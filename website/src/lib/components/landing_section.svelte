@@ -12,6 +12,7 @@
 	>
 		{landingContent.hero.subtitle}
 	</p>
+	<p class="mt-2 text-center text-sm font-medium text-slate-500 sm:text-base">Aug 12 - Sept 7</p>
 </div>
 <div class="mb-[11vh] flex flex-col items-center justify-center sm:mb-[6vh]">
 	<Scroll extraclass="h-11 w-fit fill-slate-700" />
