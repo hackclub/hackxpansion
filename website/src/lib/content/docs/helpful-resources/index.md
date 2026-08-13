@@ -4,6 +4,8 @@
 
 - [Hack Club Codex](https://codex.hackclub.com/) This is a collection of general hardware event guides and tips for hardware projects, and a must read
 
+- [What is a voltage divider](https://learn.sparkfun.com/tutorials/voltage-dividers/all) This a really helpful doc that explains how voltage dividers works, this is good to understand for the resistor based ID system
+
 - [KinoCAD KiCAD tips](https://www.youtube.com/watch?v=rs2peElk62g&list=PLM5C__oTgD3tzhCQGOxPKnR394YoYXHCO) This is a playlist of youtube videos giving really good KiCAD tips that will make your life 100x better
 
 - [Altium Academy](https://www.youtube.com/@AltiumAcademy/videos) There are a bunch of good general EE videos that you can learn a lot from, just sort by highest views. Their short form content is also pretty good.

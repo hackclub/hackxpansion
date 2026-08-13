@@ -30,6 +30,8 @@ Each module has two resistors, which when connected each become the top resistor
 
 When creating a project on the platform you'll get assigned these two resistor values that you need to put on your module.
 
+**THESE RESISTORS HAVE TO BE 0.1% PRECISE**
+
 ## What connector do the modules use?
 
 The modules uses a standard right angle 2x7 2.54mm header. This way you don't even need to make a pcb to create a new modules, just use a perfboard, or you can just plug in breadboard cables.

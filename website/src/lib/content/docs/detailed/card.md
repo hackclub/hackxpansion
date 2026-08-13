@@ -4,7 +4,7 @@
 
 This page describes the specification of an expansion card.
 
-The CAD model is available [here](https://szekelymikokollegium2.autodesk360.com/g/shares/SH28cd1QT2badd0ea72b21236d76e5e5ca90), use it as reference for now.
+The CAD model is available [here](https://szekelymikokollegium2.autodesk360.com/g/shares/SH28cd1QT2badd0ea72b21236d76e5e5ca90), use it as reference for now. Isolate one of the modules, and you can measure for dimension.
 
 A module template is [available on GitHub](https://github.com/hackclub/hackxpansion/tree/main/hardware/modules/empty).
 
