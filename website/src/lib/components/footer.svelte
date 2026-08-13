@@ -39,4 +39,5 @@
 			</a>
 		</nav>
 	</div>
+	<p>Made with ❤️ by Marcell Balázs</p>
 </footer>
