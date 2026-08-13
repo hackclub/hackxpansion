@@ -2,7 +2,7 @@
 	import { resolve } from '$app/paths';
 	import { fade } from 'svelte/transition';
 
-	const repoURL = 'https://github.com/koeglike/hackxpansion';
+	const repoURL = 'https://github.com/hackclub/hackxpansion';
 	let { showGoUp = false }: { showGoUp?: boolean } = $props();
 </script>
 

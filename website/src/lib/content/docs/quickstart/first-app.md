@@ -252,21 +252,21 @@ impl App for ButtonLoggerApp {
 
 If you followed the driver guide, you should already have a fork and local clone of the main hackxpansion repo. Adding an app is almost the exact process as adding a driver. Here are the steps:
 
-1. Fork and clone the [hackxpansion repo](https://github.com/KOEGlike/hackxpansion) if you haven't already.
+1. Fork and clone the [hackxpansion repo](https://github.com/hackclub/hackxpansion) if you haven't already.
 2. Go into the `firmware` folder.
-3. Add your app crate as a local workspace dependency under `# Apps` in [`firmware/Cargo.toml`](https://github.com/KOEGlike/hackxpansion/blob/main/firmware/Cargo.toml). The path should point to your local app repo while you are testing it:
+3. Add your app crate as a local workspace dependency under `# Apps` in [`firmware/Cargo.toml`](https://github.com/hackclub/hackxpansion/blob/main/firmware/Cargo.toml). The path should point to your local app repo while you are testing it:
 
 ```toml
 my-app = { path = "../../my-app" } # This could also be an absolute path
 ```
 
-4. Add the workspace dependency under `# Apps` in [`firmware/xpanse/Cargo.toml`](https://github.com/KOEGlike/hackxpansion/blob/main/firmware/xpanse/Cargo.toml):
+4. Add the workspace dependency under `# Apps` in [`firmware/xpanse/Cargo.toml`](https://github.com/hackclub/hackxpansion/blob/main/firmware/xpanse/Cargo.toml):
 
 ```toml
 my-app = { workspace = true }
 ```
 
-5. Add your app to `APP_CATALOG` in [`app_loader.rs`](https://github.com/KOEGlike/hackxpansion/blob/main/firmware/xpanse/src/app_loader.rs), following the existing apps:
+5. Add your app to `APP_CATALOG` in [`app_loader.rs`](https://github.com/hackclub/hackxpansion/blob/main/firmware/xpanse/src/app_loader.rs), following the existing apps:
 
 ```rust
 AppDescriptor {

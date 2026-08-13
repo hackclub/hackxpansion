@@ -153,21 +153,21 @@ In this example we register 4 groups, each having two buttons, if one is taken o
 
 Adding a driver is really easy. Here are the steps:
 
-1. Fork and clone the [hackxpansion repo](https://github.com/KOEGlike/hackxpansion) if you haven't already.
+1. Fork and clone the [hackxpansion repo](https://github.com/hackclub/hackxpansion) if you haven't already.
 2. Go into the `firmware` folder.
-3. Add your driver crate as a local workspace dependency under `# Drivers` in [`firmware/Cargo.toml`](https://github.com/KOEGlike/hackxpansion/blob/main/firmware/Cargo.toml). The path should point to the `firmware` folder in your local module repo while you are testing it:
+3. Add your driver crate as a local workspace dependency under `# Drivers` in [`firmware/Cargo.toml`](https://github.com/hackclub/hackxpansion/blob/main/firmware/Cargo.toml). The path should point to the `firmware` folder in your local module repo while you are testing it:
 
 ```toml
 my-driver = { path = "../../my-module-repo/firmware" } # This could also be a local path
 ```
 
-4. Add the workspace dependency under `# Drivers` in [`firmware/xpanse/Cargo.toml`](https://github.com/KOEGlike/hackxpansion/blob/main/firmware/xpanse/Cargo.toml):
+4. Add the workspace dependency under `# Drivers` in [`firmware/xpanse/Cargo.toml`](https://github.com/hackclub/hackxpansion/blob/main/firmware/xpanse/Cargo.toml):
 
 ```toml
 my-driver = { workspace = true }
 ```
 
-5. Add a match arm for your driver in [`load_driver.rs`](https://github.com/KOEGlike/hackxpansion/blob/main/firmware/xpanse/src/load_driver.rs), following the existing drivers:
+5. Add a match arm for your driver in [`load_driver.rs`](https://github.com/hackclub/hackxpansion/blob/main/firmware/xpanse/src/load_driver.rs), following the existing drivers:
 
 ```rust
 Some(id) if id == my_driver::MyDriver::ID => {

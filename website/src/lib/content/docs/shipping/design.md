@@ -90,7 +90,7 @@ Here are some examples of well-shipped projects made by Hack Clubbers\! Notice h
     </div>
     <div>
       <img src="https://github.com/cheyao/icepi-zero/raw/main/gallery/icepi-in-hand.png" alt="KOEGlike’s Split Keyboard" />
-      <a href="https://github.com/KOEGlike/mito">Cyao's Icepi Zero</a>
+      <a href="https://github.com/cheyao/icepi-zero">Cyao's Icepi Zero</a>
     </div>
     <div>
       <img src="https://github.com/KaiPereira/Cheetah-MX4-Mini/raw/master/renders/real_photo.png" alt="Kai’s Cheetah MX4 Mini" />
