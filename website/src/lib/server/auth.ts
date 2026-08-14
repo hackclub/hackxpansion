@@ -69,42 +69,6 @@ export const auth = betterAuth({
 			githubUsername: {
 				type: 'string',
 				required: false
-			},
-			birthday: {
-				type: 'string',
-				required: false,
-				input: false,
-				returned: false
-			},
-			addressLine1: {
-				type: 'string',
-				required: false,
-				returned: false
-			},
-			addressLine2: {
-				type: 'string',
-				required: false,
-				returned: false
-			},
-			addressCity: {
-				type: 'string',
-				required: false,
-				returned: false
-			},
-			addressRegion: {
-				type: 'string',
-				required: false,
-				returned: false
-			},
-			addressPostalCode: {
-				type: 'string',
-				required: false,
-				returned: false
-			},
-			addressCountry: {
-				type: 'string',
-				required: false,
-				returned: false
 			}
 		}
 	},
@@ -117,7 +81,16 @@ export const auth = betterAuth({
 					clientId: env.HACKCLUB_CLIENT_ID,
 					clientSecret: env.HACKCLUB_CLIENT_SECRET,
 					overrideUserInfo: true,
-					scopes: ['openid', 'email', 'name', 'profile', 'verification_status', 'slack_id'],
+					scopes: [
+						'openid',
+						'email',
+						'name',
+						'profile',
+						'birthdate',
+						'address',
+						'verification_status',
+						'slack_id'
+					],
 					getUserInfo: (tokens) =>
 						tokens.accessToken
 							? fetchHackClubProfile(tokens.accessToken, env.SLACK_BOT_TOKEN)

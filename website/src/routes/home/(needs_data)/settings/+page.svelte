@@ -29,8 +29,10 @@
 
 	<section aria-labelledby="submission-settings" class="content-box p-5">
 		<h2 id="submission-settings" class="text-2xl font-bold">Submission details</h2>
-		<p class="mt-2 text-slate-600">
-			These details are used to pre-fill project review submissions.
+		<p class="mt-2 text-slate-600">Your GitHub username is used to pre-fill review submissions.</p>
+		<p class="mt-1 text-sm text-slate-500">
+			Shipping addresses and birthdays are read from Hack Club Auth only when needed and are not
+			stored in Hackxpansion.
 		</p>
 
 		{#if form && 'profileSuccess' in form}
@@ -47,8 +49,8 @@
 			</p>
 		{/if}
 
-		<form method="post" action="?/updateProfile" class="mt-5 grid gap-4 sm:grid-cols-2">
-			<label class="flex flex-col gap-1 text-sm font-semibold sm:col-span-2">
+		<form method="post" action="?/updateProfile" class="mt-5 grid gap-4">
+			<label class="flex flex-col gap-1 text-sm font-semibold">
 				GitHub username
 				<input
 					name="githubUsername"
@@ -59,77 +61,7 @@
 					class="border border-slate-500 bg-white p-2 font-normal"
 				/>
 			</label>
-			<label class="flex flex-col gap-1 text-sm font-semibold sm:col-span-2">
-				Birthday
-				<input
-					type="date"
-					name="birthday"
-					value={value('birthday')}
-					autocomplete="bday"
-					class="border border-slate-500 bg-white p-2 font-normal"
-				/>
-			</label>
-			<label class="flex flex-col gap-1 text-sm font-semibold sm:col-span-2">
-				Address line 1
-				<input
-					name="addressLine1"
-					value={value('addressLine1')}
-					maxlength="200"
-					autocomplete="address-line1"
-					class="border border-slate-500 bg-white p-2 font-normal"
-				/>
-			</label>
-			<label class="flex flex-col gap-1 text-sm font-semibold sm:col-span-2">
-				Address line 2
-				<input
-					name="addressLine2"
-					value={value('addressLine2')}
-					maxlength="200"
-					autocomplete="address-line2"
-					class="border border-slate-500 bg-white p-2 font-normal"
-				/>
-			</label>
-			<label class="flex flex-col gap-1 text-sm font-semibold">
-				City
-				<input
-					name="addressCity"
-					value={value('addressCity')}
-					maxlength="100"
-					autocomplete="address-level2"
-					class="border border-slate-500 bg-white p-2 font-normal"
-				/>
-			</label>
-			<label class="flex flex-col gap-1 text-sm font-semibold">
-				State / province
-				<input
-					name="addressRegion"
-					value={value('addressRegion')}
-					maxlength="100"
-					autocomplete="address-level1"
-					class="border border-slate-500 bg-white p-2 font-normal"
-				/>
-			</label>
-			<label class="flex flex-col gap-1 text-sm font-semibold">
-				ZIP / postal code
-				<input
-					name="addressPostalCode"
-					value={value('addressPostalCode')}
-					maxlength="32"
-					autocomplete="postal-code"
-					class="border border-slate-500 bg-white p-2 font-normal"
-				/>
-			</label>
-			<label class="flex flex-col gap-1 text-sm font-semibold">
-				Country
-				<input
-					name="addressCountry"
-					value={value('addressCountry')}
-					maxlength="100"
-					autocomplete="country-name"
-					class="border border-slate-500 bg-white p-2 font-normal"
-				/>
-			</label>
-			<div class="sm:col-span-2">
+			<div>
 				<button class="bg-slate-800 px-4 py-2 text-white hover:bg-slate-700">Save details</button>
 			</div>
 		</form>

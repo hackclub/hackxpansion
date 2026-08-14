@@ -1,12 +1,5 @@
 export type UserSubmissionProfile = {
 	githubUsername: string | null;
-	birthday: string | null;
-	addressLine1: string | null;
-	addressLine2: string | null;
-	addressCity: string | null;
-	addressRegion: string | null;
-	addressPostalCode: string | null;
-	addressCountry: string | null;
 };
 
 export function inferGithubUsername(repoUrl: string | null | undefined): string | null {

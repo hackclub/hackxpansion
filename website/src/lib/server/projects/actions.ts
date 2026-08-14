@@ -25,6 +25,12 @@ import {
 import { internalErrorDetails, upstreamResponseExcerpt } from '$lib/server/error-logging';
 import { currentRequestId } from '$lib/server/request-context';
 import {
+	getHackClubIdentity,
+	hackClubAddressIdFromForm,
+	HackClubIdentityError,
+	resolveHackClubAddress
+} from '$lib/server/hackclub-identity';
+import {
 	journalInputFromForm,
 	JournalMutationError,
 	type JournalInput
@@ -79,16 +85,23 @@ export async function handleProjectFormAction({
 export async function submitProjectAction(projectId: string, userId: string, formData: FormData) {
 	const values = {
 		...userProfileFormValues(formData),
-		...projectSubmissionFeedbackFormValues(formData)
+		...projectSubmissionFeedbackFormValues(formData),
+		addressId:
+			typeof formData.get('addressId') === 'string' ? String(formData.get('addressId')) : ''
 	};
 
 	try {
-		const profile = userProfileInputFromForm(formData, {
-			requireAddress: true,
-			requireBirthday: true
-		});
+		const profile = userProfileInputFromForm(formData);
 		const feedback = projectSubmissionFeedbackFromForm(formData);
-		const result = await submitProjectToAri({ projectId, userId, profile, feedback });
+		const hackClubAddressId = hackClubAddressIdFromForm(formData);
+		resolveHackClubAddress(await getHackClubIdentity(userId), hackClubAddressId);
+		const result = await submitProjectToAri({
+			projectId,
+			userId,
+			profile,
+			feedback,
+			hackClubAddressId
+		});
 		return {
 			success: true,
 			message: `Submitted for ${result.phase} review.`,
@@ -97,9 +110,18 @@ export async function submitProjectAction(projectId: string, userId: string, for
 	} catch (error) {
 		if (
 			error instanceof UserProfileValidationError ||
-			error instanceof ProjectSubmissionFeedbackError
+			error instanceof ProjectSubmissionFeedbackError ||
+			error instanceof HackClubIdentityError
 		) {
-			return fail(422, { success: false, message: error.message, projectId, values });
+			return fail(
+				error instanceof HackClubIdentityError && error.code === 'unavailable' ? 503 : 422,
+				{
+					success: false,
+					message: error.message,
+					projectId,
+					values
+				}
+			);
 		}
 		return projectReviewActionFailure(error, projectId, values);
 	}

@@ -29,6 +29,7 @@ export type SubmitProjectToAriOptions = {
 type SubmitProjectInput = SubmitProjectToAriOptions & {
 	profile: UserSubmissionProfile;
 	feedback: ProjectSubmissionFeedbackInput;
+	hackClubAddressId: string;
 };
 
 export type SubmitProjectToAriResult = {
@@ -96,10 +97,11 @@ export async function submitProjectToAri({
 	projectId,
 	userId,
 	profile,
-	feedback
+	feedback,
+	hackClubAddressId
 }: SubmitProjectInput): Promise<SubmitProjectToAriResult> {
 	const config = getAriConfig();
-	const claim = await claimSubmission(projectId, userId, profile, feedback);
+	const claim = await claimSubmission(projectId, userId, profile, feedback, hackClubAddressId);
 
 	try {
 		const payload = buildAriIngestPayload({
@@ -210,7 +212,8 @@ async function claimSubmission(
 	projectId: string,
 	userId: string,
 	profile: UserSubmissionProfile,
-	feedback: ProjectSubmissionFeedbackInput
+	feedback: ProjectSubmissionFeedbackInput,
+	hackClubAddressId: string
 ): Promise<ClaimedSubmission> {
 	return db.transaction(async (tx) => {
 		const [projectForSubmission] = await tx
@@ -260,6 +263,7 @@ async function claimSubmission(
 		await tx.insert(projectSubmissionFeedback).values({
 			...feedback,
 			...submissionProfile,
+			hackClubAddressId,
 			projectRepoUrl: projectForSubmission.repoUrl,
 			projectDemoUrl: projectForSubmission.demoUrl,
 			projectThumbnailUrl: projectForSubmission.thumbnailUrl,

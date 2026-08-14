@@ -6,6 +6,8 @@
 		action,
 		phase,
 		profile,
+		addressOptions,
+		hackClubIdentityError,
 		repoUrl,
 		errorMessage,
 		values
@@ -13,6 +15,8 @@
 		action: string;
 		phase: ProjectReviewPhase;
 		profile: UserSubmissionProfile;
+		addressOptions: Array<{ id: string; label: string; primary: boolean }>;
+		hackClubIdentityError: { code: string; message: string } | null;
 		repoUrl: string | null;
 		errorMessage?: string;
 		values?: Record<string, string>;
@@ -31,7 +35,8 @@
 	<div>
 		<h3 class="font-bold">Submission details</h3>
 		<p class="text-sm text-slate-600">
-			We save these details to pre-fill future review submissions. You can update them in Settings.
+			We save your GitHub username and the ID of the address selected for this submission. Your
+			birthday and full address stay in Hack Club Auth.
 		</p>
 	</div>
 
@@ -47,84 +52,36 @@
 		/>
 	</label>
 
-	<label class="flex flex-col gap-1 text-sm font-semibold">
-		Birthday
-		<input
-			type="date"
-			name="birthday"
-			value={value('birthday', profile.birthday)}
-			autocomplete="bday"
-			required
-			class="border border-slate-500 bg-white p-2 font-normal"
-		/>
-	</label>
-
-	<div class="grid gap-3 sm:grid-cols-2">
-		<label class="flex flex-col gap-1 text-sm font-semibold sm:col-span-2">
-			Address line 1
-			<input
-				name="addressLine1"
-				value={value('addressLine1', profile.addressLine1)}
-				maxlength="200"
-				autocomplete="address-line1"
-				required
-				class="border border-slate-500 bg-white p-2 font-normal"
-			/>
-		</label>
-		<label class="flex flex-col gap-1 text-sm font-semibold sm:col-span-2">
-			Address line 2 <span class="font-normal text-slate-500">(optional)</span>
-			<input
-				name="addressLine2"
-				value={value('addressLine2', profile.addressLine2)}
-				maxlength="200"
-				autocomplete="address-line2"
-				class="border border-slate-500 bg-white p-2 font-normal"
-			/>
-		</label>
+	{#if hackClubIdentityError}
+		<div class="border border-amber-700 bg-amber-100 p-4 text-sm text-amber-950">
+			<p>{hackClubIdentityError.message}</p>
+			{#if hackClubIdentityError.code === 'reauthorization_required'}
+				<button
+					type="submit"
+					formaction="?/reconnectHackClub"
+					formnovalidate
+					class="mt-3 border border-amber-900 bg-white px-3 py-2 hover:bg-amber-50"
+				>
+					Reconnect Hack Club Auth
+				</button>
+			{/if}
+		</div>
+	{:else}
 		<label class="flex flex-col gap-1 text-sm font-semibold">
-			City
-			<input
-				name="addressCity"
-				value={value('addressCity', profile.addressCity)}
-				maxlength="100"
-				autocomplete="address-level2"
-				required
-				class="border border-slate-500 bg-white p-2 font-normal"
-			/>
+			Shipping address
+			<select name="addressId" required class="border border-slate-500 bg-white p-2 font-normal">
+				<option value="" selected={!value('addressId')}>Select an address</option>
+				{#each addressOptions as address (address.id)}
+					<option value={address.id} selected={value('addressId') === address.id}>
+						{address.label}{address.primary ? ' (primary)' : ''}
+					</option>
+				{/each}
+			</select>
+			<span class="font-normal text-slate-500">
+				Loaded from Hack Club Auth. This choice applies only to this submission.
+			</span>
 		</label>
-		<label class="flex flex-col gap-1 text-sm font-semibold">
-			State / province <span class="font-normal text-slate-500">(optional)</span>
-			<input
-				name="addressRegion"
-				value={value('addressRegion', profile.addressRegion)}
-				maxlength="100"
-				autocomplete="address-level1"
-				class="border border-slate-500 bg-white p-2 font-normal"
-			/>
-		</label>
-		<label class="flex flex-col gap-1 text-sm font-semibold">
-			ZIP / postal code
-			<input
-				name="addressPostalCode"
-				value={value('addressPostalCode', profile.addressPostalCode)}
-				maxlength="32"
-				autocomplete="postal-code"
-				required
-				class="border border-slate-500 bg-white p-2 font-normal"
-			/>
-		</label>
-		<label class="flex flex-col gap-1 text-sm font-semibold">
-			Country
-			<input
-				name="addressCountry"
-				value={value('addressCountry', profile.addressCountry)}
-				maxlength="100"
-				autocomplete="country-name"
-				required
-				class="border border-slate-500 bg-white p-2 font-normal"
-			/>
-		</label>
-	</div>
+	{/if}
 
 	<fieldset class="flex flex-col gap-2">
 		<legend class="font-bold"
@@ -185,7 +142,11 @@
 		</label>
 	</div>
 
-	<button type="submit" class="bg-slate-800 px-4 py-2 text-white hover:bg-slate-700">
+	<button
+		type="submit"
+		disabled={hackClubIdentityError !== null}
+		class="bg-slate-800 px-4 py-2 text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
+	>
 		Submit {phase} review
 	</button>
 </form>

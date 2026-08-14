@@ -37,6 +37,8 @@
 			action="?/submit"
 			phase={data.readiness.phase}
 			profile={data.profile}
+			addressOptions={data.addressOptions}
+			hackClubIdentityError={data.hackClubIdentityError}
 			repoUrl={data.project.repoUrl}
 			errorMessage={form?.message}
 			values={submissionValues()}

@@ -8,33 +8,21 @@ function profileForm(values: Record<string, string> = {}) {
 }
 
 describe('user submission profile', () => {
-	it('accepts and normalizes a valid birthday', () => {
-		const profile = userProfileInputFromForm(profileForm({ birthday: '2000-02-29' }), {
-			requireBirthday: true
-		});
-
-		expect(profile.birthday).toBe('2000-02-29');
+	it('stores only a normalized GitHub username', () => {
+		expect(
+			userProfileInputFromForm(
+				profileForm({
+					githubUsername: ' maker ',
+					birthday: '2000-02-29',
+					addressLine1: '1 Private Lane'
+				})
+			)
+		).toEqual({ githubUsername: 'maker' });
 	});
 
-	it('requires a birthday for project submissions', () => {
-		expect(() => userProfileInputFromForm(profileForm(), { requireBirthday: true })).toThrowError(
-			new UserProfileValidationError('Birthday is required.')
-		);
-	});
-
-	it.each(['2001-02-29', 'not-a-date'])('rejects invalid birthday %s', (birthday) => {
-		expect(() => userProfileInputFromForm(profileForm({ birthday }))).toThrowError(
-			new UserProfileValidationError('Enter a valid birthday.')
-		);
-	});
-
-	it('rejects a future birthday', () => {
-		expect(() => userProfileInputFromForm(profileForm({ birthday: '2999-01-01' }))).toThrowError(
-			new UserProfileValidationError('Birthday cannot be in the future.')
-		);
-	});
-
-	it('allows birthday to be cleared in settings', () => {
-		expect(userProfileInputFromForm(profileForm({ birthday: ' ' })).birthday).toBeNull();
+	it('validates the GitHub username', () => {
+		expect(() =>
+			userProfileInputFromForm(profileForm({ githubUsername: '-invalid-' }))
+		).toThrowError(new UserProfileValidationError('Enter a valid GitHub username.'));
 	});
 });

@@ -16,6 +16,7 @@ import { isUuid } from '$lib/projects/domain';
 import { env } from '$env/dynamic/private';
 import { and, eq, isNull, sql } from 'drizzle-orm';
 import { fetchHackClubRealName } from '$lib/server/hackclub-real-name';
+import { getHackClubIdentity, resolveHackClubAddress } from '$lib/server/hackclub-identity';
 
 export const POST: RequestHandler = async ({ request }) => {
 	if (!env.ARI_OUT_SECRET) {
@@ -45,13 +46,7 @@ export const POST: RequestHandler = async ({ request }) => {
 					whatAreWeDoingWell: projectSubmissionFeedback.whatAreWeDoingWell,
 					howCanWeImprove: projectSubmissionFeedback.howCanWeImprove,
 					githubUsername: projectSubmissionFeedback.githubUsername,
-					birthday: projectSubmissionFeedback.birthday,
-					addressLine1: projectSubmissionFeedback.addressLine1,
-					addressLine2: projectSubmissionFeedback.addressLine2,
-					addressCity: projectSubmissionFeedback.addressCity,
-					addressRegion: projectSubmissionFeedback.addressRegion,
-					addressPostalCode: projectSubmissionFeedback.addressPostalCode,
-					addressCountry: projectSubmissionFeedback.addressCountry,
+					hackClubAddressId: projectSubmissionFeedback.hackClubAddressId,
 					projectRepoUrl: projectSubmissionFeedback.projectRepoUrl,
 					projectDemoUrl: projectSubmissionFeedback.projectDemoUrl,
 					projectThumbnailUrl: projectSubmissionFeedback.projectThumbnailUrl,
@@ -156,6 +151,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
 			let airtableApproval: YswsProjectApproval | null = null;
 			let airtableUserId: string | null = null;
+			let airtableAddressId: string | null = null;
 			if (body.event === 'review.approved' && !existingReview.airtableRecordId) {
 				const approvalProject =
 					activeProject ??
@@ -168,7 +164,9 @@ export const POST: RequestHandler = async ({ request }) => {
 							.limit(1)
 					)[0];
 				if (!approvalProject) throw new Error('Could not load the approved project');
+				if (!submissionFeedback) throw new Error('Could not load the approved submission');
 				airtableUserId = approvalProject.userId;
+				airtableAddressId = submissionFeedback.hackClubAddressId;
 				airtableApproval = {
 					ariApprovalDeliveryId: headers.delivery_id,
 					project: {
@@ -192,25 +190,13 @@ export const POST: RequestHandler = async ({ request }) => {
 						githubUsername: submissionFeedback
 							? submissionFeedback.githubUsername
 							: approvalProject.makerGithubUsername,
-						birthday: submissionFeedback?.birthday ?? approvalProject.makerBirthday,
-						addressLine1: submissionFeedback
-							? submissionFeedback.addressLine1
-							: approvalProject.makerAddressLine1,
-						addressLine2: submissionFeedback
-							? submissionFeedback.addressLine2
-							: approvalProject.makerAddressLine2,
-						addressCity: submissionFeedback
-							? submissionFeedback.addressCity
-							: approvalProject.makerAddressCity,
-						addressRegion: submissionFeedback
-							? submissionFeedback.addressRegion
-							: approvalProject.makerAddressRegion,
-						addressPostalCode: submissionFeedback
-							? submissionFeedback.addressPostalCode
-							: approvalProject.makerAddressPostalCode,
-						addressCountry: submissionFeedback
-							? submissionFeedback.addressCountry
-							: approvalProject.makerAddressCountry
+						birthday: null,
+						addressLine1: null,
+						addressLine2: null,
+						addressCity: null,
+						addressRegion: null,
+						addressPostalCode: null,
+						addressCountry: null
 					},
 					feedback: submissionFeedback
 						? {
@@ -232,16 +218,30 @@ export const POST: RequestHandler = async ({ request }) => {
 				currencyAwarded,
 				stale: !activeProject,
 				airtableApproval,
-				airtableUserId
+				airtableUserId,
+				airtableAddressId
 			};
 		});
 
-		if (result.airtableApproval && result.airtableUserId) {
+		if (result.airtableApproval && result.airtableUserId && result.airtableAddressId) {
+			const identity = await getHackClubIdentity(result.airtableUserId);
 			const realName = await fetchHackClubRealName(result.airtableUserId);
+			const address = resolveHackClubAddress(identity, result.airtableAddressId);
 			const airtableRecordId = await createYswsProjectSubmission(
 				{
 					...result.airtableApproval,
-					maker: { ...result.airtableApproval.maker, name: realName, givenName: null }
+					maker: {
+						...result.airtableApproval.maker,
+						name: realName,
+						givenName: null,
+						birthday: identity.birthday,
+						addressLine1: address.line1,
+						addressLine2: address.line2,
+						addressCity: address.city,
+						addressRegion: address.region,
+						addressPostalCode: address.postalCode,
+						addressCountry: address.country
+					}
 				},
 				env.AIRTABLE_PAC
 			);
@@ -284,14 +284,7 @@ const approvalProjectFields = {
 	makerDisplayName: user.displayName,
 	makerEmail: user.email,
 	makerSlackId: user.slackId,
-	makerGithubUsername: user.githubUsername,
-	makerBirthday: user.birthday,
-	makerAddressLine1: user.addressLine1,
-	makerAddressLine2: user.addressLine2,
-	makerAddressCity: user.addressCity,
-	makerAddressRegion: user.addressRegion,
-	makerAddressPostalCode: user.addressPostalCode,
-	makerAddressCountry: user.addressCountry
+	makerGithubUsername: user.githubUsername
 };
 
 type Transaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
