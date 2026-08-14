@@ -30,12 +30,43 @@ pub(crate) fn spi_program_instructions(config: &spi::Config) -> u8 {
 }
 
 pub(crate) fn gpio_base_for_pins(pins: &[u8]) -> Option<bool> {
-    if pins.iter().all(|pin| *pin < 32) {
+    gpio_base_for_pin_numbers(pins.iter().copied())
+}
+
+fn gpio_base_for_pin_numbers(pins: impl IntoIterator<Item = u8>) -> Option<bool> {
+    let mut has_pins = false;
+    let mut all_low = true;
+    let mut all_high = true;
+    for pin in pins {
+        has_pins = true;
+        all_low &= pin < 32;
+        all_high &= (16..48).contains(&pin);
+    }
+
+    if !has_pins {
+        None
+    } else if all_low {
         Some(false)
-    } else if pins.iter().all(|pin| *pin >= 16) {
+    } else if all_high {
         Some(true)
     } else {
         None
+    }
+}
+
+/// Type-erased view of a PIO-capable pin used to select a PIO GPIO window.
+///
+/// This is implemented for every typed Embassy [`Peri`] containing a
+/// [`PioPin`], allowing heterogeneous pins to be passed to
+/// [`BusAllocator::request_pio`](crate::bus::allocator::BusAllocator::request_pio).
+pub trait PioProgramPin {
+    #[doc(hidden)]
+    fn pio_pin_number(&self) -> u8;
+}
+
+impl<P: PioPin> PioProgramPin for Peri<'static, P> {
+    fn pio_pin_number(&self) -> u8 {
+        self.pin()
     }
 }
 
@@ -453,9 +484,20 @@ impl PioManager {
     }
 
     /// Hand out one free state machine on any block, together with the block's
-    /// `Common` handle.  Drivers use this to load custom PIO programs.
-    pub fn request_pio(&mut self, pin: &Peri<'static, impl PioPin>) -> Option<PioAccess<'_>> {
-        let gpio_base_high = gpio_base_for_pins(&[pin.pin()])?;
+    /// `Common` handle. Drivers use this to load custom PIO programs. Every pin
+    /// used by the program must be included so the selected GPIO window covers
+    /// the complete pin set.
+    ///
+    /// # Returns
+    ///
+    /// Returns `None` if `pins` is empty, if the pins cannot all fit in either
+    /// GPIO window (0-31 or 16-47), or if no PIO block has both a free state
+    /// machine and all 32 instruction slots available. Custom PIO access
+    /// reserves the selected block's full instruction memory for the rest of
+    /// the boot.
+    pub fn request_pio(&mut self, pins: &[&dyn PioProgramPin]) -> Option<PioAccess<'_>> {
+        let gpio_base_high =
+            gpio_base_for_pin_numbers(pins.iter().map(|pin| pin.pio_pin_number()))?;
         let (block, sm) = self.find_free_sm(gpio_base_high, 32)?;
         match block {
             PioBlock::Block0 => {
@@ -572,7 +614,7 @@ fn two_free_sms<PIO: Instance + Send + 'static>(slot: &PioSlot<PIO>) -> Option<(
 ///     MyDriver::new(common, sm, &program)
 /// }
 ///
-/// let handle = allocator.request_pio(&pin)?;
+/// let handle = allocator.request_pio(&[&data_pin, &clock_pin])?;
 /// let driver = with_pio!(handle, common, sm, my_init(common, sm));
 /// ```
 #[macro_export]

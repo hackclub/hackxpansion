@@ -47,7 +47,7 @@ use alloc::boxed::Box;
 use crate::bus::i2c::I2cBusHandle;
 use crate::bus::i2c_bitbang::BitBangI2cBus;
 use crate::bus::i2c_hardware::HardwareI2cBus;
-use crate::bus::pio::{PioManager, gpio_base_for_pins, spi_program_instructions};
+use crate::bus::pio::{PioManager, PioProgramPin, gpio_base_for_pins, spi_program_instructions};
 use crate::bus::spi::{SpiBusHandle, SpiError};
 use crate::bus::spi_bitbang::BitBangSpiBus;
 use crate::bus::spi_hardware::HardwareSpiBus;
@@ -1028,7 +1028,8 @@ impl BusAllocator {
     /// Hands out one free PIO state machine on any block, together with the
     /// block's `Common` handle. Drivers that load custom PIO programs use this,
     /// then call [`with_pio!`](crate::with_pio!) to dispatch over the erased
-    /// block/SM types.
+    /// block/SM types. `pins` must contain every pin used by the program so the
+    /// allocator can select a GPIO window that covers all of them.
     ///
     /// The `Common` borrow is only valid while the returned [`crate::bus::pio::PioAccess`] is
     /// alive (i.e. while you hold `&mut BusAllocator`). Programs loaded via
@@ -1036,12 +1037,17 @@ impl BusAllocator {
     /// configure the SM, and then keep the `LoadedProgram` + `StateMachine`
     /// after the borrow ends.
     ///
-    /// Returns `None` if every state machine on every block is in use, the pin
-    /// is not a PIO-capable GPIO, or 32 instructions have already been reserved.
-    pub fn request_pio<P: PioPin>(
+    /// # Returns
+    ///
+    /// Returns `None` if `pins` is empty, if the pins cannot all fit in either
+    /// GPIO window (0-31 or 16-47), or if no PIO block has both a free state
+    /// machine and all 32 instruction slots available. Custom PIO access
+    /// reserves the selected block's full instruction memory for the rest of
+    /// the boot.
+    pub fn request_pio(
         &mut self,
-        pin: &Peri<'static, P>,
+        pins: &[&dyn PioProgramPin],
     ) -> Option<crate::bus::pio::PioAccess<'_>> {
-        self.pio_manager.request_pio(pin)
+        self.pio_manager.request_pio(pins)
     }
 }
