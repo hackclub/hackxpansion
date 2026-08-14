@@ -10,11 +10,11 @@ Each card can be in one of three tiers; for each tier of card, you get a differe
 
 ### Tiers:
 
-- Basic: Only a few buttons, or a joystick, or smth from a guide; this is to get you into PCB design and writing code 'and stuff. Max funding of ≈ $35. Worth 1 currency
+- **Basic**: Only a few buttons, or a joystick, or smth from a guide; this is to get you into PCB design and writing code 'and stuff. Max funding of ≈ $35. Worth 1 currency
 
-- Advanced: Has at least one IC, or it has a relatively complex CAD design. Something like a simple audio card or an LED matrix. Max funding of ≈ $50. Worth 2 currency
+- **Advanced**: Has at least one IC, or it has a relatively complex CAD design. Something like a simple audio card or an LED matrix. Max funding of ≈ $50. Worth 2 currency
 
-- PRO: Something relatively advanced, like another MCU(ch32), or some sort of RF. Max funding of ≈ $75(If you need more DM @koeg on slack). Worth 3 currency
+- **PRO**: Something relatively advanced, like another MCU(ch32), or some sort of RF. Max funding of ≈ $75(If you need more DM @koeg on slack). Worth 3 currency
 
 You also get 1-3 currency per app that you make; the payout is based on complexity, just like with the modules.
 

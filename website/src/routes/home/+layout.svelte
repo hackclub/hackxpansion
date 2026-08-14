@@ -34,6 +34,9 @@
 			indent: true
 		},
 		{ title: 'Detailed', href: '/home/docs/detailed', indent: false },
+		{ title: 'Rust API', href: '/home/docs/detailed/api', indent: true },
+		{ title: 'PIO', href: '/home/docs/detailed/pio', indent: true },
+		{ title: 'Bus Allocator', href: '/home/docs/detailed/bus-allocator', indent: true },
 		{ title: 'Device', href: '/home/docs/detailed/device', indent: true },
 		{ title: 'Resistors', href: '/home/docs/detailed/resistors', indent: true },
 		{ title: 'Pinout', href: '/home/docs/detailed/pinout', indent: true },
@@ -42,7 +45,6 @@
 		{ title: 'ADC', href: '/home/docs/detailed/adc', indent: true },
 		{ title: 'PWM', href: '/home/docs/detailed/pwm', indent: true },
 		{ title: 'Backlight', href: '/home/docs/detailed/backlight', indent: true },
-		{ title: 'API', href: '/home/docs/detailed/api', indent: true },
 		{ title: 'Persistent Storage', href: '/home/docs/detailed/persistent-storage', indent: true },
 		{ title: 'Shipping', href: '/home/docs/shipping', indent: false },
 		{ title: 'Design', href: '/home/docs/shipping/design', indent: true },
