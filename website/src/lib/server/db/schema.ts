@@ -163,7 +163,9 @@ export const review = pgTable(
 		fraud: jsonb('fraud').$type<FraudReview | null>(),
 		reviewer: jsonb('reviewer').$type<Reviewer | null>(),
 		rawPayload: jsonb('raw_payload').$type<OutboundBody>().notNull(),
-		airtableRecordId: text('airtable_record_id')
+		airtableRecordId: text('airtable_record_id'),
+		slackMessageTs: text('slack_message_ts'),
+		fraudAdminSlackMessageTs: text('fraud_admin_slack_message_ts')
 	},
 	(table) => [index('review_project_id_idx').on(table.projectId)]
 );

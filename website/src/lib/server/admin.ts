@@ -49,6 +49,21 @@ export async function getAdminUsers() {
 	}));
 }
 
+export async function getProtectedAdminNotificationTarget() {
+	const [configuredAdmin] = await db
+		.select({ userId: user.id, slackId: user.slackId })
+		.from(authAccount)
+		.innerJoin(user, eq(authAccount.userId, user.id))
+		.where(
+			and(
+				eq(authAccount.providerId, 'hackclub'),
+				eq(authAccount.accountId, CONFIGURED_ADMIN_HACKCLUB_ID)
+			)
+		)
+		.limit(1);
+	return configuredAdmin ?? null;
+}
+
 export async function promoteUserToAdmin(adminUserId: string, targetUserId: string) {
 	await requireAdmin(adminUserId);
 	const [promotedUser] = await db

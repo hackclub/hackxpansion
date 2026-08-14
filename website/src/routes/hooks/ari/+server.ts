@@ -11,12 +11,24 @@ import {
 import { db } from '$lib/server/db';
 import { project, projectSubmissionFeedback, review, user } from '$lib/server/db/schema';
 import { createYswsProjectSubmission, type YswsProjectApproval } from '$lib/server/airtable';
-import { getApprovalCurrencyPayout, getProjectStatusAfterAriEvent } from '$lib/projects/lifecycle';
-import { isUuid } from '$lib/projects/domain';
+import {
+	getApprovalCurrencyPayout,
+	getProjectStatusAfterAriEvent,
+	type ProjectReviewPhase
+} from '$lib/projects/lifecycle';
+import { isUuid, type ProjectStatus } from '$lib/projects/domain';
 import { env } from '$env/dynamic/private';
 import { and, eq, isNull, sql } from 'drizzle-orm';
 import { fetchHackClubRealName } from '$lib/server/hackclub-real-name';
 import { getHackClubIdentity, resolveHackClubAddress } from '$lib/server/hackclub-identity';
+import {
+	buildFraudAdminSlackMessage,
+	buildProjectReviewSlackMessage,
+	fraudAdminSlackClientMessageId,
+	sendSlackDirectMessage
+} from '$lib/server/slack';
+import { resolve } from '$app/paths';
+import { getProtectedAdminNotificationTarget } from '$lib/server/admin';
 
 export const POST: RequestHandler = async ({ request }) => {
 	if (!env.ARI_OUT_SECRET) {
@@ -45,6 +57,7 @@ export const POST: RequestHandler = async ({ request }) => {
 					howDidYouHear: projectSubmissionFeedback.howDidYouHear,
 					whatAreWeDoingWell: projectSubmissionFeedback.whatAreWeDoingWell,
 					howCanWeImprove: projectSubmissionFeedback.howCanWeImprove,
+					phase: projectSubmissionFeedback.phase,
 					githubUsername: projectSubmissionFeedback.githubUsername,
 					hackClubAddressId: projectSubmissionFeedback.hackClubAddressId,
 					projectRepoUrl: projectSubmissionFeedback.projectRepoUrl,
@@ -69,6 +82,14 @@ export const POST: RequestHandler = async ({ request }) => {
 					body
 				);
 			}
+			const nextProjectStatus = activeProject
+				? getProjectStatusAfterAriEvent(activeProject.status, body.event)
+				: null;
+			const slackNotificationEligible =
+				activeProject !== undefined &&
+				(nextProjectStatus !== null || body.event === 'review.fraud');
+			const fraudAdminNotificationEligible =
+				activeProject !== undefined && body.event === 'review.fraud';
 
 			const inserted = await tx
 				.insert(review)
@@ -85,25 +106,53 @@ export const POST: RequestHandler = async ({ request }) => {
 					collaborators: body.collaborators ?? null,
 					fraud: body.fraud ?? null,
 					reviewer: body.review.reviewer ?? null,
-					rawPayload: body
+					rawPayload: body,
+					slackMessageTs: slackNotificationEligible ? null : 'not-applicable',
+					fraudAdminSlackMessageTs: fraudAdminNotificationEligible ? null : 'not-applicable'
 				})
 				.onConflictDoNothing({ target: review.deliveryId })
-				.returning({ id: review.id, airtableRecordId: review.airtableRecordId });
+				.returning({
+					id: review.id,
+					ariId: review.ariId,
+					projectId: review.projectId,
+					rawPayload: review.rawPayload,
+					minutesBreakdown: review.minutesBreakdown,
+					noteToMaker: review.noteToMaker,
+					justification: review.justification,
+					auditNote: review.auditNote,
+					airtableRecordId: review.airtableRecordId,
+					slackMessageTs: review.slackMessageTs,
+					fraudAdminSlackMessageTs: review.fraudAdminSlackMessageTs
+				});
 
 			const [existingReview] = inserted.length
 				? inserted
 				: await tx
-						.select({ id: review.id, airtableRecordId: review.airtableRecordId })
+						.select({
+							id: review.id,
+							ariId: review.ariId,
+							projectId: review.projectId,
+							rawPayload: review.rawPayload,
+							minutesBreakdown: review.minutesBreakdown,
+							noteToMaker: review.noteToMaker,
+							justification: review.justification,
+							auditNote: review.auditNote,
+							airtableRecordId: review.airtableRecordId,
+							slackMessageTs: review.slackMessageTs,
+							fraudAdminSlackMessageTs: review.fraudAdminSlackMessageTs
+						})
 						.from(review)
 						.where(eq(review.deliveryId, headers.delivery_id))
 						.limit(1);
 			if (!existingReview) throw new Error('Could not resolve the stored Ari review');
 			const duplicate = inserted.length === 0;
+			if (duplicate) assertDuplicateMatches(existingReview, associatedProjectId, body);
+			const storedBody = existingReview.rawPayload;
 
 			let projectStatus = null;
 			let currencyAwarded = 0;
 			if (!duplicate && activeProject) {
-				const nextStatus = getProjectStatusAfterAriEvent(activeProject.status, body.event);
+				const nextStatus = nextProjectStatus;
 				if (nextStatus) {
 					const payout =
 						body.event === 'review.approved'
@@ -149,47 +198,84 @@ export const POST: RequestHandler = async ({ request }) => {
 				}
 			}
 
+			const shouldPrepareAirtable =
+				storedBody.event === 'review.approved' && !existingReview.airtableRecordId;
+			const shouldPrepareSlack = !existingReview.slackMessageTs;
+			const shouldPrepareFraudAdminSlack = !existingReview.fraudAdminSlackMessageTs;
+			const relatedProject =
+				activeProject ??
+				(shouldPrepareAirtable || shouldPrepareSlack || shouldPrepareFraudAdminSlack
+					? (
+							await tx
+								.select(approvalProjectFields)
+								.from(project)
+								.innerJoin(user, eq(project.userId, user.id))
+								.where(eq(project.id, associatedProjectId))
+								.limit(1)
+						)[0]
+					: null);
+			if (
+				(shouldPrepareAirtable || shouldPrepareSlack || shouldPrepareFraudAdminSlack) &&
+				!relatedProject
+			) {
+				throw new Error('Could not load the reviewed project');
+			}
+
+			const slackNotification =
+				shouldPrepareSlack && relatedProject
+					? {
+							reviewId: existingReview.id,
+							recipientSlackId: submissionFeedback?.makerSlackId ?? relatedProject.makerSlackId,
+							projectId: relatedProject.id,
+							projectTitle: relatedProject.title,
+							phase: submissionFeedback?.phase ?? reviewPhaseFromStatus(relatedProject.status),
+							event: storedBody.event,
+							noteToMaker: existingReview.noteToMaker,
+							approvedMinutes: sumApprovedMinutes(existingReview.minutesBreakdown)
+						}
+					: null;
+			const fraudAdminNotification =
+				shouldPrepareFraudAdminSlack && relatedProject
+					? {
+							reviewId: existingReview.id,
+							projectId: relatedProject.id,
+							projectTitle: relatedProject.title,
+							makerSlackId: submissionFeedback?.makerSlackId ?? relatedProject.makerSlackId,
+							makerUserId: relatedProject.userId
+						}
+					: null;
+
 			let airtableApproval: YswsProjectApproval | null = null;
 			let airtableUserId: string | null = null;
 			let airtableAddressId: string | null = null;
-			if (body.event === 'review.approved' && !existingReview.airtableRecordId) {
-				const approvalProject =
-					activeProject ??
-					(
-						await tx
-							.select(approvalProjectFields)
-							.from(project)
-							.innerJoin(user, eq(project.userId, user.id))
-							.where(eq(project.id, associatedProjectId))
-							.limit(1)
-					)[0];
-				if (!approvalProject) throw new Error('Could not load the approved project');
+			if (shouldPrepareAirtable) {
+				if (!relatedProject) throw new Error('Could not load the approved project');
 				if (!submissionFeedback) throw new Error('Could not load the approved submission');
-				airtableUserId = approvalProject.userId;
+				airtableUserId = relatedProject.userId;
 				airtableAddressId = submissionFeedback.hackClubAddressId;
 				airtableApproval = {
 					ariApprovalDeliveryId: headers.delivery_id,
 					project: {
 						repoUrl: submissionFeedback
 							? submissionFeedback.projectRepoUrl
-							: approvalProject.repoUrl,
+							: relatedProject.repoUrl,
 						demoUrl: submissionFeedback
 							? submissionFeedback.projectDemoUrl
-							: approvalProject.demoUrl,
+							: relatedProject.demoUrl,
 						thumbnailUrl: submissionFeedback
 							? submissionFeedback.projectThumbnailUrl
-							: approvalProject.thumbnailUrl,
+							: relatedProject.thumbnailUrl,
 						description: submissionFeedback
 							? submissionFeedback.projectDescription
-							: approvalProject.description
+							: relatedProject.description
 					},
 					maker: {
-						name: approvalProject.makerDisplayName,
+						name: relatedProject.makerDisplayName,
 						givenName: null,
-						email: submissionFeedback ? submissionFeedback.makerEmail : approvalProject.makerEmail,
+						email: submissionFeedback ? submissionFeedback.makerEmail : relatedProject.makerEmail,
 						githubUsername: submissionFeedback
 							? submissionFeedback.githubUsername
-							: approvalProject.makerGithubUsername,
+							: relatedProject.makerGithubUsername,
 						birthday: null,
 						addressLine1: null,
 						addressLine2: null,
@@ -205,9 +291,9 @@ export const POST: RequestHandler = async ({ request }) => {
 								howCanWeImprove: submissionFeedback.howCanWeImprove
 							}
 						: null,
-					approvedMinutes: sumApprovedMinutes(minutesBreakdown),
-					justification: body.review.justification ?? null,
-					auditNote: body.review.audit_note ?? null
+					approvedMinutes: sumApprovedMinutes(existingReview.minutesBreakdown),
+					justification: existingReview.justification,
+					auditNote: existingReview.auditNote
 				};
 			}
 
@@ -219,36 +305,57 @@ export const POST: RequestHandler = async ({ request }) => {
 				stale: !activeProject,
 				airtableApproval,
 				airtableUserId,
-				airtableAddressId
+				airtableAddressId,
+				slackNotification,
+				fraudAdminNotification
 			};
 		});
 
+		const sideEffects: Promise<void>[] = [];
 		if (result.airtableApproval && result.airtableUserId && result.airtableAddressId) {
-			const identity = await getHackClubIdentity(result.airtableUserId);
-			const realName = await fetchHackClubRealName(result.airtableUserId);
-			const address = resolveHackClubAddress(identity, result.airtableAddressId);
-			const airtableRecordId = await createYswsProjectSubmission(
-				{
-					...result.airtableApproval,
-					maker: {
-						...result.airtableApproval.maker,
-						name: realName,
-						givenName: null,
-						birthday: identity.birthday,
-						addressLine1: address.line1,
-						addressLine2: address.line2,
-						addressCity: address.city,
-						addressRegion: address.region,
-						addressPostalCode: address.postalCode,
-						addressCountry: address.country
-					}
-				},
-				env.AIRTABLE_PAC
+			sideEffects.push(
+				(async () => {
+					const identity = await getHackClubIdentity(result.airtableUserId!);
+					const realName = await fetchHackClubRealName(result.airtableUserId!);
+					const address = resolveHackClubAddress(identity, result.airtableAddressId!);
+					const airtableRecordId = await createYswsProjectSubmission(
+						{
+							...result.airtableApproval!,
+							maker: {
+								...result.airtableApproval!.maker,
+								name: realName,
+								givenName: null,
+								birthday: identity.birthday,
+								addressLine1: address.line1,
+								addressLine2: address.line2,
+								addressCity: address.city,
+								addressRegion: address.region,
+								addressPostalCode: address.postalCode,
+								addressCountry: address.country
+							}
+						},
+						env.AIRTABLE_PAC
+					);
+					await db
+						.update(review)
+						.set({ airtableRecordId })
+						.where(and(eq(review.id, result.id), isNull(review.airtableRecordId)));
+				})()
 			);
-			await db
-				.update(review)
-				.set({ airtableRecordId })
-				.where(and(eq(review.id, result.id), isNull(review.airtableRecordId)));
+		}
+
+		if (result.slackNotification) {
+			sideEffects.push(sendReviewSlackNotification(result.slackNotification));
+		}
+		if (result.fraudAdminNotification) {
+			sideEffects.push(sendFraudAdminSlackNotification(result.fraudAdminNotification));
+		}
+		const outcomes = await Promise.allSettled(sideEffects);
+		const failures = outcomes
+			.filter((outcome) => outcome.status === 'rejected')
+			.map((outcome) => outcome.reason);
+		if (failures.length > 0) {
+			throw new AggregateError(failures, 'Could not complete review delivery side effects');
 		}
 
 		if (result.duplicate) return json({ status: 'duplicate' });
@@ -271,6 +378,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
 const approvalProjectFields = {
 	id: project.id,
+	title: project.title,
 	status: project.status,
 	type: project.type,
 	tier: project.tier,
@@ -286,6 +394,92 @@ const approvalProjectFields = {
 	makerSlackId: user.slackId,
 	makerGithubUsername: user.githubUsername
 };
+
+function assertDuplicateMatches(
+	stored: { ariId: string; projectId: string | null; rawPayload: OutboundBody },
+	associatedProjectId: string,
+	incoming: OutboundBody
+) {
+	if (
+		stored.ariId !== incoming.id ||
+		stored.projectId !== associatedProjectId ||
+		stored.rawPayload.external_id !== incoming.external_id ||
+		stored.rawPayload.event !== incoming.event
+	) {
+		throw new OutboundWebhookError(409, 'Ari delivery ID was reused with a different review');
+	}
+}
+
+async function sendReviewSlackNotification(notification: {
+	reviewId: string;
+	recipientSlackId: string;
+	projectId: string;
+	projectTitle: string;
+	phase: ProjectReviewPhase;
+	event: OutboundBody['event'];
+	noteToMaker: string | null;
+	approvedMinutes: number | null;
+}) {
+	if (!env.ORIGIN) throw new Error('ORIGIN is not configured');
+	const projectUrl = new URL(
+		resolve(`/home/projects/${notification.projectId}`),
+		env.ORIGIN
+	).toString();
+	const { messageTs } = await sendSlackDirectMessage({
+		botToken: env.SLACK_BOT_TOKEN,
+		userId: notification.recipientSlackId,
+		clientMessageId: notification.reviewId,
+		message: buildProjectReviewSlackMessage({
+			event: notification.event,
+			phase: notification.phase,
+			projectTitle: notification.projectTitle,
+			projectUrl,
+			noteToMaker: notification.noteToMaker,
+			approvedMinutes: notification.approvedMinutes
+		})
+	});
+	await db
+		.update(review)
+		.set({ slackMessageTs: messageTs })
+		.where(and(eq(review.id, notification.reviewId), isNull(review.slackMessageTs)));
+}
+
+async function sendFraudAdminSlackNotification(notification: {
+	reviewId: string;
+	projectId: string;
+	projectTitle: string;
+	makerSlackId: string;
+	makerUserId: string;
+}) {
+	if (!env.ORIGIN) throw new Error('ORIGIN is not configured');
+	const protectedAdmin = await getProtectedAdminNotificationTarget();
+	if (!protectedAdmin)
+		throw new Error('Protected admin account is not available for notifications');
+	const projectUrl = new URL(
+		resolve(`/home/admin/projects/${notification.projectId}`),
+		env.ORIGIN
+	).toString();
+	const { messageTs } = await sendSlackDirectMessage({
+		botToken: env.SLACK_BOT_TOKEN,
+		userId: protectedAdmin.slackId,
+		clientMessageId: fraudAdminSlackClientMessageId(notification.reviewId),
+		message: buildFraudAdminSlackMessage({
+			projectTitle: notification.projectTitle,
+			projectId: notification.projectId,
+			projectUrl,
+			makerSlackId: notification.makerSlackId,
+			makerUserId: notification.makerUserId
+		})
+	});
+	await db
+		.update(review)
+		.set({ fraudAdminSlackMessageTs: messageTs })
+		.where(and(eq(review.id, notification.reviewId), isNull(review.fraudAdminSlackMessageTs)));
+}
+
+function reviewPhaseFromStatus(status: ProjectStatus) {
+	return status.endsWith('_build') ? ('build' as const) : ('design' as const);
+}
 
 type Transaction = Parameters<Parameters<typeof db.transaction>[0]>[0];
 
