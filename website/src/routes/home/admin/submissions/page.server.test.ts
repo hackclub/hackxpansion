@@ -106,9 +106,7 @@ describe('admin submission deletion', () => {
 			});
 		mocks.existingLimit.mockResolvedValue([
 			{
-				projectStatus: 'waiting_design',
-				activeAriExternalId: 'ari-123',
-				ariExternalId: 'ari-123'
+				projectStatus: 'waiting_design'
 			}
 		]);
 

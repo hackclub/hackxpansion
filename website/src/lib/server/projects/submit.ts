@@ -1,5 +1,4 @@
 import { env } from '$env/dynamic/private';
-import { randomUUID } from 'node:crypto';
 import {
 	AriInboundError,
 	buildAriIngestPayload,
@@ -64,6 +63,7 @@ type ClaimedSubmission = {
 	waitingStatus: ProjectStatus;
 	previousStatus: ProjectStatus;
 	externalId: string;
+	submissionFeedbackId: string;
 	journals: Array<{ createdAt: Date; durationInMinutes: number; text: string }>;
 };
 
@@ -190,7 +190,11 @@ export async function withdrawProjectFromAri({
 		existingProject.status === 'waiting_build' ? 'approved_design' : 'not_submitted';
 	const [updatedProject] = await db
 		.update(project)
-		.set({ status: revertedStatus, activeAriExternalId: null })
+		.set({
+			status: revertedStatus,
+			activeAriExternalId: null,
+			activeSubmissionFeedbackId: null
+		})
 		.where(
 			and(
 				eq(project.id, projectId),
@@ -253,33 +257,38 @@ async function claimSubmission(
 			);
 		}
 
-		const externalId = `${projectId}:${readiness.phase}:${randomUUID()}`;
+		const externalId = projectId;
 		const submissionProfile = {
 			...profile,
 			githubUsername: profile.githubUsername ?? inferGithubUsername(projectForSubmission.repoUrl)
 		};
 
 		await tx.update(user).set(submissionProfile).where(eq(user.id, userId));
-		await tx.insert(projectSubmissionFeedback).values({
-			...feedback,
-			...submissionProfile,
-			hackClubAddressId,
-			projectRepoUrl: projectForSubmission.repoUrl,
-			projectDemoUrl: projectForSubmission.demoUrl,
-			projectThumbnailUrl: projectForSubmission.thumbnailUrl,
-			projectDescription: projectForSubmission.description,
-			makerEmail: projectForSubmission.makerEmail,
-			makerSlackId: projectForSubmission.makerSlackId,
-			phase: readiness.phase,
-			ariExternalId: externalId,
-			projectId,
-			userId
-		});
+		const [submissionFeedback] = await tx
+			.insert(projectSubmissionFeedback)
+			.values({
+				...feedback,
+				...submissionProfile,
+				hackClubAddressId,
+				projectRepoUrl: projectForSubmission.repoUrl,
+				projectDemoUrl: projectForSubmission.demoUrl,
+				projectThumbnailUrl: projectForSubmission.thumbnailUrl,
+				projectDescription: projectForSubmission.description,
+				makerEmail: projectForSubmission.makerEmail,
+				makerSlackId: projectForSubmission.makerSlackId,
+				phase: readiness.phase,
+				ariExternalId: externalId,
+				projectId,
+				userId
+			})
+			.returning({ id: projectSubmissionFeedback.id });
+		if (!submissionFeedback) throw new Error('Could not create the submission snapshot');
 		await tx
 			.update(project)
 			.set({
 				status: readiness.waitingStatus,
-				activeAriExternalId: externalId
+				activeAriExternalId: externalId,
+				activeSubmissionFeedbackId: submissionFeedback.id
 			})
 			.where(and(eq(project.id, projectId), eq(project.userId, userId)));
 
@@ -289,6 +298,7 @@ async function claimSubmission(
 			waitingStatus: readiness.waitingStatus,
 			previousStatus: projectForSubmission.status,
 			externalId,
+			submissionFeedbackId: submissionFeedback.id,
 			journals: projectJournals
 		};
 	});
@@ -298,20 +308,25 @@ async function releaseFailedSubmission(claim: ClaimedSubmission, userId: string)
 	await db.transaction(async (tx) => {
 		const rolledBack = await tx
 			.update(project)
-			.set({ status: claim.previousStatus, activeAriExternalId: null })
+			.set({
+				status: claim.previousStatus,
+				activeAriExternalId: null,
+				activeSubmissionFeedbackId: null
+			})
 			.where(
 				and(
 					eq(project.id, claim.project.id),
 					eq(project.userId, userId),
 					eq(project.status, claim.waitingStatus),
-					eq(project.activeAriExternalId, claim.externalId)
+					eq(project.activeAriExternalId, claim.externalId),
+					eq(project.activeSubmissionFeedbackId, claim.submissionFeedbackId)
 				)
 			)
 			.returning({ id: project.id });
 		if (rolledBack.length > 0) {
 			await tx
 				.delete(projectSubmissionFeedback)
-				.where(eq(projectSubmissionFeedback.ariExternalId, claim.externalId));
+				.where(eq(projectSubmissionFeedback.id, claim.submissionFeedbackId));
 		}
 	});
 }

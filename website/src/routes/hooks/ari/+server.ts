@@ -52,39 +52,13 @@ export const POST: RequestHandler = async ({ request }) => {
 				throw new OutboundWebhookError(404, 'Ari delivery does not match a known project');
 			}
 
-			const [submissionFeedback] = await tx
-				.select({
-					howDidYouHear: projectSubmissionFeedback.howDidYouHear,
-					whatAreWeDoingWell: projectSubmissionFeedback.whatAreWeDoingWell,
-					howCanWeImprove: projectSubmissionFeedback.howCanWeImprove,
-					phase: projectSubmissionFeedback.phase,
-					githubUsername: projectSubmissionFeedback.githubUsername,
-					hackClubAddressId: projectSubmissionFeedback.hackClubAddressId,
-					projectRepoUrl: projectSubmissionFeedback.projectRepoUrl,
-					projectDemoUrl: projectSubmissionFeedback.projectDemoUrl,
-					projectThumbnailUrl: projectSubmissionFeedback.projectThumbnailUrl,
-					projectDescription: projectSubmissionFeedback.projectDescription,
-					makerEmail: projectSubmissionFeedback.makerEmail,
-					makerSlackId: projectSubmissionFeedback.makerSlackId
-				})
-				.from(projectSubmissionFeedback)
-				.where(eq(projectSubmissionFeedback.ariExternalId, body.external_id))
-				.limit(1);
-
-			if (activeProject) {
-				assertMakerMatches(
-					submissionFeedback
-						? {
-								makerEmail: submissionFeedback.makerEmail,
-								makerSlackId: submissionFeedback.makerSlackId
-							}
-						: activeProject,
-					body
-				);
-			}
 			const nextProjectStatus = activeProject
 				? getProjectStatusAfterAriEvent(activeProject.status, body.event)
 				: null;
+			const airtableExportEligible =
+				activeProject !== undefined &&
+				body.event === 'review.approved' &&
+				nextProjectStatus !== null;
 			const slackNotificationEligible =
 				activeProject !== undefined &&
 				(nextProjectStatus !== null || body.event === 'review.fraud');
@@ -98,6 +72,7 @@ export const POST: RequestHandler = async ({ request }) => {
 					ariId: body.id,
 					deliveryId: headers.delivery_id,
 					projectId: associatedProjectId,
+					submissionFeedbackId: activeProject?.activeSubmissionFeedbackId ?? null,
 					minutesBreakdown,
 					noteToMaker: body.review.note_to_maker ?? null,
 					auditNote: body.review.audit_note ?? null,
@@ -107,6 +82,8 @@ export const POST: RequestHandler = async ({ request }) => {
 					fraud: body.fraud ?? null,
 					reviewer: body.review.reviewer ?? null,
 					rawPayload: body,
+					airtableRecordId:
+						body.event === 'review.approved' && !airtableExportEligible ? 'not-applicable' : null,
 					slackMessageTs: slackNotificationEligible ? null : 'not-applicable',
 					fraudAdminSlackMessageTs: fraudAdminNotificationEligible ? null : 'not-applicable'
 				})
@@ -115,6 +92,7 @@ export const POST: RequestHandler = async ({ request }) => {
 					id: review.id,
 					ariId: review.ariId,
 					projectId: review.projectId,
+					submissionFeedbackId: review.submissionFeedbackId,
 					rawPayload: review.rawPayload,
 					minutesBreakdown: review.minutesBreakdown,
 					noteToMaker: review.noteToMaker,
@@ -132,6 +110,7 @@ export const POST: RequestHandler = async ({ request }) => {
 							id: review.id,
 							ariId: review.ariId,
 							projectId: review.projectId,
+							submissionFeedbackId: review.submissionFeedbackId,
 							rawPayload: review.rawPayload,
 							minutesBreakdown: review.minutesBreakdown,
 							noteToMaker: review.noteToMaker,
@@ -148,6 +127,38 @@ export const POST: RequestHandler = async ({ request }) => {
 			const duplicate = inserted.length === 0;
 			if (duplicate) assertDuplicateMatches(existingReview, associatedProjectId, body);
 			const storedBody = existingReview.rawPayload;
+			const [submissionFeedback] = existingReview.submissionFeedbackId
+				? await tx
+						.select({
+							howDidYouHear: projectSubmissionFeedback.howDidYouHear,
+							whatAreWeDoingWell: projectSubmissionFeedback.whatAreWeDoingWell,
+							howCanWeImprove: projectSubmissionFeedback.howCanWeImprove,
+							phase: projectSubmissionFeedback.phase,
+							githubUsername: projectSubmissionFeedback.githubUsername,
+							hackClubAddressId: projectSubmissionFeedback.hackClubAddressId,
+							projectRepoUrl: projectSubmissionFeedback.projectRepoUrl,
+							projectDemoUrl: projectSubmissionFeedback.projectDemoUrl,
+							projectThumbnailUrl: projectSubmissionFeedback.projectThumbnailUrl,
+							projectDescription: projectSubmissionFeedback.projectDescription,
+							makerEmail: projectSubmissionFeedback.makerEmail,
+							makerSlackId: projectSubmissionFeedback.makerSlackId
+						})
+						.from(projectSubmissionFeedback)
+						.where(eq(projectSubmissionFeedback.id, existingReview.submissionFeedbackId))
+						.limit(1)
+				: [];
+
+			if (activeProject) {
+				assertMakerMatches(
+					submissionFeedback
+						? {
+								makerEmail: submissionFeedback.makerEmail,
+								makerSlackId: submissionFeedback.makerSlackId
+							}
+						: activeProject,
+					body
+				);
+			}
 
 			let projectStatus = null;
 			let currencyAwarded = 0;
@@ -182,7 +193,10 @@ export const POST: RequestHandler = async ({ request }) => {
 						.where(
 							and(
 								eq(project.id, activeProject.id),
-								eq(project.activeAriExternalId, body.external_id)
+								eq(project.activeAriExternalId, body.external_id),
+								existingReview.submissionFeedbackId
+									? eq(project.activeSubmissionFeedbackId, existingReview.submissionFeedbackId)
+									: isNull(project.activeSubmissionFeedbackId)
 							)
 						)
 						.returning({ status: project.status });
@@ -392,7 +406,8 @@ const approvalProjectFields = {
 	makerDisplayName: user.displayName,
 	makerEmail: user.email,
 	makerSlackId: user.slackId,
-	makerGithubUsername: user.githubUsername
+	makerGithubUsername: user.githubUsername,
+	activeSubmissionFeedbackId: project.activeSubmissionFeedbackId
 };
 
 function assertDuplicateMatches(

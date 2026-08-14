@@ -7,8 +7,9 @@ import {
 	type AriIngestPayload
 } from './inbound';
 
+const projectId = '019ff59c-69b3-785a-9618-a2ee6ae323a1';
 const payload: AriIngestPayload = {
-	external_id: 'project:design:delivery',
+	external_id: projectId,
 	title: 'Expansion card',
 	description: 'A useful expansion card.',
 	maker: { email: 'maker@example.com', name: 'Maker', slack_id: 'U123' },
@@ -16,7 +17,7 @@ const payload: AriIngestPayload = {
 	track: 'hardware',
 	thumbnail_url: 'https://example.com/card.png',
 	evidence: ['commits', 'elapsed', 'devlog'],
-	meta: { 'Project ID': 'project' }
+	meta: { 'Project ID': projectId }
 };
 
 afterEach(() => vi.unstubAllGlobals());
@@ -24,9 +25,9 @@ afterEach(() => vi.unstubAllGlobals());
 describe('Ari ingest', () => {
 	it('builds the documented solo ship payload', () => {
 		const result = buildAriIngestPayload({
-			externalId: 'project:design:delivery',
+			externalId: projectId,
 			project: {
-				id: 'project',
+				id: projectId,
 				title: 'Expansion card',
 				description: 'A useful expansion card.',
 				repoUrl: 'https://github.com/hackclub/example',
@@ -42,7 +43,7 @@ describe('Ari ingest', () => {
 		});
 
 		expect(result).toMatchObject({
-			external_id: 'project:design:delivery',
+			external_id: projectId,
 			track: 'hardware',
 			hackatime_projects: ['card-firmware'],
 			journals: [{ at: '2026-07-30', minutes: 45, text: 'Built it' }]
@@ -123,12 +124,12 @@ describe('Ari ingest', () => {
 			.mockResolvedValue(new Response('{"status":"withdrawn"}', { status: 200 }));
 		vi.stubGlobal('fetch', fetchMock);
 
-		await sendAriWithdraw('project:design:delivery', {
+		await sendAriWithdraw(projectId, {
 			programId: 'program-id',
 			signingSecret: 'secret'
 		});
 		const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
-		const rawBody = JSON.stringify({ external_id: 'project:design:delivery' });
+		const rawBody = JSON.stringify({ external_id: projectId });
 
 		expect(url).toBe('https://webhooks.ari.hackclub.com/api/ingest/program-id/withdraw');
 		expect(new Headers(init.headers).get('X-Ari-Signature')).toBe(

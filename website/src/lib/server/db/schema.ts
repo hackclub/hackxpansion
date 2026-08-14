@@ -8,6 +8,7 @@ import {
 	pgEnum,
 	jsonb,
 	boolean,
+	type AnyPgColumn,
 	uniqueIndex,
 	index,
 	check
@@ -57,6 +58,10 @@ export const project = pgTable(
 		md0: integer('md0'),
 		md1: integer('md1'),
 		activeAriExternalId: text('active_ari_external_id'),
+		activeSubmissionFeedbackId: uuid('active_submission_feedback_id').references(
+			(): AnyPgColumn => projectSubmissionFeedback.id,
+			{ onDelete: 'set null' }
+		),
 		userId: text('user_id')
 			.notNull()
 			.references(() => user.id, { onDelete: 'cascade' }),
@@ -65,6 +70,7 @@ export const project = pgTable(
 	(table) => [
 		index('project_user_id_idx').on(table.userId),
 		uniqueIndex('project_active_ari_external_id_uniq').on(table.activeAriExternalId),
+		index('project_active_submission_feedback_id_idx').on(table.activeSubmissionFeedbackId),
 		check(
 			'project_resistor_assignment',
 			sql`(${table.type} = 'app' AND ${table.md0} IS NULL AND ${table.md1} IS NULL) OR (${table.type} = 'card' AND ${table.md0} IS NOT NULL AND ${table.md1} IS NOT NULL)`
@@ -127,7 +133,7 @@ export const projectSubmissionFeedback = pgTable(
 			.references(() => user.id, { onDelete: 'cascade' })
 	},
 	(table) => [
-		uniqueIndex('project_submission_feedback_ari_external_id_uniq').on(table.ariExternalId),
+		index('project_submission_feedback_ari_external_id_idx').on(table.ariExternalId),
 		index('project_submission_feedback_project_id_idx').on(table.projectId),
 		index('project_submission_feedback_user_id_idx').on(table.userId),
 		check('project_submission_feedback_nps_range', sql`${table.nps} BETWEEN 0 AND 10`),
@@ -148,6 +154,10 @@ export const review = pgTable(
 		ariId: text('ari_id').notNull(),
 		deliveryId: text('delivery_id').notNull().unique(),
 		projectId: uuid('project_id').references(() => project.id, { onDelete: 'set null' }),
+		submissionFeedbackId: uuid('submission_feedback_id').references(
+			() => projectSubmissionFeedback.id,
+			{ onDelete: 'set null' }
+		),
 		minutesBreakdown: jsonb('minutes_breakdown').$type<MinutesBreakdown | null>(),
 		approvedMinutes: integer('approved_minutes').generatedAlwaysAs(sql`
       COALESCE((minutes_breakdown->>'hackatime')::int, 0) +
@@ -167,7 +177,10 @@ export const review = pgTable(
 		slackMessageTs: text('slack_message_ts'),
 		fraudAdminSlackMessageTs: text('fraud_admin_slack_message_ts')
 	},
-	(table) => [index('review_project_id_idx').on(table.projectId)]
+	(table) => [
+		index('review_project_id_idx').on(table.projectId),
+		index('review_submission_feedback_id_idx').on(table.submissionFeedbackId)
+	]
 );
 
 export const shopOrderStatusValues = ['in_queue', 'fulfilled'] as const;

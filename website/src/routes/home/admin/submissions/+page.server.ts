@@ -27,7 +27,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 			projectId: projectSubmissionFeedback.projectId,
 			projectTitle: project.title,
 			projectStatus: project.status,
-			activeAriExternalId: project.activeAriExternalId,
+			activeSubmissionFeedbackId: project.activeSubmissionFeedbackId,
 			userId: projectSubmissionFeedback.userId,
 			userName: user.displayName,
 			userEmail: user.email,
@@ -44,7 +44,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 			isWaitingForReview:
 				(submission.projectStatus === 'waiting_design' ||
 					submission.projectStatus === 'waiting_build') &&
-				submission.activeAriExternalId === submission.ariExternalId
+				submission.activeSubmissionFeedbackId === submission.id
 		}))
 	};
 };
@@ -67,7 +67,7 @@ export const actions: Actions = {
 					and(
 						eq(project.id, projectSubmissionFeedback.projectId),
 						inArray(project.status, ['waiting_design', 'waiting_build']),
-						eq(project.activeAriExternalId, projectSubmissionFeedback.ariExternalId)
+						eq(project.activeSubmissionFeedbackId, projectSubmissionFeedback.id)
 					)
 				);
 			const [deletedSubmission] = await db
@@ -81,9 +81,7 @@ export const actions: Actions = {
 
 			const [existingSubmission] = await db
 				.select({
-					projectStatus: project.status,
-					activeAriExternalId: project.activeAriExternalId,
-					ariExternalId: projectSubmissionFeedback.ariExternalId
+					projectStatus: project.status
 				})
 				.from(projectSubmissionFeedback)
 				.innerJoin(project, eq(projectSubmissionFeedback.projectId, project.id))
