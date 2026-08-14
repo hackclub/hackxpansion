@@ -12,6 +12,10 @@
 			label: 'In design review',
 			classes: 'bg-amber-200 text-amber-900'
 		},
+		needs_changes_design: {
+			label: 'Needs changes',
+			classes: 'bg-yellow-200 text-yellow-900'
+		},
 		rejected_design: {
 			label: 'Design rejected',
 			classes: 'bg-red-200 text-red-900'
@@ -23,6 +27,10 @@
 		waiting_build: {
 			label: 'In build review',
 			classes: 'bg-amber-200 text-amber-900'
+		},
+		needs_changes_build: {
+			label: 'Needs changes',
+			classes: 'bg-yellow-200 text-yellow-900'
 		},
 		rejected_build: {
 			label: 'Build rejected',

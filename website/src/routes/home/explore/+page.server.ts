@@ -13,7 +13,12 @@ export const load: PageServerLoad = async ({ url }) => {
 		status === 'not_submitted'
 			? eq(project.status, 'not_submitted')
 			: status === 'approved_design'
-				? inArray(project.status, ['approved_design', 'waiting_build', 'rejected_build'])
+				? inArray(project.status, [
+						'approved_design',
+						'waiting_build',
+						'needs_changes_build',
+						'rejected_build'
+					])
 				: status === 'approved_build'
 					? eq(project.status, 'approved_build')
 					: undefined;

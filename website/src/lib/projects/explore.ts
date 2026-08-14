@@ -17,7 +17,12 @@ export function isExploreFilter(value: string): value is ExploreFilter {
 
 export function getProjectProgress(status: ProjectStatus): ProjectProgress {
 	if (status === 'approved_build') return 'build_approved';
-	if (status === 'approved_design' || status === 'waiting_build' || status === 'rejected_build') {
+	if (
+		status === 'approved_design' ||
+		status === 'waiting_build' ||
+		status === 'needs_changes_build' ||
+		status === 'rejected_build'
+	) {
 		return 'design_approved';
 	}
 	return 'created';

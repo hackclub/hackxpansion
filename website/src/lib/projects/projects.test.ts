@@ -52,6 +52,16 @@ describe('project lifecycle', () => {
 			phase: 'build',
 			waitingStatus: 'waiting_build'
 		});
+		expect(getNextProjectSubmission('needs_changes_design')).toEqual({
+			phase: 'design',
+			waitingStatus: 'waiting_design'
+		});
+		expect(getNextProjectSubmission('needs_changes_build')).toEqual({
+			phase: 'build',
+			waitingStatus: 'waiting_build'
+		});
+		expect(getNextProjectSubmission('rejected_design')).toBeNull();
+		expect(getNextProjectSubmission('rejected_build')).toBeNull();
 		expect(getNextProjectSubmission('approved_build')).toBeNull();
 	});
 
@@ -60,6 +70,18 @@ describe('project lifecycle', () => {
 			'approved_design'
 		);
 		expect(getProjectStatusAfterAriEvent('not_submitted', 'review.approved')).toBeNull();
+		expect(getProjectStatusAfterAriEvent('waiting_design', 'review.changes')).toBe(
+			'needs_changes_design'
+		);
+		expect(getProjectStatusAfterAriEvent('waiting_build', 'review.changes')).toBe(
+			'needs_changes_build'
+		);
+		expect(getProjectStatusAfterAriEvent('waiting_design', 'review.rejected')).toBe(
+			'rejected_design'
+		);
+		expect(getProjectStatusAfterAriEvent('waiting_build', 'review.rejected')).toBe(
+			'rejected_build'
+		);
 		expect(getProjectStatusAfterAriEvent('rejected_build', 'review.requeued')).toBe(
 			'waiting_build'
 		);
@@ -137,6 +159,19 @@ describe('submission readiness', () => {
 			message: 'Confirm your YSWS eligibility through Hack Club Auth.'
 		});
 	});
+
+	it('allows requested changes to be resubmitted but blocks rejected projects', () => {
+		expect(
+			getProjectSubmissionReadiness({ ...readyProject, status: 'needs_changes_design' })
+		).toMatchObject({ canSubmit: true, phase: 'design' });
+
+		const rejected = getProjectSubmissionReadiness({ ...readyProject, status: 'rejected_design' });
+		expect(rejected.canSubmit).toBe(false);
+		expect(rejected.changes).toContainEqual({
+			field: 'status',
+			message: 'This project design was rejected and cannot be resubmitted.'
+		});
+	});
 });
 
 describe('journal validation', () => {
@@ -203,6 +238,8 @@ describe('project utilities', () => {
 		expect(getProjectProgress('waiting_design')).toBe('created');
 		expect(getProjectProgress('approved_design')).toBe('design_approved');
 		expect(getProjectProgress('waiting_build')).toBe('design_approved');
+		expect(getProjectProgress('needs_changes_build')).toBe('design_approved');
+		expect(getProjectProgress('rejected_build')).toBe('design_approved');
 		expect(getProjectProgress('approved_build')).toBe('build_approved');
 	});
 });

@@ -1,9 +1,11 @@
 export const projectStatusValues = [
 	'not_submitted',
 	'waiting_design',
+	'needs_changes_design',
 	'rejected_design',
 	'approved_design',
 	'waiting_build',
+	'needs_changes_build',
 	'rejected_build',
 	'approved_build'
 ] as const;

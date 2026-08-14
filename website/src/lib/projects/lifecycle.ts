@@ -28,10 +28,10 @@ export function canEditProject(status: ProjectStatus) {
 export function getNextProjectSubmission(status: ProjectStatus): NextProjectSubmission | null {
 	switch (status) {
 		case 'not_submitted':
-		case 'rejected_design':
+		case 'needs_changes_design':
 			return { phase: 'design', waitingStatus: 'waiting_design' };
 		case 'approved_design':
-		case 'rejected_build':
+		case 'needs_changes_build':
 			return { phase: 'build', waitingStatus: 'waiting_build' };
 		default:
 			return null;
@@ -50,6 +50,11 @@ export function getProjectStatusAfterAriEvent(
 					? 'approved_build'
 					: null;
 		case 'review.changes':
+			return status === 'waiting_design'
+				? 'needs_changes_design'
+				: status === 'waiting_build'
+					? 'needs_changes_build'
+					: null;
 		case 'review.rejected':
 			return status === 'waiting_design'
 				? 'rejected_design'
@@ -79,10 +84,12 @@ function getWaitingStatusForCurrentPhase(status: ProjectStatus): ProjectStatus |
 	switch (status) {
 		case 'waiting_design':
 		case 'approved_design':
+		case 'needs_changes_design':
 		case 'rejected_design':
 			return 'waiting_design';
 		case 'waiting_build':
 		case 'approved_build':
+		case 'needs_changes_build':
 		case 'rejected_build':
 			return 'waiting_build';
 		default:
