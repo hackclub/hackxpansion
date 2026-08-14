@@ -30,8 +30,6 @@ You have to track your work, here are the 3 options you have:
 - Using [Lapse](https://lapse.hackclub.com/) to create a timelapse of your work
 - Using [Hackatime](https://hackatime.hackclub.com/) to track your coding in your editors
 
-**CODING HAS TO BE TRACKED WITH HACKATIME**
-
 You must only track a unit of work with one of these, so if you used lapse to record yourself coding, you must not also use hackatime. There is one exception here, you can write journals of work tracked with lapse or hackatime, but you must not report time for them in the journal entry.
 
 ## FAQ

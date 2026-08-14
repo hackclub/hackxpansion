@@ -32,15 +32,15 @@ If they have to open even a single file, your README is not doing its job. At mi
 - [x] Screenshots of your PCB with components
 - [x] Anything else that makes it clear what your project is and what it’s for
 
-3\. Add your MD0 and MD1 values for modules:
+3\. Requirements for modules:
 
-- [x] Link them to your public project page, like https://hackxpansion.koeg.dev/explore/1k:1k
-- [x] Put it in a visible place
+- [x] Add a link to your public project page, like https://hackxpansion.hackclub.com/explore/1k:1k
+- [x] Put your MD0 and MD1 in your readme
 
-4\. Link resources that your app uses
+4\. Requirements for apps:
 
-- [x] Have a list of all the crates that export the resources that your app uses with links to all of them
-- [x] Put it in a visible place
+- [x] Have a list of all the rust crates that export the resources that your app uses
+- [x] Have a link to your project page
 
 ## 2. A fully finished design:
 
@@ -48,7 +48,7 @@ Whoa… A lot at first glance\! Breathe. You got this. It’s simpler than it se
 
 For a design to be 100% finished, someone else should be able to read your repo, understand, and replicate it… i.e. You need to include all files and instructions\!
 
-A project that only you can make is not [**shipped**](/docs/requirements/what-is-shipping). It only lives in your head.
+A project that only you can make is not [**shipped**](../). It only lives in your head.
 
 The design should also reasonably actually work\! Of course, you can’t be sure until building it, but stuff like floating parts, incomplete firmware, or parts attached with “magic” is a no-go.
 

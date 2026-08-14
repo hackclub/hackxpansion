@@ -62,6 +62,9 @@ use xpanse_api::{
 };
 
 // Each driver is a struct, that impls the Driver and DriverMeta trait
+//
+// These structs can contain channels, or hardware that the driver owns,
+// or buses that the hardware owns
 pub struct TwoButtonDriver;
 
 // This trait allows the main firmware to know when should it load this driver,
@@ -104,6 +107,8 @@ impl<G: BankPins> Driver<G> for TwoButtonDriver {
 
         // we don't use any busses
         let _ = bus_allocator;
+
+        // You can also spawn new tasks here
 
         Ok(())
     }
