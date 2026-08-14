@@ -51,6 +51,7 @@ type ProjectForSubmission = {
 	hackatimeProjects: string[] | null;
 	md0: number | null;
 	md1: number | null;
+	hasShippedToAri: boolean;
 	makerEmail: string;
 	makerDisplayName: string;
 	makerSlackId: string;
@@ -106,6 +107,7 @@ export async function submitProjectToAri({
 	try {
 		const payload = buildAriIngestPayload({
 			externalId: claim.externalId,
+			isUpdate: claim.project.hasShippedToAri,
 			project: {
 				...claim.project,
 				hackatime_projects: claim.project.hackatimeProjects
@@ -287,6 +289,7 @@ async function claimSubmission(
 			.update(project)
 			.set({
 				status: readiness.waitingStatus,
+				hasShippedToAri: true,
 				activeAriExternalId: externalId,
 				activeSubmissionFeedbackId: submissionFeedback.id
 			})
@@ -310,6 +313,7 @@ async function releaseFailedSubmission(claim: ClaimedSubmission, userId: string)
 			.update(project)
 			.set({
 				status: claim.previousStatus,
+				hasShippedToAri: claim.project.hasShippedToAri,
 				activeAriExternalId: null,
 				activeSubmissionFeedbackId: null
 			})
@@ -356,6 +360,7 @@ const projectForSubmissionFields = {
 	hackatimeProjects: project.hackatime_projects,
 	md0: project.md0,
 	md1: project.md1,
+	hasShippedToAri: project.hasShippedToAri,
 	makerEmail: user.email,
 	makerDisplayName: user.displayName,
 	makerSlackId: user.slackId,

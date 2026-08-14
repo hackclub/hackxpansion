@@ -10,6 +10,7 @@ import {
 const projectId = '019ff59c-69b3-785a-9618-a2ee6ae323a1';
 const payload: AriIngestPayload = {
 	external_id: projectId,
+	is_update: false,
 	title: 'Expansion card',
 	description: 'A useful expansion card.',
 	maker: { email: 'maker@example.com', name: 'Maker', slack_id: 'U123' },
@@ -24,8 +25,9 @@ afterEach(() => vi.unstubAllGlobals());
 
 describe('Ari ingest', () => {
 	it('builds the documented solo ship payload', () => {
-		const result = buildAriIngestPayload({
+		const options = {
 			externalId: projectId,
+			isUpdate: false,
 			project: {
 				id: projectId,
 				title: 'Expansion card',
@@ -39,16 +41,19 @@ describe('Ari ingest', () => {
 			journals: [
 				{ createdAt: new Date('2026-07-30T12:00:00Z'), durationInMinutes: 45, text: 'Built it' }
 			],
-			phase: 'design'
-		});
+			phase: 'design' as const
+		};
+		const result = buildAriIngestPayload(options);
 
 		expect(result).toMatchObject({
 			external_id: projectId,
+			is_update: false,
 			track: 'hardware',
 			hackatime_projects: ['card-firmware'],
 			journals: [{ at: '2026-07-30', minutes: 45, text: 'Built it' }]
 		});
 		expect(typeof result.journals?.[0].minutes).toBe('number');
+		expect(buildAriIngestPayload({ ...options, isUpdate: true }).is_update).toBe(true);
 	});
 
 	it('sends journals using Ari date, numeric minutes, and text fields', async () => {

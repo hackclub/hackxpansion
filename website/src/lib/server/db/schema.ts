@@ -57,6 +57,7 @@ export const project = pgTable(
 		buildCurrencyAwarded: boolean('build_currency_awarded').default(false).notNull(),
 		md0: integer('md0'),
 		md1: integer('md1'),
+		hasShippedToAri: boolean('has_shipped_to_ari').default(false).notNull(),
 		activeAriExternalId: text('active_ari_external_id'),
 		activeSubmissionFeedbackId: uuid('active_submission_feedback_id').references(
 			(): AnyPgColumn => projectSubmissionFeedback.id,

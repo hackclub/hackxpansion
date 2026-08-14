@@ -9,6 +9,7 @@ export type InboundTrack = 'software' | 'hardware';
 
 export type AriIngestPayload = {
 	external_id: string;
+	is_update: boolean;
 	title: string;
 	description: string;
 	maker: {
@@ -54,6 +55,7 @@ export type JournalForAriIngest = {
 
 export type BuildAriIngestPayloadOptions = {
 	externalId: string;
+	isUpdate: boolean;
 	project: ProjectForAriIngest;
 	maker: MakerForAriIngest;
 	journals: JournalForAriIngest[];
@@ -87,6 +89,7 @@ export class AriInboundError extends Error {
 
 export function buildAriIngestPayload({
 	externalId,
+	isUpdate,
 	project,
 	maker,
 	journals,
@@ -126,6 +129,7 @@ export function buildAriIngestPayload({
 
 	return {
 		external_id: externalId,
+		is_update: isUpdate,
 		title: project.title,
 		description,
 		maker: {
