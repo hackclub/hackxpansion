@@ -1,4 +1,5 @@
 <script lang="ts">
+	import DropdownSelect from '$lib/components/dropdown_select.svelte';
 	import { inferGithubUsername, type UserSubmissionProfile } from '$lib/profile';
 	import type { ProjectReviewPhase } from '$lib/projects/lifecycle';
 
@@ -25,6 +26,8 @@
 	function value(name: string, fallback: string | null = null) {
 		return values?.[name] ?? fallback ?? '';
 	}
+
+	let selectedAddressId = $state<string | null>(value('addressId') || null);
 </script>
 
 <form method="post" {action} class="content-box flex w-full flex-col gap-6 p-5 sm:p-7">
@@ -67,20 +70,22 @@
 			{/if}
 		</div>
 	{:else}
-		<label class="flex flex-col gap-1 text-sm font-semibold">
-			Shipping address
-			<select name="addressId" required class="border border-slate-500 bg-white p-2 font-normal">
-				<option value="" selected={!value('addressId')}>Select an address</option>
-				{#each addressOptions as address (address.id)}
-					<option value={address.id} selected={value('addressId') === address.id}>
-						{address.label}{address.primary ? ' (primary)' : ''}
-					</option>
-				{/each}
-			</select>
+		<div class="flex flex-col gap-1">
+			<DropdownSelect
+				name="addressId"
+				label="Shipping address"
+				options={addressOptions.map((address) => ({
+					value: address.id,
+					label: `${address.label}${address.primary ? ' (primary)' : ''}`
+				}))}
+				bind:value={selectedAddressId}
+				placeholder="Select an address"
+				required
+			/>
 			<span class="font-normal text-slate-500">
 				Loaded from Hack Club Auth. This choice applies only to this submission.
 			</span>
-		</label>
+		</div>
 	{/if}
 
 	<fieldset class="flex flex-col gap-2">

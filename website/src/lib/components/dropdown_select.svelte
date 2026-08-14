@@ -20,7 +20,9 @@
 	const controlId = $props.id();
 	const labelId = `${controlId}-label`;
 	const listboxId = `${controlId}-listbox`;
+	const errorId = `${controlId}-error`;
 	let isOpen = $state(false);
+	let invalid = $state(false);
 	let activeIndex = $state(0);
 	let trigger: HTMLButtonElement;
 	let optionButtons: HTMLButtonElement[] = [];
@@ -42,7 +44,14 @@
 
 	function select(index: number) {
 		value = options[index].value;
+		invalid = false;
 		closeDropdown();
+	}
+
+	function handleInvalid(event: Event) {
+		event.preventDefault();
+		invalid = true;
+		openDropdown();
 	}
 
 	function moveActive(direction: 1 | -1) {
@@ -94,10 +103,21 @@
 </script>
 
 <div class="relative flex flex-col gap-0.5">
-	<span id={labelId}>
+	<span id={labelId} class="text-sm font-semibold">
 		{label}{#if required}<span aria-hidden="true"> *</span>{/if}
 	</span>
-	<input type="hidden" {name} value={value ?? ''} />
+	<input
+		type="text"
+		{name}
+		value={value ?? ''}
+		{required}
+		{disabled}
+		tabindex="-1"
+		aria-hidden="true"
+		autocomplete="off"
+		class="pointer-events-none absolute h-px w-px opacity-0"
+		oninvalid={handleInvalid}
+	/>
 
 	<button
 		bind:this={trigger}
@@ -108,10 +128,12 @@
 		aria-controls={listboxId}
 		aria-expanded={isOpen}
 		aria-required={required}
+		aria-invalid={invalid}
+		aria-describedby={invalid ? errorId : undefined}
 		id={controlId}
-		class="flex w-full cursor-pointer items-center justify-between border border-slate-700 bg-white/70 px-3 py-2 text-left text-sm disabled:cursor-not-allowed disabled:bg-slate-100 disabled:opacity-50 {isOpen
-			? 'relative z-20'
-			: ''}"
+		class="flex w-full cursor-pointer items-center justify-between border bg-white/70 px-3 py-2 text-left text-sm font-normal disabled:cursor-not-allowed disabled:bg-slate-100 disabled:opacity-50 {invalid
+			? 'border-red-700'
+			: 'border-slate-700'} {isOpen ? 'relative z-20' : ''}"
 		onclick={() => (isOpen ? closeDropdown() : openDropdown())}
 		onkeydown={handleTriggerKeydown}
 		{disabled}
@@ -119,6 +141,9 @@
 		<span class={options[selectedIndex]?.class ?? ''}>{displayLabel}</span>
 		<span aria-hidden="true" class="ml-3 text-xs">{isOpen ? '▲' : '▼'}</span>
 	</button>
+	{#if invalid}
+		<span id={errorId} class="text-xs font-normal text-red-700">Select an option.</span>
+	{/if}
 
 	{#if isOpen}
 		<button
@@ -143,7 +168,7 @@
 						role="option"
 						aria-selected={option.value === value}
 						tabindex={index === activeIndex ? 0 : -1}
-						class="w-full cursor-pointer px-3 py-2 text-left text-sm transition-colors hover:bg-slate-100 focus:bg-slate-100 focus:outline-none active:bg-slate-200 {option.value ===
+						class="w-full cursor-pointer px-3 py-2 text-left text-sm font-normal transition-colors hover:bg-slate-100 focus:bg-slate-100 focus:outline-none active:bg-slate-200 {option.value ===
 						value
 							? 'bg-slate-100 font-semibold'
 							: ''} {option.class ?? ''}"
