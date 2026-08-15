@@ -55,6 +55,14 @@ You must only track a unit of work with one of these, so if you used lapse to re
 
 ## FAQ
 
+### What do I get in the console package
+
+You get the
+
+- **_Hackxpansion_** console
+- a two and four button module kit with a PCBs and parts
+- as many right angle 2x7 headers as you need for your modules
+
 ### When do I get the funding for my modules
 
 After your all your module designs get approved and you order the console, you will get an email/DM on slack with an invite to a HCB grant card. This way you can order call your modules at once, and save on shipping
