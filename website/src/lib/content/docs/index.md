@@ -60,7 +60,7 @@ You must only track a unit of work with one of these, so if you used lapse to re
 You get the
 
 - **_Hackxpansion_** console
-- a two and four button module kit with a PCBs and parts
+- a two and four button module kit with PCBs and parts
 - as many right angle 2x7 headers as you need for your modules
 
 ### When do I get the funding for my modules
