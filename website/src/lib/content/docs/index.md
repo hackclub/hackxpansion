@@ -57,11 +57,13 @@ You must only track a unit of work with one of these, so if you used lapse to re
 
 ### When do I get the funding for my modules
 
-After your designs get approved, you will get an email/DM on slack with an invite to a HCB card.
+After your all your module designs get approved and you order the console, you will get an email/DM on slack with an invite to a HCB grant card. This way you can order call your modules at once, and save on shipping
 
 ### I don't have a 3D printer, how do I print out the shell of my modules
 
 No problem! Just join `#printing-legion` on slack and you can get your models printed by a network of printers all around the world.
+
+The price of printing legion is 50$/Kg, you won't have to this out of pocket, instead you will have to use your HCB grant card. If other services are cheaper, maybe like JLC3DP, you are welcome to use those.
 
 ### What is this all about?
 
