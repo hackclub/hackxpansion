@@ -9,7 +9,7 @@ This is the main docs page of Hackxpansion, where you can learn about the event,
 
 ## How does this work?
 
-Design 4 expansion cards; get funding to build them; write app that use these card; get a custom handheld console to use them in/on.
+Design 4 expansion cards; get funding to build them; write an app that use these card; get a custom handheld console to use them in/on.
 
 Each card can be in one of three tiers; for each tier of card, you get a different amount of currency.
 
