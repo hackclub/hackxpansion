@@ -1,5 +1,10 @@
 # Hackxpansion documentation
 
+<div class="flex flex-wrap items-center gap-6">
+    <img class="h-64 w-auto max-w-full object-contain" src="/shop/console.png" />
+    <img class="h-64 w-auto max-w-full object-contain" src="https://cdn.hackclub.com/01a005fc-617f-76f8-a676-107ad7259ae6/6767676.png" />
+</div>
+
 This is the main docs page of Hackxpansion, where you can learn about the event, hardware and firmware. If you have any more questions ask in the `#hackxpansion` slack channel.
 
 ## How does this work?
@@ -31,6 +36,22 @@ You have to track your work, here are the 3 options you have:
 - Using [Hackatime](https://hackatime.hackclub.com/) to track your coding in your editors
 
 You must only track a unit of work with one of these, so if you used lapse to record yourself coding, you must not also use hackatime. There is one exception here, you can write journals of work tracked with lapse or hackatime, but you must not report time for them in the journal entry.
+
+## Gallery
+
+<details>
+<summary>images</summary>
+
+<img src="https://cdn.hackclub.com/01a005f3-4a9c-737e-9898-1df71c40801d/1000023455.png">
+<img src="https://cdn.hackclub.com/01a005f3-4d9e-79aa-9c5c-b8ef2e1f3400/1000023456.png">
+<img src="https://cdn.hackclub.com/01a005f3-36c0-75ce-b869-0186b5b8bbfc/100002326767.jpg">
+<img src="https://cdn.hackclub.com/01a005f3-39ec-7b7e-ad51-f78bb3b2e53e/1000023131.jpg">
+<img src="https://cdn.hackclub.com/01a005f3-3e5d-7997-a91d-7d19fe64ddf7/1000023140.jpg">
+<img src="https://cdn.hackclub.com/01a005f3-4149-7843-9add-a190e7cf5b50/1000023459.jpg">
+<img src="https://cdn.hackclub.com/01a005f3-440e-79cb-8e40-8658f3d5547d/1000023171.jpg">
+<img src="https://cdn.hackclub.com/01a005f3-4747-7552-b844-f382ceb26087/1000023265.jpg">
+
+</details>
 
 ## FAQ
 
