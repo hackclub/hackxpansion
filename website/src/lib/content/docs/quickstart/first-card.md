@@ -341,3 +341,51 @@ Then drag your uploaded pcb model into the newly created hybrid design.
 # Work In Progress
 
 For now look at the [example](https://szekelymikokollegium2.autodesk360.com/g/shares/SH28cd1QT2badd0ea72b21236d76e5e5ca90)
+
+## Ordering
+
+This part will guide you through how to order your PCBs from [JLCPCB](https://jlcpcb.com/)
+
+### Installing pPugin
+
+Go the the `Plugin and Content Manager`(PCM) menu option in the main KiCAD page:
+
+![PCM](https://cdn.hackclub.com/01a0060a-6f3f-7b16-b0af-280a98ccc1cf/image.png)
+
+Search JLC:
+
+![JLC search in PCM](https://cdn.hackclub.com/01a0060c-82c5-75b4-b737-10e8fd008398/image.png)
+
+And install
+
+### Exporting
+
+A new button should appear in the PCB editor
+
+![new button](https://cdn.hackclub.com/01a00611-dce7-7171-9dfa-fee30ed584a2/image.png)
+
+If you click it, it will bring up the exporter menu.
+
+You probably don't need to worry about most options, so just click `Generate`
+
+This will create directory named `production` where all the prod files live.
+
+### Ordering
+
+Go to [https://jlcpcb.com](jlcpcb.com) and click `Get Instant Quote`
+
+Upload your `YOURPCBNAME.zip` to the gerber section.
+
+There are a bunch of options here, like: PCB color, surface finish, etc. Most of these should stay as their default, but you can play around them if you want.
+
+**For shipping use the cheapest option!!**
+
+### PCBA
+
+_PCB Assembly_
+
+If you used small SMD components, like one with a QFN/0402 package, you may want to get your PCB assembled by JLCPCB
+
+This is a more advanced topic, so you should do your own research.
+
+**_TIP_**: If you add a LCSC property with an LCSC part nr. to your symbols (use the symbol table to mass assign LCSC part NRs), this extension will include them in your generated BOM, and will make your life much easier, you will not have to assign them manually on the JLC website.
