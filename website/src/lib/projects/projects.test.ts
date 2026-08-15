@@ -60,8 +60,14 @@ describe('project lifecycle', () => {
 			phase: 'build',
 			waitingStatus: 'waiting_build'
 		});
-		expect(getNextProjectSubmission('rejected_design')).toBeNull();
-		expect(getNextProjectSubmission('rejected_build')).toBeNull();
+		expect(getNextProjectSubmission('rejected_design')).toEqual({
+			phase: 'design',
+			waitingStatus: 'waiting_design'
+		});
+		expect(getNextProjectSubmission('rejected_build')).toEqual({
+			phase: 'build',
+			waitingStatus: 'waiting_build'
+		});
 		expect(getNextProjectSubmission('approved_build')).toBeNull();
 	});
 
@@ -160,17 +166,22 @@ describe('submission readiness', () => {
 		});
 	});
 
-	it('allows requested changes to be resubmitted but blocks rejected projects', () => {
+	it('allows requested changes and rejected projects to be resubmitted', () => {
 		expect(
 			getProjectSubmissionReadiness({ ...readyProject, status: 'needs_changes_design' })
 		).toMatchObject({ canSubmit: true, phase: 'design' });
 
-		const rejected = getProjectSubmissionReadiness({ ...readyProject, status: 'rejected_design' });
-		expect(rejected.canSubmit).toBe(false);
-		expect(rejected.changes).toContainEqual({
-			field: 'status',
-			message: 'This project design was rejected and cannot be resubmitted.'
-		});
+		expect(
+			getProjectSubmissionReadiness({ ...readyProject, status: 'rejected_design' })
+		).toMatchObject({ canSubmit: true, phase: 'design' });
+
+		expect(
+			getProjectSubmissionReadiness({
+				...readyProject,
+				status: 'rejected_build',
+				demoUrl: 'https://example.com/demo'
+			})
+		).toMatchObject({ canSubmit: true, phase: 'build' });
 	});
 });
 

@@ -29,9 +29,11 @@ export function getNextProjectSubmission(status: ProjectStatus): NextProjectSubm
 	switch (status) {
 		case 'not_submitted':
 		case 'needs_changes_design':
+		case 'rejected_design':
 			return { phase: 'design', waitingStatus: 'waiting_design' };
 		case 'approved_design':
 		case 'needs_changes_build':
+		case 'rejected_build':
 			return { phase: 'build', waitingStatus: 'waiting_build' };
 		default:
 			return null;

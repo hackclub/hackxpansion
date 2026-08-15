@@ -135,10 +135,6 @@ function getStatusSubmissionMessage(status: ProjectStatus) {
 			return 'Wait for the current build review to finish.';
 		case 'approved_build':
 			return 'This project build has already been approved.';
-		case 'rejected_design':
-			return 'This project design was rejected and cannot be resubmitted.';
-		case 'rejected_build':
-			return 'This project build was rejected and cannot be resubmitted.';
 		default:
 			return `Project status must change before submitting. Current status: ${status}.`;
 	}

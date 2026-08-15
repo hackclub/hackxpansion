@@ -107,7 +107,7 @@ describe('project review Slack messages', () => {
 	it.each<[ReviewEvent, string, string]>([
 		['review.approved', 'Build approved', 'design got approved'],
 		['review.changes', 'Changes requested', 'submit it for build review again'],
-		['review.rejected', 'Rejected!!!', "Don't submit again"],
+		['review.rejected', 'Rejected!!!', 'submit it for build review again'],
 		['review.requeued', 'Back in review', 'No action is required'],
 		['review.reverted', 'Review reopened', 'No action is required'],
 		['review.fraud', 'Needs manual review', 'team member will contact you']

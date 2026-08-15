@@ -223,7 +223,7 @@ function reviewOutcome(event: ReviewEvent, phase: ProjectReviewPhase) {
 		case 'review.rejected':
 			return {
 				label: 'Rejected!!!',
-				nextSteps: `Don't submit again, your project will get returned immediately`
+				nextSteps: `Review the feedback, update your project, and submit it for ${phase} review again.`
 			};
 		case 'review.requeued':
 			return {
