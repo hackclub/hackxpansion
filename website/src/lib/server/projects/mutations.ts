@@ -65,7 +65,7 @@ export class ProjectMutationError extends Error {
 export async function createProject({ userId, input }: CreateProjectOptions) {
 	const values = normalizeProjectInput(input);
 
-	if (values.type === 'app') {
+	if (values.type !== 'card') {
 		const [createdProject] = await db
 			.insert(project)
 			.values({
@@ -161,7 +161,7 @@ export async function editProject({ projectId, userId, input }: EditProjectOptio
 		}
 
 		if (values.type && values.type !== existingProject.type) {
-			if (values.type === 'app') {
+			if (values.type !== 'card') {
 				values.md0 = null;
 				values.md1 = null;
 			} else {
@@ -268,7 +268,7 @@ function normalizeProjectPatch(input: ProjectPatch) {
 function normalizeProjectType(type: ProjectType | undefined): ProjectType {
 	if (type === undefined) return 'card';
 	if (!isProjectType(type)) {
-		throw new ProjectMutationError(422, 'Project type must be Card or App.');
+		throw new ProjectMutationError(422, 'Project type must be Card, App, or Mod.');
 	}
 	return type;
 }

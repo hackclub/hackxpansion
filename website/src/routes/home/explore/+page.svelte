@@ -111,6 +111,8 @@
 								<span class="text-slate-600">
 									MD0:{formatResistor(project.md0)} · MD1:{formatResistor(project.md1)}
 								</span>
+							{:else if project.type === 'mod'}
+								<span class="text-slate-600">Hardware mod</span>
 							{:else}
 								<span class="text-slate-600">Software app</span>
 							{/if}

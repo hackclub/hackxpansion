@@ -137,7 +137,8 @@
 		label="Type"
 		options={[
 			{ value: 'card', label: 'Card', class: 'capitalize' },
-			{ value: 'app', label: 'App', class: 'capitalize' }
+			{ value: 'app', label: 'App', class: 'capitalize' },
+			{ value: 'mod', label: 'Mod', class: 'capitalize' }
 		]}
 		bind:value={selectedType}
 		required

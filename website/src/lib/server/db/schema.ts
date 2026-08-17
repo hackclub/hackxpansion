@@ -74,7 +74,7 @@ export const project = pgTable(
 		index('project_active_submission_feedback_id_idx').on(table.activeSubmissionFeedbackId),
 		check(
 			'project_resistor_assignment',
-			sql`(${table.type} = 'app' AND ${table.md0} IS NULL AND ${table.md1} IS NULL) OR (${table.type} = 'card' AND ${table.md0} IS NOT NULL AND ${table.md1} IS NOT NULL)`
+			sql`(${table.type} IN ('app', 'mod') AND ${table.md0} IS NULL AND ${table.md1} IS NULL) OR (${table.type} = 'card' AND ${table.md0} IS NOT NULL AND ${table.md1} IS NOT NULL)`
 		),
 		check('project_currency_paid_out_nonnegative', sql`${table.currencyPaidOut} >= 0`),
 		uniqueIndex('project_card_md_pair_uniq')

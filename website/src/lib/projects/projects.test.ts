@@ -4,7 +4,8 @@ import { hasMarkdownImage, isValidJournalDuration, MAX_JOURNAL_DURATION_MINUTES 
 import {
 	getApprovalCurrencyPayout,
 	getNextProjectSubmission,
-	getProjectStatusAfterAriEvent
+	getProjectStatusAfterAriEvent,
+	trackForProjectType
 } from './lifecycle';
 import { E24_RESISTOR_VALUES, findNextAvailableResistorPair, formatResistor } from './resistors';
 import { getProjectSubmissionReadiness } from './submission';
@@ -31,9 +32,17 @@ const readyProject = {
 describe('project domain validation', () => {
 	it('accepts only known project types and tiers', () => {
 		expect(isProjectType('card')).toBe(true);
+		expect(isProjectType('app')).toBe(true);
+		expect(isProjectType('mod')).toBe(true);
 		expect(isProjectType('other')).toBe(false);
 		expect(isProjectTier('advanced')).toBe(true);
 		expect(isProjectTier('none')).toBe(false);
+	});
+
+	it('maps mod to hardware track', () => {
+		expect(trackForProjectType('card')).toBe('hardware');
+		expect(trackForProjectType('mod')).toBe('hardware');
+		expect(trackForProjectType('app')).toBe('software');
 	});
 
 	it('identifies waiting states', () => {

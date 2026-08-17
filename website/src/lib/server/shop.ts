@@ -10,6 +10,7 @@ import {
 	type ShopProgress
 } from '$lib/shop/domain';
 import type { CatalogItemInput } from '$lib/shop/catalog';
+import type { ProjectType } from '$lib/projects/domain';
 
 const MAX_NOTE_LENGTH = 2_000;
 const fulfiller = alias(user, 'fulfiller');
@@ -276,7 +277,7 @@ export async function fulfillShopOrder(adminUserId: string, orderId: string, raw
 	});
 }
 
-function countAcceptedDesigns(rows: Array<{ type: 'card' | 'app' | null }>): ShopProgress {
+function countAcceptedDesigns(rows: Array<{ type: ProjectType | null }>): ShopProgress {
 	return {
 		moduleDesigns: rows.filter((row) => row.type === 'card').length,
 		appDesigns: rows.filter((row) => row.type === 'app').length

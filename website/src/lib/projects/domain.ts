@@ -10,7 +10,7 @@ export const projectStatusValues = [
 	'approved_build'
 ] as const;
 
-export const projectTypeValues = ['card', 'app'] as const;
+export const projectTypeValues = ['card', 'app', 'mod'] as const;
 export const projectTierValues = ['pro', 'advanced', 'basic'] as const;
 export const reviewEventTypeValues = [
 	'approved',

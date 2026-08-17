@@ -34,7 +34,7 @@ export function projectInputFromForm(formData: FormData): ProjectInput {
 	const tier = stringFromForm(formData, 'tier');
 
 	if (!isProjectType(type)) {
-		throw new ProjectMutationError(422, 'Project type must be Card or App.');
+		throw new ProjectMutationError(422, 'Project type must be Card, App, or Mod.');
 	}
 	if (tier && !isProjectTier(tier)) {
 		throw new ProjectMutationError(422, 'Project tier must be PRO, Advanced, or Basic.');
