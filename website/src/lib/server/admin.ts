@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, inArray, sql } from 'drizzle-orm';
+import { and, asc, countDistinct, desc, eq, inArray, sql } from 'drizzle-orm';
 import { db } from '$lib/server/db';
 import { account as authAccount } from '$lib/server/db/auth.schema';
 import {
@@ -103,7 +103,8 @@ export async function getEventStats() {
 		[reviewStats],
 		[orderStats],
 		[journalStats],
-		projectsForHackatime
+		projectsForHackatime,
+		[usersWithProject]
 	] = await Promise.all([
 		db
 			.select({
@@ -184,7 +185,12 @@ export async function getEventStats() {
 				hackatimeProjects: project.hackatime_projects
 			})
 			.from(project)
-			.innerJoin(user, eq(project.userId, user.id))
+			.innerJoin(user, eq(project.userId, user.id)),
+		db
+			.select({
+				count: countDistinct(project.userId)
+			})
+			.from(project)
 	]);
 
 	const hackatimeMap = await getHackatimeMinutesForProjects(projectsForHackatime);
@@ -209,7 +215,8 @@ export async function getEventStats() {
 			yswsEligible: Number(userStats?.yswsEligibleCount ?? 0),
 			admins: Number(userStats?.adminCount ?? 0),
 			totalCurrency: Number(userStats?.totalUserCurrency ?? 0),
-			withActiveWork: Number(activeWorkUserStats?.activeWorkUsers ?? 0)
+			withActiveWork: Number(activeWorkUserStats?.activeWorkUsers ?? 0),
+			withAtLeastOneProject: Number(usersWithProject?.count ?? 0)
 		},
 		projects: {
 			total: Number(projectStats?.totalProjects ?? 0),
