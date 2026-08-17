@@ -127,6 +127,13 @@
       "when": 1786961490518,
       "tag": "0017_chunky_cerebro",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1786961490519,
+      "tag": "0018_mod_resistor_assignment",
+      "breakpoints": true
     }
   ]
 }

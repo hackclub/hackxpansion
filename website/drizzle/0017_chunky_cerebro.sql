@@ -1,3 +1,1 @@
-ALTER TYPE "public"."project_type" ADD VALUE 'mod';--> statement-breakpoint
-ALTER TABLE "project" DROP CONSTRAINT "project_resistor_assignment";--> statement-breakpoint
-ALTER TABLE "project" ADD CONSTRAINT "project_resistor_assignment" CHECK (("project"."type" IN ('app', 'mod') AND "project"."md0" IS NULL AND "project"."md1" IS NULL) OR ("project"."type" = 'card' AND "project"."md0" IS NOT NULL AND "project"."md1" IS NOT NULL));
+ALTER TYPE "public"."project_type" ADD VALUE IF NOT EXISTS 'mod';

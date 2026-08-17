@@ -1,6 +1,6 @@
 {
-  "id": "78d1160d-429e-45ab-b74b-229890873743",
-  "prevId": "a68fe73a-dac4-41a4-833c-e8046c45ca5c",
+  "id": "5a24bf98-0c67-466d-8fa0-6819b5e3962d",
+  "prevId": "78d1160d-429e-45ab-b74b-229890873743",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -329,7 +329,7 @@
       "checkConstraints": {
         "project_resistor_assignment": {
           "name": "project_resistor_assignment",
-          "value": "(\"project\".\"type\" = 'app' AND \"project\".\"md0\" IS NULL AND \"project\".\"md1\" IS NULL) OR (\"project\".\"type\" = 'card' AND \"project\".\"md0\" IS NOT NULL AND \"project\".\"md1\" IS NOT NULL)"
+          "value": "(\"project\".\"type\" IN ('app', 'mod') AND \"project\".\"md0\" IS NULL AND \"project\".\"md1\" IS NULL) OR (\"project\".\"type\" = 'card' AND \"project\".\"md0\" IS NOT NULL AND \"project\".\"md1\" IS NOT NULL)"
         },
         "project_currency_paid_out_nonnegative": {
           "name": "project_currency_paid_out_nonnegative",
