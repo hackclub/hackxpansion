@@ -1,11 +1,37 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import CoinIcon from '$lib/components/coin_icon.svelte';
+	import DropdownSelect from '$lib/components/dropdown_select.svelte';
 	import ProjectStatusBadge from '$lib/components/project_status_badge.svelte';
 	import { formatMinutes } from '$lib/projects/domain';
 	import type { PageServerData } from './$types';
 
 	let { data }: { data: PageServerData } = $props();
+
+	type SortOption = 'latest' | 'oldest' | 'most_hours' | 'least_hours';
+	let sortBy = $state<string | null>('latest');
+
+	const sortOptions = [
+		{ value: 'latest', label: 'Latest' },
+		{ value: 'oldest', label: 'Oldest' },
+		{ value: 'most_hours', label: 'Most Hours' },
+		{ value: 'least_hours', label: 'Least Hours' }
+	];
+
+	let sortedProjects = $derived.by(() => {
+		const list = [...data.projects];
+		switch (sortBy as SortOption) {
+			case 'oldest':
+				return list.reverse();
+			case 'most_hours':
+				return list.sort((a, b) => b.totalTrackedMinutes - a.totalTrackedMinutes);
+			case 'least_hours':
+				return list.sort((a, b) => a.totalTrackedMinutes - b.totalTrackedMinutes);
+			case 'latest':
+			default:
+				return list;
+		}
+	});
 </script>
 
 <svelte:head>
@@ -13,17 +39,30 @@
 </svelte:head>
 
 <main class="mx-auto flex max-w-6xl flex-col gap-8 p-6 text-slate-800">
-	<header>
-		<p class="text-sm font-bold uppercase tracking-widest text-slate-500">Admin</p>
-		<h1 class="text-4xl font-bold">Projects</h1>
-		<p class="text-slate-600">View every project, its owner, journals, and review history.</p>
+	<header class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+		<div>
+			<p class="text-sm font-bold uppercase tracking-widest text-slate-500">Admin</p>
+			<h1 class="text-4xl font-bold">Projects</h1>
+			<p class="text-slate-600">View every project, its owner, journals, and review history.</p>
+		</div>
+
+		{#if data.projects.length > 0}
+			<div class="w-48 shrink-0 self-start sm:self-auto">
+				<DropdownSelect
+					name="sortBy"
+					label="Sort by"
+					bind:value={sortBy}
+					options={sortOptions}
+				/>
+			</div>
+		{/if}
 	</header>
 
 	{#if data.projects.length === 0}
 		<p class="content-box p-5">No projects have been created.</p>
 	{:else}
 		<section class="grid gap-4 lg:grid-cols-2" aria-label="All projects">
-			{#each data.projects as project (project.id)}
+			{#each sortedProjects as project (project.id)}
 				<article
 					class="content-box group relative flex cursor-pointer flex-col gap-4 p-5 transition duration-150 hover:-translate-y-0.5 hover:bg-slate-400/70 hover:shadow-lg"
 				>
@@ -73,6 +112,7 @@
 						{#if project.hackatimeMinutes > 0}
 							<span>{formatMinutes(project.hackatimeMinutes)} Hackatime</span>
 						{/if}
+						<span class="font-bold text-slate-800">{formatMinutes(project.totalTrackedMinutes)} total</span>
 						<span>{project.reviewCount} review{project.reviewCount === 1 ? '' : 's'}</span>
 						<span
 							class="flex items-center gap-1"
