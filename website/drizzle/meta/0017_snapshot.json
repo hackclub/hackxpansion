@@ -329,7 +329,7 @@
       "checkConstraints": {
         "project_resistor_assignment": {
           "name": "project_resistor_assignment",
-          "value": "(\"project\".\"type\" = 'app' AND \"project\".\"md0\" IS NULL AND \"project\".\"md1\" IS NULL) OR (\"project\".\"type\" = 'card' AND \"project\".\"md0\" IS NOT NULL AND \"project\".\"md1\" IS NOT NULL)"
+          "value": "(\"project\".\"type\" IN ('app', 'mod') AND \"project\".\"md0\" IS NULL AND \"project\".\"md1\" IS NULL) OR (\"project\".\"type\" = 'card' AND \"project\".\"md0\" IS NOT NULL AND \"project\".\"md1\" IS NOT NULL)"
         },
         "project_currency_paid_out_nonnegative": {
           "name": "project_currency_paid_out_nonnegative",
