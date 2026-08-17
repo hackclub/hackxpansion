@@ -60,7 +60,8 @@
 		{ title: 'Your Orders', href: '/home/shop/orders' }
 	] as const;
 	const adminItems = [
-		{ title: 'Orders', href: '/home/admin' },
+		{ title: 'Overview', href: '/home/admin' },
+		{ title: 'Orders', href: '/home/admin/orders' },
 		{ title: 'Projects', href: '/home/admin/projects' },
 		{ title: 'Submissions', href: '/home/admin/submissions' },
 		{ title: 'Shop Items', href: '/home/admin/shop' },

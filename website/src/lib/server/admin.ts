@@ -1,7 +1,14 @@
-import { and, asc, desc, eq } from 'drizzle-orm';
+import { and, asc, desc, eq, sql } from 'drizzle-orm';
 import { db } from '$lib/server/db';
 import { account as authAccount } from '$lib/server/db/auth.schema';
-import { user } from '$lib/server/db/schema';
+import {
+	journal,
+	project,
+	projectSubmissionFeedback,
+	review,
+	shopOrder,
+	user
+} from '$lib/server/db/schema';
 
 const CONFIGURED_ADMIN_HACKCLUB_ID = 'ident!ZVpfLg';
 
@@ -13,6 +20,145 @@ export class AdminError extends Error {
 		super(message);
 		this.name = 'AdminError';
 	}
+}
+
+export async function getEventStats() {
+	const [
+		[userStats],
+		[activeWorkUserStats],
+		[projectStats],
+		projectStatusCounts,
+		projectTypeCounts,
+		projectTierCounts,
+		[submissionStats],
+		[reviewStats],
+		[orderStats],
+		[journalStats]
+	] = await Promise.all([
+		db
+			.select({
+				totalUsers: sql<number>`COUNT(${user.id})`,
+				yswsEligibleCount: sql<number>`COUNT(CASE WHEN ${user.yswsEligible} THEN 1 END)`,
+				adminCount: sql<number>`COUNT(CASE WHEN ${user.isAdmin} THEN 1 END)`,
+				totalUserCurrency: sql<number>`COALESCE(SUM(${user.currency}), 0)`
+			})
+			.from(user),
+		db
+			.select({
+				activeWorkUsers: sql<number>`COUNT(DISTINCT ${project.userId})`
+			})
+			.from(project)
+			.leftJoin(journal, eq(journal.projectId, project.id))
+			.where(
+				sql`COALESCE(cardinality(${project.hackatime_projects}), 0) > 0 OR ${journal.id} IS NOT NULL`
+			),
+		db
+			.select({
+				totalProjects: sql<number>`COUNT(${project.id})`,
+				totalCurrencyPaidOut: sql<number>`COALESCE(SUM(${project.currencyPaidOut}), 0)`,
+				shippedToAriCount: sql<number>`COUNT(CASE WHEN ${project.hasShippedToAri} THEN 1 END)`
+			})
+			.from(project),
+		db
+			.select({
+				status: project.status,
+				count: sql<number>`COUNT(${project.id})`
+			})
+			.from(project)
+			.groupBy(project.status),
+		db
+			.select({
+				type: project.type,
+				count: sql<number>`COUNT(${project.id})`
+			})
+			.from(project)
+			.groupBy(project.type),
+		db
+			.select({
+				tier: project.tier,
+				count: sql<number>`COUNT(${project.id})`
+			})
+			.from(project)
+			.groupBy(project.tier),
+		db
+			.select({
+				totalSubmissions: sql<number>`COUNT(${projectSubmissionFeedback.id})`,
+				avgNps: sql<number | null>`AVG(${projectSubmissionFeedback.nps})`
+			})
+			.from(projectSubmissionFeedback),
+		db
+			.select({
+				totalReviews: sql<number>`COUNT(${review.id})`,
+				totalApprovedMinutes: sql<number>`COALESCE(SUM(${review.approvedMinutes}), 0)`
+			})
+			.from(review),
+		db
+			.select({
+				totalOrders: sql<number>`COUNT(${shopOrder.id})`,
+				pendingOrders: sql<number>`COUNT(CASE WHEN ${shopOrder.status} = 'in_queue' THEN 1 END)`,
+				fulfilledOrders: sql<number>`COUNT(CASE WHEN ${shopOrder.status} = 'fulfilled' THEN 1 END)`,
+				totalSpent: sql<number>`COALESCE(SUM(${shopOrder.pricePaid}), 0)`
+			})
+			.from(shopOrder),
+		db
+			.select({
+				totalJournals: sql<number>`COUNT(${journal.id})`,
+				totalJournalMinutes: sql<number>`COALESCE(SUM(${journal.durationInMinutes}), 0)`
+			})
+			.from(journal)
+	]);
+
+	const statusMap = Object.fromEntries(projectStatusCounts.map((s) => [s.status, Number(s.count)]));
+	const typeMap = Object.fromEntries(projectTypeCounts.map((t) => [t.type, Number(t.count)]));
+	const tierMap = Object.fromEntries(
+		projectTierCounts.map((t) => [t.tier ?? 'unassigned', Number(t.count)])
+	);
+
+	const pendingReviewCount = (statusMap['waiting_design'] ?? 0) + (statusMap['waiting_build'] ?? 0);
+	const approvedDesignCount = statusMap['approved_design'] ?? 0;
+	const approvedBuildCount = statusMap['approved_build'] ?? 0;
+
+	return {
+		users: {
+			total: Number(userStats?.totalUsers ?? 0),
+			yswsEligible: Number(userStats?.yswsEligibleCount ?? 0),
+			admins: Number(userStats?.adminCount ?? 0),
+			totalCurrency: Number(userStats?.totalUserCurrency ?? 0),
+			withActiveWork: Number(activeWorkUserStats?.activeWorkUsers ?? 0)
+		},
+		projects: {
+			total: Number(projectStats?.totalProjects ?? 0),
+			totalCurrencyPaidOut: Number(projectStats?.totalCurrencyPaidOut ?? 0),
+			shippedToAri: Number(projectStats?.shippedToAriCount ?? 0),
+			pendingReview: pendingReviewCount,
+			approvedDesign: approvedDesignCount,
+			approvedBuild: approvedBuildCount,
+			byStatus: statusMap,
+			byType: typeMap,
+			byTier: tierMap
+		},
+		submissions: {
+			total: Number(submissionStats?.totalSubmissions ?? 0),
+			avgNps:
+				submissionStats?.avgNps !== null && submissionStats?.avgNps !== undefined
+					? Number(Number(submissionStats.avgNps).toFixed(1))
+					: null
+		},
+		reviews: {
+			total: Number(reviewStats?.totalReviews ?? 0),
+			totalApprovedMinutes: Number(reviewStats?.totalApprovedMinutes ?? 0)
+		},
+		orders: {
+			total: Number(orderStats?.totalOrders ?? 0),
+			pending: Number(orderStats?.pendingOrders ?? 0),
+			fulfilled: Number(orderStats?.fulfilledOrders ?? 0),
+			totalSpent: Number(orderStats?.totalSpent ?? 0)
+		},
+		journals: {
+			total: Number(journalStats?.totalJournals ?? 0),
+			totalMinutes: Number(journalStats?.totalJournalMinutes ?? 0)
+		}
+	};
 }
 
 export async function isUserAdmin(userId: string) {
