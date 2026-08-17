@@ -3,7 +3,7 @@ import { resolve } from '$app/paths';
 import { and, desc, eq, notInArray } from 'drizzle-orm';
 import type { Actions, PageServerLoad } from './$types';
 import { isUuid } from '$lib/projects/domain';
-import { AdminError, requireAdmin } from '$lib/server/admin';
+import { AdminError, getHackatimeMinutesForProjects, requireAdmin } from '$lib/server/admin';
 import { db } from '$lib/server/db';
 import { journal, project, review, user } from '$lib/server/db/schema';
 
@@ -83,13 +83,25 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 			.orderBy(desc(review.receivedAt))
 	]);
 
+	const hackatimeMap = await getHackatimeMinutesForProjects([
+		{
+			id: existingProject.id,
+			ownerSlackId: existingProject.ownerSlackId,
+			hackatimeProjects: existingProject.hackatimeProjects
+		}
+	]);
+	const hackatimeMinutes = hackatimeMap.get(existingProject.id) ?? 0;
+	const totalJournalMinutes = journals.reduce((total, entry) => total + entry.durationInMinutes, 0);
+
 	return {
 		project: existingProject,
 		journals,
 		reviews,
 		stats: {
 			journalCount: journals.length,
-			totalJournalMinutes: journals.reduce((total, entry) => total + entry.durationInMinutes, 0)
+			totalJournalMinutes,
+			hackatimeMinutes,
+			totalTrackedMinutes: totalJournalMinutes + hackatimeMinutes
 		}
 	};
 };

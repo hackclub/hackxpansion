@@ -78,7 +78,7 @@
 		</div>
 	</header>
 
-	<section class="grid gap-4 sm:grid-cols-3" aria-label="Project summary">
+	<section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" aria-label="Project summary">
 		<article class="content-box p-4">
 			<p class="text-xs uppercase tracking-wide text-slate-600">Journal entries</p>
 			<p class="mt-1 text-2xl font-bold">{data.stats.journalCount}</p>
@@ -86,6 +86,10 @@
 		<article class="content-box p-4">
 			<p class="text-xs uppercase tracking-wide text-slate-600">Journaled time</p>
 			<p class="mt-1 text-2xl font-bold">{formatMinutes(data.stats.totalJournalMinutes)}</p>
+		</article>
+		<article class="content-box p-4">
+			<p class="text-xs uppercase tracking-wide text-slate-600">Hackatime</p>
+			<p class="mt-1 text-2xl font-bold">{formatMinutes(data.stats.hackatimeMinutes)}</p>
 		</article>
 		<article class="content-box p-4">
 			<p class="text-xs uppercase tracking-wide text-slate-600">Currency paid</p>

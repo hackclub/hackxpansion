@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, inArray, sql } from 'drizzle-orm';
 import { db } from '$lib/server/db';
 import { account as authAccount } from '$lib/server/db/auth.schema';
 import {
@@ -9,6 +9,8 @@ import {
 	shopOrder,
 	user
 } from '$lib/server/db/schema';
+import { getUserHackatimeProjectsWithStats } from '$lib/server/hackatime';
+import { sumHackatimeMinutes } from '$lib/projects/time';
 
 const CONFIGURED_ADMIN_HACKCLUB_ID = 'ident!ZVpfLg';
 
@@ -22,6 +24,73 @@ export class AdminError extends Error {
 	}
 }
 
+export async function getHackatimeMinutesForProjects(
+	projects: Array<{
+		id: string;
+		ownerSlackId: string | null;
+		hackatimeProjects?: string[] | null;
+	}>
+): Promise<Map<string, number>> {
+	const result = new Map<string, number>();
+
+	const slackIdToProjects = new Map<string, Array<{ id: string; hackatimeProjects: string[] }>>();
+	for (const p of projects) {
+		const linked = p.hackatimeProjects?.filter((name) => name.trim().length > 0) ?? [];
+		if (p.ownerSlackId && linked.length > 0) {
+			const existing = slackIdToProjects.get(p.ownerSlackId) ?? [];
+			existing.push({ id: p.id, hackatimeProjects: linked });
+			slackIdToProjects.set(p.ownerSlackId, existing);
+		}
+	}
+
+	const slackEntries = Array.from(slackIdToProjects.entries());
+	const hackatimeResults = await Promise.allSettled(
+		slackEntries.map(async ([slackId, projs]) => {
+			const stats = await getUserHackatimeProjectsWithStats(slackId);
+			return { projs, stats };
+		})
+	);
+
+	for (const res of hackatimeResults) {
+		if (res.status === 'fulfilled') {
+			const { projs, stats } = res.value;
+			for (const p of projs) {
+				const minutes = sumHackatimeMinutes(p.hackatimeProjects, stats);
+				result.set(p.id, minutes);
+			}
+		}
+	}
+
+	const missingProjectIds = projects.filter((p) => !result.has(p.id)).map((p) => p.id);
+	if (missingProjectIds.length > 0) {
+		const reviews = await db
+			.select({
+				projectId: review.projectId,
+				minutesBreakdown: review.minutesBreakdown
+			})
+			.from(review)
+			.where(inArray(review.projectId, missingProjectIds))
+			.orderBy(desc(review.receivedAt));
+
+		for (const r of reviews) {
+			if (r.projectId && !result.has(r.projectId)) {
+				const hackatimeMin = Number(r.minutesBreakdown?.hackatime ?? 0);
+				if (hackatimeMin > 0) {
+					result.set(r.projectId, hackatimeMin);
+				}
+			}
+		}
+	}
+
+	for (const p of projects) {
+		if (!result.has(p.id)) {
+			result.set(p.id, 0);
+		}
+	}
+
+	return result;
+}
+
 export async function getEventStats() {
 	const [
 		[userStats],
@@ -33,7 +102,8 @@ export async function getEventStats() {
 		[submissionStats],
 		[reviewStats],
 		[orderStats],
-		[journalStats]
+		[journalStats],
+		projectsForHackatime
 	] = await Promise.all([
 		db
 			.select({
@@ -89,7 +159,8 @@ export async function getEventStats() {
 		db
 			.select({
 				totalReviews: sql<number>`COUNT(${review.id})`,
-				totalApprovedMinutes: sql<number>`COALESCE(SUM(${review.approvedMinutes}), 0)`
+				totalApprovedMinutes: sql<number>`COALESCE(SUM(${review.approvedMinutes}), 0)`,
+				totalApprovedHackatimeMinutes: sql<number>`COALESCE(SUM(((${review.minutesBreakdown}->>'hackatime')::int)), 0)`
 			})
 			.from(review),
 		db
@@ -105,8 +176,22 @@ export async function getEventStats() {
 				totalJournals: sql<number>`COUNT(${journal.id})`,
 				totalJournalMinutes: sql<number>`COALESCE(SUM(${journal.durationInMinutes}), 0)`
 			})
-			.from(journal)
+			.from(journal),
+		db
+			.select({
+				id: project.id,
+				ownerSlackId: user.slackId,
+				hackatimeProjects: project.hackatime_projects
+			})
+			.from(project)
+			.innerJoin(user, eq(project.userId, user.id))
 	]);
+
+	const hackatimeMap = await getHackatimeMinutesForProjects(projectsForHackatime);
+	let totalHackatimeMinutes = 0;
+	for (const mins of hackatimeMap.values()) {
+		totalHackatimeMinutes += mins;
+	}
 
 	const statusMap = Object.fromEntries(projectStatusCounts.map((s) => [s.status, Number(s.count)]));
 	const typeMap = Object.fromEntries(projectTypeCounts.map((t) => [t.type, Number(t.count)]));
@@ -157,6 +242,10 @@ export async function getEventStats() {
 		journals: {
 			total: Number(journalStats?.totalJournals ?? 0),
 			totalMinutes: Number(journalStats?.totalJournalMinutes ?? 0)
+		},
+		hackatime: {
+			totalMinutes: totalHackatimeMinutes,
+			approvedMinutes: Number(reviewStats?.totalApprovedHackatimeMinutes ?? 0)
 		}
 	};
 }

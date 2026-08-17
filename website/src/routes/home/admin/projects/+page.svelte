@@ -70,6 +70,9 @@
 					>
 						<span>{project.journalCount} journal{project.journalCount === 1 ? '' : 's'}</span>
 						<span>{formatMinutes(project.totalJournalMinutes)} journaled</span>
+						{#if project.hackatimeMinutes > 0}
+							<span>{formatMinutes(project.hackatimeMinutes)} Hackatime</span>
+						{/if}
 						<span>{project.reviewCount} review{project.reviewCount === 1 ? '' : 's'}</span>
 						<span
 							class="flex items-center gap-1"

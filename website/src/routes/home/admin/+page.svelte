@@ -130,10 +130,17 @@
 		<article class="content-box flex flex-col justify-between p-5">
 			<div>
 				<p class="text-xs font-bold uppercase tracking-wider text-slate-500">Logged Work</p>
-				<p class="mt-2 text-4xl font-extrabold">{formatMinutes(stats.journals.totalMinutes)}</p>
+				<p class="mt-2 text-4xl font-extrabold">
+					{formatMinutes(stats.journals.totalMinutes + stats.hackatime.totalMinutes)}
+				</p>
 			</div>
 			<div class="mt-4 border-t border-slate-400/60 pt-3 text-xs text-slate-600">
-				<p><span class="font-semibold text-slate-800">{stats.journals.total}</span> journal entries</p>
+				<p>
+					Journals: <span class="font-semibold text-slate-800">{formatMinutes(stats.journals.totalMinutes)}</span> ({stats.journals.total} entries)
+				</p>
+				<p>
+					Hackatime: <span class="font-semibold text-slate-800">{formatMinutes(stats.hackatime.totalMinutes)}</span>
+				</p>
 				<p>
 					Avg NPS:
 					<span class="font-semibold text-slate-800">

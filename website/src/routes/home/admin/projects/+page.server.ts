@@ -3,7 +3,7 @@ import { desc, eq, sql } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 import { db } from '$lib/server/db';
 import { journal, project, review, user } from '$lib/server/db/schema';
-import { AdminError, requireAdmin } from '$lib/server/admin';
+import { AdminError, getHackatimeMinutesForProjects, requireAdmin } from '$lib/server/admin';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (!locals.user) error(404, 'Page not found');
@@ -26,8 +26,10 @@ export const load: PageServerLoad = async ({ locals }) => {
 				type: project.type,
 				tier: project.tier,
 				currencyPaidOut: project.currencyPaidOut,
+				hackatimeProjects: project.hackatime_projects,
 				ownerName: user.displayName,
-				ownerEmail: user.email
+				ownerEmail: user.email,
+				ownerSlackId: user.slackId
 			})
 			.from(project)
 			.innerJoin(user, eq(project.userId, user.id))
@@ -49,6 +51,14 @@ export const load: PageServerLoad = async ({ locals }) => {
 			.groupBy(review.projectId)
 	]);
 
+	const hackatimeMap = await getHackatimeMinutesForProjects(
+		projects.map((p) => ({
+			id: p.id,
+			ownerSlackId: p.ownerSlackId,
+			hackatimeProjects: p.hackatimeProjects
+		}))
+	);
+
 	const journalsByProject = new Map(journalStats.map((stats) => [stats.projectId, stats]));
 	const reviewsByProject = new Map(reviewStats.map((stats) => [stats.projectId, stats]));
 
@@ -56,10 +66,15 @@ export const load: PageServerLoad = async ({ locals }) => {
 		projects: projects.map((currentProject) => {
 			const journals = journalsByProject.get(currentProject.id);
 			const reviews = reviewsByProject.get(currentProject.id);
+			const totalJournalMinutes = Number(journals?.totalJournalMinutes ?? 0);
+			const hackatimeMinutes = hackatimeMap.get(currentProject.id) ?? 0;
+
 			return {
 				...currentProject,
 				journalCount: Number(journals?.journalCount ?? 0),
-				totalJournalMinutes: Number(journals?.totalJournalMinutes ?? 0),
+				totalJournalMinutes,
+				hackatimeMinutes,
+				totalTrackedMinutes: totalJournalMinutes + hackatimeMinutes,
 				reviewCount: Number(reviews?.reviewCount ?? 0)
 			};
 		})
