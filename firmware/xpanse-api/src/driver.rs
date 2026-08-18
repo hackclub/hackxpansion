@@ -29,7 +29,8 @@ pub trait DriverMeta {
 /// Bus resources allocated through [`BusAllocator`] are startup allocations and
 /// remain owned by the resulting capability for the rest of the boot.
 ///
-/// Drivers are run on core 0, so any task spawn will also run on core 0
+/// Drivers are run on core 1, so any task spawn will also run on core 1
+/// The Apps and resource method calls run on core 0, so you can use both cores
 ///
 /// # Example
 ///
@@ -75,6 +76,8 @@ pub trait Driver<G: BankPins>: DriverMeta {
     ///
     /// Implementations should avoid publishing partially initialized resources
     /// and return [`DriverError::InitFailed`] if setup cannot complete.
+    ///
+    /// Can create new tasks which run on core 1
     fn create(
         gpio_bank: GpioBank<G>,
         slot: ModuleSlot,

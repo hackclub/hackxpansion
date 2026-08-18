@@ -63,8 +63,7 @@ use xpanse_api::{
 
 // Each driver is a struct, that impls the Driver and DriverMeta trait
 //
-// These structs can contain channels, or hardware that the driver owns,
-// or buses that the hardware owns
+// This struct should stay zero sized
 pub struct TwoButtonDriver;
 
 // This trait allows the main firmware to know when should it load this driver,
@@ -108,7 +107,9 @@ impl<G: BankPins> Driver<G> for TwoButtonDriver {
         // we don't use any busses
         let _ = bus_allocator;
 
-        // You can also spawn new tasks here
+        // You can also spawn new tasks here which run on core 1
+        // Apps and resource method calls run on core 0, so you can use both cores
+        // Use embassy sync types to communicate between tasks
 
         Ok(())
     }
