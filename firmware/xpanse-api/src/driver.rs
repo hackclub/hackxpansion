@@ -85,3 +85,21 @@ pub trait Driver<G: BankPins>: DriverMeta {
         bus_allocator: &mut BusAllocator,
     ) -> impl Future<Output = Result<(), DriverError>>;
 }
+
+pub trait DualSlotDriver<G: BankPins>: DriverMeta {
+    /// Consumes a module's pins, initializes its hardware, and registers its
+    /// capabilities.
+    ///
+    /// Implementations should avoid publishing partially initialized resources
+    /// and return [`DriverError::InitFailed`] if setup cannot complete.
+    ///
+    /// Can create new tasks which run on core 1
+    ///
+    /// 0 is right, and 1 is left for the tuples
+    fn create(
+        gpio_banks: (GpioBank<G>, GpioBank<G>),
+        slots: (ModuleSlot, ModuleSlot),
+        registry: &mut Registry,
+        bus_allocator: &mut BusAllocator,
+    ) -> impl Future<Output = Result<(), DriverError>>;
+}

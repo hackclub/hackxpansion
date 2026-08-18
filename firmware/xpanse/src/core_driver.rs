@@ -1,7 +1,7 @@
 use xpanse_api::gpio_bank::GpioBank;
 use xpanse_api::registry::Registry;
 
-use crate::load_driver::load_driver;
+use crate::load_driver::load_driver_pair;
 use crate::{adc::init_adc, adc_mapping, resource_split::*};
 use xpanse_api::bus::allocator::BusAllocator;
 use xpanse_api::interfaces::adc;
@@ -123,34 +123,20 @@ pub async fn app_core_task(
     registry.register_platform::<UsbPeripheral>(remaining_peris.usb);
 
     defmt::info!("app_core: loading module drivers");
-    load_driver(
-        module_ids[0],
-        gpio_bank_0,
-        ModuleSlot::FrontRight,
+    load_driver_pair(
+        (
+            (module_ids[0], gpio_bank_0, ModuleSlot::FrontRight),
+            (module_ids[1], gpio_bank_1, ModuleSlot::FrontLeft),
+        ),
         &mut registry,
         &mut bus_allocator,
     )
     .await;
-    load_driver(
-        module_ids[1],
-        gpio_bank_1,
-        ModuleSlot::FrontLeft,
-        &mut registry,
-        &mut bus_allocator,
-    )
-    .await;
-    load_driver(
-        module_ids[2],
-        gpio_bank_2,
-        ModuleSlot::BackRight,
-        &mut registry,
-        &mut bus_allocator,
-    )
-    .await;
-    load_driver(
-        module_ids[3],
-        gpio_bank_3,
-        ModuleSlot::BackLeft,
+    load_driver_pair(
+        (
+            (module_ids[2], gpio_bank_2, ModuleSlot::BackRight),
+            (module_ids[3], gpio_bank_3, ModuleSlot::BackLeft),
+        ),
         &mut registry,
         &mut bus_allocator,
     )
