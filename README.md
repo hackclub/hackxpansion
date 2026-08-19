@@ -17,7 +17,7 @@
 
 ## Key Features
 
-- Resistor based module idnetification at start up
+- Resistor based module identification at start up
 - [2" 240x320 ST7789 LCD panel](https://www.buydisplay.com/2-inch-ips-tft-lcd-display-ips-panel-screen-240x320-for-smart-watch)
 - RP2354 MCU
 - Easily adaptable [module standard](https://hackxpansion.dino.icu/docs/detailed/card)

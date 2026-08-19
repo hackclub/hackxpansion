@@ -173,7 +173,7 @@ my-driver = { path = "../../my-module-repo/firmware" } # This could also be a lo
 my-driver = { workspace = true }
 ```
 
-5. Add a match arm for your driver in [`load_driver.rs`](https://github.com/hackclub/hackxpansion/blob/main/firmware/xpanse/src/load_driver.rs), following the existing drivers:
+5. Add a match arm for your driver in [`load_driver.rs`](https://github.com/hackclub/hackxpansion/blob/main/firmware/xpanse/src/load_driver.rs) in the `load_driver` function, following the existing drivers:
 
 ```rust
 Some(id) if id == my_driver::MyDriver::ID => {

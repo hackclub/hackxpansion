@@ -35,6 +35,7 @@
 		},
 		{ title: 'Detailed', href: '/home/docs/detailed', indent: false },
 		{ title: 'Rust API', href: '/home/docs/detailed/api', indent: true },
+		{ title: 'Dual Slot Module', href: '/home/docs/detailed/dual-slot', indent: true },
 		{ title: 'PIO', href: '/home/docs/detailed/pio', indent: true },
 		{ title: 'Bus Allocator', href: '/home/docs/detailed/bus-allocator', indent: true },
 		{ title: 'Device', href: '/home/docs/detailed/device', indent: true },
