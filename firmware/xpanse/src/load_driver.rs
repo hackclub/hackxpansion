@@ -18,7 +18,7 @@ pub async fn load_driver_pair<G1: BankPins, G2: BankPins>(
 ) {
     match (modules.0.0, modules.1.0) {
         (None, None) => {
-            defmt::warn!("No modules in slots: {:?} {:?} ", modules.0.3, modules.1.3);
+            defmt::warn!("No modules in slots: {:?} {:?} ", modules.0.2, modules.1.2);
         }
 
         (Some(right), Some(left)) if left != right => {
