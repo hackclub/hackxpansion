@@ -18,7 +18,7 @@ pub async fn load_driver_pair<G1: BankPins, G2: BankPins>(
 ) {
     match (modules.0.0, modules.1.0) {
         (None, None) => {
-            defmt::warn!("No modules in front slots");
+            defmt::warn!("No modules in slots: {:?} {:?} ", modules.0.3, modules.1.3);
         }
 
         (Some(right), Some(left)) if left != right => {
@@ -100,13 +100,14 @@ async fn load_dual_slot_driver<G1: BankPins, G2: BankPins>(
         // Example
         // Some(id) if id == dual_slot_test_driver::DualSlotTestDriver::ID => {
         //     match dual_slot_test_driver::DualSlotTestDriver::create(banks, slots, registry, bus).await
-        //         .await
         //     {
         //         Ok(()) => defmt::info!("dual slot test driver initialized in {:?}", slots),
         //         Err(error) => {
         //             defmt::error!("dual slot driver init failed in {:?}: {:?}", slots, error)
         //         }
         //     }
+        //     // We Return Ok here, since if there is a dual slot module in a pair of slots,
+        //     // it's impossible to have other modules in those slots, so the gpio banks are not returned
         //     Ok(())
         // }
         Some(_) | None => {

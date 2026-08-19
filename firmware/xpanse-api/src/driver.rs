@@ -86,7 +86,7 @@ pub trait Driver<G: BankPins>: DriverMeta {
     ) -> impl Future<Output = Result<(), DriverError>>;
 }
 
-pub trait DualSlotDriver<G: BankPins>: DriverMeta {
+pub trait DualSlotDriver<G1: BankPins, G2: BankPins>: DriverMeta {
     /// Consumes a module's pins, initializes its hardware, and registers its
     /// capabilities.
     ///
@@ -97,7 +97,7 @@ pub trait DualSlotDriver<G: BankPins>: DriverMeta {
     ///
     /// 0 is right, and 1 is left for the tuples
     fn create(
-        gpio_banks: (GpioBank<G>, GpioBank<G>),
+        gpio_banks: (GpioBank<G1>, GpioBank<G2>),
         slots: (ModuleSlot, ModuleSlot),
         registry: &mut Registry,
         bus_allocator: &mut BusAllocator,
