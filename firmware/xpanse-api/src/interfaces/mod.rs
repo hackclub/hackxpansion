@@ -7,6 +7,8 @@
 pub mod adc;
 /// Active-low button capabilities and role markers.
 pub mod buttons;
+/// GPIO LED output capabilities and role markers.
+pub mod leds;
 /// USB peripheral resources.
 pub mod usb;
 /// Direct RGB565 framebuffer resources.
