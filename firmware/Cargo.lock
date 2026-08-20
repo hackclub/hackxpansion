@@ -592,7 +592,7 @@ version = "0.1.0"
 dependencies = [
  "slint",
  "slint-build",
- "xpanse-api 0.2.2",
+ "xpanse-api 0.2.3",
 ]
 
 [[package]]
@@ -1050,7 +1050,7 @@ version = "0.1.0"
 dependencies = [
  "slint",
  "slint-build",
- "xpanse-api 0.2.2",
+ "xpanse-api 0.2.3",
 ]
 
 [[package]]
@@ -2170,7 +2170,7 @@ dependencies = [
 name = "four-button-driver"
 version = "0.1.0"
 dependencies = [
- "xpanse-api 0.2.2",
+ "xpanse-api 0.2.3",
 ]
 
 [[package]]
@@ -3249,7 +3249,7 @@ version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1db8c8a406a4822b3d5cf4bef48e113cfcf4d8b1f248ee67ff60f6645fcc8347"
 dependencies = [
- "xpanse-api 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "xpanse-api 0.2.2",
 ]
 
 [[package]]
@@ -3683,7 +3683,7 @@ dependencies = [
  "heapless 0.9.3",
  "slint",
  "slint-build",
- "xpanse-api 0.2.2",
+ "xpanse-api 0.2.3",
 ]
 
 [[package]]
@@ -3691,7 +3691,7 @@ name = "nes-emulator"
 version = "0.1.0"
 dependencies = [
  "runes",
- "xpanse-api 0.2.2",
+ "xpanse-api 0.2.3",
 ]
 
 [[package]]
@@ -5549,7 +5549,7 @@ dependencies = [
  "heapless 0.9.3",
  "slint",
  "slint-build",
- "xpanse-api 0.2.2",
+ "xpanse-api 0.2.3",
 ]
 
 [[package]]
@@ -5799,7 +5799,7 @@ name = "test-driver"
 version = "0.1.0"
 dependencies = [
  "ti-adc-expander",
- "xpanse-api 0.2.2",
+ "xpanse-api 0.2.3",
 ]
 
 [[package]]
@@ -6062,7 +6062,7 @@ dependencies = [
 name = "two-button-driver"
 version = "0.1.0"
 dependencies = [
- "xpanse-api 0.2.2",
+ "xpanse-api 0.2.3",
 ]
 
 [[package]]
@@ -6949,12 +6949,14 @@ dependencies = [
  "ti-adc-expander",
  "two-button-driver",
  "usbd-hid",
- "xpanse-api 0.2.2",
+ "xpanse-api 0.2.3",
 ]
 
 [[package]]
 name = "xpanse-api"
 version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7fe22999af1d7aaa8f94560f08fecd7cb12d3658aec44c16396bcea5b02447af"
 dependencies = [
  "defmt 1.1.1",
  "embassy-futures",
@@ -6972,9 +6974,7 @@ dependencies = [
 
 [[package]]
 name = "xpanse-api"
-version = "0.2.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7fe22999af1d7aaa8f94560f08fecd7cb12d3658aec44c16396bcea5b02447af"
+version = "0.2.3"
 dependencies = [
  "defmt 1.1.1",
  "embassy-futures",
