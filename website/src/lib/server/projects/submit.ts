@@ -125,6 +125,8 @@ export async function submitProjectToAri({
 				...buildTierMeta(claim.project.tier)
 			}
 		});
+		// TODO: remove debug logging
+		console.log('[ari/ingest] Sending project to Ari', JSON.stringify(payload, null, 2));
 		const ari = await sendAriIngest(payload, config);
 
 		return {
