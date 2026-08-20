@@ -9,6 +9,8 @@ pub mod adc;
 pub mod buttons;
 /// GPIO LED output capabilities and role markers.
 pub mod leds;
+/// NFC device capabilities and role markers.
+pub mod nfc;
 /// USB peripheral resources.
 pub mod usb;
 /// Direct RGB565 framebuffer resources.
