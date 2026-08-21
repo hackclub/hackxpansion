@@ -3249,7 +3249,7 @@ version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1db8c8a406a4822b3d5cf4bef48e113cfcf4d8b1f248ee67ff60f6645fcc8347"
 dependencies = [
- "xpanse-api 0.2.2",
+ "xpanse-api 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -3699,6 +3699,15 @@ name = "new_debug_unreachable"
 version = "1.0.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "650eef8c711430f1a879fdd01d4745a7deea475becfb90269c06775983bbf086"
+
+[[package]]
+name = "nfcxpansion"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a4ea9fd8c4135f470be2a84367435761bd1c444af63f4967d6d72ae98e1750e5"
+dependencies = [
+ "xpanse-api 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
+]
 
 [[package]]
 name = "nix"
@@ -6935,6 +6944,7 @@ dependencies = [
  "mipidsi",
  "neon-beat",
  "nes-emulator",
+ "nfcxpansion",
  "panic-probe",
  "portable-atomic",
  "rgb",
@@ -6954,9 +6964,7 @@ dependencies = [
 
 [[package]]
 name = "xpanse-api"
-version = "0.2.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7fe22999af1d7aaa8f94560f08fecd7cb12d3658aec44c16396bcea5b02447af"
+version = "0.2.3"
 dependencies = [
  "defmt 1.1.1",
  "embassy-futures",
@@ -6975,6 +6983,8 @@ dependencies = [
 [[package]]
 name = "xpanse-api"
 version = "0.2.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2b93e489b8f1be94a57c4336bae81102dcfd0a4b906f55091458d32c13fb0dc2"
 dependencies = [
  "defmt 1.1.1",
  "embassy-futures",
