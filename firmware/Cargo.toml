@@ -8,7 +8,7 @@ lto = "fat"
 codegen-units = 1
 
 [workspace.dependencies]
-xpanse-api = { path = "./xpanse-api/" }
+xpanse-api = "0.2"
 
 embassy-embedded-hal = { version = "0.6.0", features = ["defmt"] }
 embassy-sync = { version = "0.8.0", features = ["defmt"] }

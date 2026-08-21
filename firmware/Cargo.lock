@@ -592,7 +592,7 @@ version = "0.1.0"
 dependencies = [
  "slint",
  "slint-build",
- "xpanse-api 0.2.3",
+ "xpanse-api 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -1050,7 +1050,7 @@ version = "0.1.0"
 dependencies = [
  "slint",
  "slint-build",
- "xpanse-api 0.2.3",
+ "xpanse-api 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -2170,7 +2170,7 @@ dependencies = [
 name = "four-button-driver"
 version = "0.1.0"
 dependencies = [
- "xpanse-api 0.2.3",
+ "xpanse-api 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -3683,7 +3683,7 @@ dependencies = [
  "heapless 0.9.3",
  "slint",
  "slint-build",
- "xpanse-api 0.2.3",
+ "xpanse-api 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -3691,7 +3691,7 @@ name = "nes-emulator"
 version = "0.1.0"
 dependencies = [
  "runes",
- "xpanse-api 0.2.3",
+ "xpanse-api 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -5558,7 +5558,7 @@ dependencies = [
  "heapless 0.9.3",
  "slint",
  "slint-build",
- "xpanse-api 0.2.3",
+ "xpanse-api 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -5808,7 +5808,7 @@ name = "test-driver"
 version = "0.1.0"
 dependencies = [
  "ti-adc-expander",
- "xpanse-api 0.2.3",
+ "xpanse-api 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6071,7 +6071,7 @@ dependencies = [
 name = "two-button-driver"
 version = "0.1.0"
 dependencies = [
- "xpanse-api 0.2.3",
+ "xpanse-api 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6959,7 +6959,7 @@ dependencies = [
  "ti-adc-expander",
  "two-button-driver",
  "usbd-hid",
- "xpanse-api 0.2.3",
+ "xpanse-api 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
