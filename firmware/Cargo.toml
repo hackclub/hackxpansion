@@ -97,6 +97,7 @@ test-driver = { path = "./drivers/test-driver/" }
 two-button-driver = { path = "./drivers/two-button-driver/" }
 four-button-driver = { path = "./drivers/four-button-driver/" }
 keebxpansion = "0.1.0"
+nfcxpansion = "0.1.1"
 
 # Apps
 button-logger = { path = "./apps/button-logger/" }
