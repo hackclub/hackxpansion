@@ -83,6 +83,15 @@ async fn load_driver<G: BankPins>(
                 }
             }
         }
+
+        Some(id) if id == wardriving_driver::WarDrivingDriver::ID => {
+    match wardriving_driver::WarDrivingDriver::create(bank, slot, registry, bus).await {
+        Ok(()) => defmt::info!("WarDriving driver initialized in {:?}", slot),
+        Err(error) => {
+            defmt::error!("WarDriving driver init failed in {:?}: {:?}", slot, error)
+        }
+    }
+}
         Some(id) if id == keebxpansion::KeebDriver::ID => {
             match keebxpansion::KeebDriver::create(bank, slot, registry, bus).await {
                 Ok(()) => defmt::info!("Keeb driver initialized in {:?}", slot),
@@ -103,6 +112,7 @@ async fn load_driver<G: BankPins>(
         None => defmt::info!("no driver to load in {:?}", slot),
     }
 }
+
 
 /// 0 is the right, 1 is the left for tuples
 async fn load_dual_slot_driver<G1: BankPins, G2: BankPins>(
