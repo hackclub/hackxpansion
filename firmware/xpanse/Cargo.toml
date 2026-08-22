@@ -66,6 +66,8 @@ test-driver = { workspace = true }
 two-button-driver = { workspace = true }
 four-button-driver = { workspace = true }
 wardriving-driver = { workspace = true }
+keebxpansion = { workspace = true }
+nfcxpansion = { workspace = true }
 
 # Apps
 button-logger = { workspace = true }

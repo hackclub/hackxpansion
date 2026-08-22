@@ -592,7 +592,7 @@ version = "0.1.0"
 dependencies = [
  "slint",
  "slint-build",
- "xpanse-api",
+ "xpanse-api 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -1050,7 +1050,7 @@ version = "0.1.0"
 dependencies = [
  "slint",
  "slint-build",
- "xpanse-api",
+ "xpanse-api 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -2170,7 +2170,7 @@ dependencies = [
 name = "four-button-driver"
 version = "0.1.0"
 dependencies = [
- "xpanse-api",
+ "xpanse-api 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -3244,6 +3244,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "keebxpansion"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1db8c8a406a4822b3d5cf4bef48e113cfcf4d8b1f248ee67ff60f6645fcc8347"
+dependencies = [
+ "xpanse-api 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
 name = "keyboard-types"
 version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3674,7 +3683,7 @@ dependencies = [
  "heapless 0.9.3",
  "slint",
  "slint-build",
- "xpanse-api",
+ "xpanse-api 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -3682,7 +3691,7 @@ name = "nes-emulator"
 version = "0.1.0"
 dependencies = [
  "runes",
- "xpanse-api",
+ "xpanse-api 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -3690,6 +3699,15 @@ name = "new_debug_unreachable"
 version = "1.0.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "650eef8c711430f1a879fdd01d4745a7deea475becfb90269c06775983bbf086"
+
+[[package]]
+name = "nfcxpansion"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a4ea9fd8c4135f470be2a84367435761bd1c444af63f4967d6d72ae98e1750e5"
+dependencies = [
+ "xpanse-api 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
+]
 
 [[package]]
 name = "nix"
@@ -5540,7 +5558,7 @@ dependencies = [
  "heapless 0.9.3",
  "slint",
  "slint-build",
- "xpanse-api",
+ "xpanse-api 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -5790,7 +5808,7 @@ name = "test-driver"
 version = "0.1.0"
 dependencies = [
  "ti-adc-expander",
- "xpanse-api",
+ "xpanse-api 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6053,7 +6071,7 @@ dependencies = [
 name = "two-button-driver"
 version = "0.1.0"
 dependencies = [
- "xpanse-api",
+ "xpanse-api 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6932,11 +6950,13 @@ dependencies = [
  "fixed-macro",
  "four-button-driver",
  "heapless 0.9.3",
+ "keebxpansion",
  "libm",
  "log",
  "mipidsi",
  "neon-beat",
  "nes-emulator",
+ "nfcxpansion",
  "panic-probe",
  "portable-atomic",
  "rgb",
@@ -6953,11 +6973,32 @@ dependencies = [
  "usbd-hid",
  "wardriving-driver",
  "xpanse-api",
+ "xpanse-api 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "xpanse-api"
-version = "0.2.2"
+version = "0.2.3"
+dependencies = [
+ "defmt 1.1.1",
+ "embassy-futures",
+ "embassy-rp",
+ "embassy-sync",
+ "embassy-time",
+ "embedded-hal 1.0.0",
+ "embedded-hal-async",
+ "embedded-hal-bus",
+ "embedded-io-async 0.7.0",
+ "libm",
+ "slint",
+ "static_cell",
+]
+
+[[package]]
+name = "xpanse-api"
+version = "0.2.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2b93e489b8f1be94a57c4336bae81102dcfd0a4b906f55091458d32c13fb0dc2"
 dependencies = [
  "defmt 1.1.1",
  "embassy-futures",

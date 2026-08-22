@@ -92,6 +92,22 @@ async fn load_driver<G: BankPins>(
         }
     }
 }
+        Some(id) if id == keebxpansion::KeebDriver::ID => {
+            match keebxpansion::KeebDriver::create(bank, slot, registry, bus).await {
+                Ok(()) => defmt::info!("Keeb driver initialized in {:?}", slot),
+                Err(error) => {
+                    defmt::error!("Keeb driver init failed in {:?}: {:?}", slot, error)
+                }
+            }
+        }
+        Some(id) if id == nfcxpansion::NfcDriver::ID => {
+            match nfcxpansion::NfcDriver::create(bank, slot, registry, bus).await {
+                Ok(()) => defmt::info!("NFC driver initialized in {:?}", slot),
+                Err(error) => {
+                    defmt::error!("NFC driver init failed in {:?}: {:?}", slot, error)
+                }
+            }
+        }
         Some(id) => defmt::warn!("unknown driver id {:?} in {:?}", id, slot),
         None => defmt::info!("no driver to load in {:?}", slot),
     }

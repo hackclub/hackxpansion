@@ -8,7 +8,7 @@ lto = "fat"
 codegen-units = 1
 
 [workspace.dependencies]
-xpanse-api = { path = "./xpanse-api/" }
+xpanse-api = "0.2"
 
 embassy-embedded-hal = { version = "0.6.0", features = ["defmt"] }
 embassy-sync = { version = "0.8.0", features = ["defmt"] }
@@ -97,6 +97,8 @@ test-driver = { path = "./drivers/test-driver/" }
 two-button-driver = { path = "./drivers/two-button-driver/" }
 four-button-driver = { path = "./drivers/four-button-driver/" }
 wardriving-driver = "0.1.1"
+keebxpansion = "0.1.0"
+nfcxpansion = "0.1.1"
 
 # Apps
 button-logger = { path = "./apps/button-logger/" }
