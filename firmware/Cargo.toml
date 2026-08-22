@@ -106,6 +106,3 @@ cube-game = { path = "./apps/cube-game/" }
 neon-beat = { path = "./apps/neon-beat/" }
 snake-game = { path = "./apps/snake-game/" }
 nes-emulator = { path = "./apps/nes-emulator/" }
-
-[patch.crates-io]
-xpanse-api = { path = "./xpanse-api" }

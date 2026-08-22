@@ -6384,7 +6384,7 @@ dependencies = [
  "embassy-sync",
  "embedded-io-async 0.7.0",
  "heapless 0.9.3",
- "xpanse-api",
+ "xpanse-api 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -6972,7 +6972,6 @@ dependencies = [
  "two-button-driver",
  "usbd-hid",
  "wardriving-driver",
- "xpanse-api",
  "xpanse-api 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
