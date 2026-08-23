@@ -92,6 +92,16 @@ async fn load_driver<G: BankPins>(
         }
     }
 }
+
+Some(id) if id == pn532_driver::Pn532Driver::ID => {
+    match pn532_driver::Pn532Driver::create(bank, slot, registry, bus).await {
+        Ok(()) => defmt::info!("PN532 driver initialized in {:?}", slot),
+        Err(error) => {
+            defmt::error!("PN532 driver init failed in {:?}: {:?}", slot, error)
+        }
+    }
+}
+
         Some(id) if id == keebxpansion::KeebDriver::ID => {
             match keebxpansion::KeebDriver::create(bank, slot, registry, bus).await {
                 Ok(()) => defmt::info!("Keeb driver initialized in {:?}", slot),

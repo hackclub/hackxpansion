@@ -4483,6 +4483,27 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b4596b6d070b27117e987119b4dac604f3c58cfb0b191112e24771b2faeac1a6"
 
 [[package]]
+name = "pn532"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ce656b2f9335bedbd8806597f6f78e644a955366673cd9280a0fb67a0d7b35a1"
+dependencies = [
+ "embedded-hal 1.0.0",
+ "nb 1.1.0",
+]
+
+[[package]]
+name = "pn532-driver"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0c525873a79e2eda90cb67636f2ab6dedce74f53c24d04f203e122e52108d6c7"
+dependencies = [
+ "heapless 0.9.3",
+ "pn532",
+ "xpanse-api",
+]
+
+[[package]]
 name = "png"
 version = "0.18.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6958,6 +6979,7 @@ dependencies = [
  "nes-emulator",
  "nfcxpansion",
  "panic-probe",
+ "pn532-driver",
  "portable-atomic",
  "rgb",
  "serde",
