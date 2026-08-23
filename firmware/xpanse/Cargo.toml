@@ -66,6 +66,7 @@ test-driver = { workspace = true }
 two-button-driver = { workspace = true }
 four-button-driver = { workspace = true }
 wardriving-driver = { workspace = true }
+pn532-driver = { workspace = true }
 keebxpansion = { workspace = true }
 nfcxpansion = { workspace = true }
 
