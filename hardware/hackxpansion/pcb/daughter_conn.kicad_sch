@@ -747,7 +747,7 @@
 	)
 	(wire
 		(pts
-			(xy 152.4 82.55) (xy 153.67 82.55)
+			(xy 151.13 82.55) (xy 153.67 82.55)
 		)
 		(stroke
 			(width 0)
@@ -1047,8 +1047,8 @@
 		(uuid "03921dcb-4619-4107-941d-270cea462b44")
 	)
 	(hierarchical_label "+3V3"
-		(shape input)
-		(at 152.4 82.55 180)
+		(shape passive)
+		(at 151.13 82.55 180)
 		(effects
 			(font
 				(size 1.27 1.27)

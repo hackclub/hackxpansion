@@ -4500,7 +4500,7 @@ checksum = "0c525873a79e2eda90cb67636f2ab6dedce74f53c24d04f203e122e52108d6c7"
 dependencies = [
  "heapless 0.9.3",
  "pn532",
- "xpanse-api",
+ "xpanse-api 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
