@@ -3417,7 +3417,7 @@
 				(justify right)
 			)
 		)
-		(property "Value" "100k"
+		(property "Value" "10k"
 			(at 31.75 102.8699 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3481,7 +3481,7 @@
 				)
 			)
 		)
-		(property "LCSC" "C481918"
+		(property "LCSC" "C190095"
 			(at 34.29 101.6 0)
 			(hide yes)
 			(show_name no)
