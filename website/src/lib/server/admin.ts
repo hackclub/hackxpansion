@@ -103,6 +103,7 @@ export async function getEventStats() {
 		[reviewStats],
 		[orderStats],
 		[journalStats],
+		[waitingJournalStats],
 		projectsForHackatime,
 		[usersWithProject]
 	] = await Promise.all([
@@ -160,7 +161,7 @@ export async function getEventStats() {
 		db
 			.select({
 				totalReviews: sql<number>`COUNT(${review.id})`,
-				totalApprovedMinutes: sql<number>`COALESCE(SUM(${review.approvedMinutes}), 0)`,
+				totalApprovedMinutes: sql<number>`COALESCE(SUM(CASE WHEN ${review.event} = 'approved' THEN ${review.approvedMinutes} ELSE 0 END), 0)`,
 				totalApprovedHackatimeMinutes: sql<number>`COALESCE(SUM(((${review.minutesBreakdown}->>'hackatime')::int)), 0)`
 			})
 			.from(review),
@@ -180,8 +181,16 @@ export async function getEventStats() {
 			.from(journal),
 		db
 			.select({
+				minutes: sql<number>`COALESCE(SUM(${journal.durationInMinutes}), 0)`
+			})
+			.from(journal)
+			.innerJoin(project, eq(journal.projectId, project.id))
+			.where(inArray(project.status, ['waiting_design', 'waiting_build'])),
+		db
+			.select({
 				id: project.id,
 				ownerSlackId: user.slackId,
+				status: project.status,
 				hackatimeProjects: project.hackatime_projects
 			})
 			.from(project)
@@ -195,8 +204,14 @@ export async function getEventStats() {
 
 	const hackatimeMap = await getHackatimeMinutesForProjects(projectsForHackatime);
 	let totalHackatimeMinutes = 0;
-	for (const mins of hackatimeMap.values()) {
+	let waitingHackatimeMinutes = 0;
+	const waitingStatuses = new Set(['waiting_design', 'waiting_build']);
+	for (const p of projectsForHackatime) {
+		const mins = hackatimeMap.get(p.id) ?? 0;
 		totalHackatimeMinutes += mins;
+		if (waitingStatuses.has(p.status)) {
+			waitingHackatimeMinutes += mins;
+		}
 	}
 
 	const statusMap = Object.fromEntries(projectStatusCounts.map((s) => [s.status, Number(s.count)]));
@@ -238,7 +253,11 @@ export async function getEventStats() {
 		},
 		reviews: {
 			total: Number(reviewStats?.totalReviews ?? 0),
-			totalApprovedMinutes: Number(reviewStats?.totalApprovedMinutes ?? 0)
+			totalApprovedMinutes: Number(reviewStats?.totalApprovedMinutes ?? 0),
+			totalSubmittedMinutes:
+				Number(reviewStats?.totalApprovedMinutes ?? 0) +
+				Number(waitingJournalStats?.minutes ?? 0) +
+				waitingHackatimeMinutes
 		},
 		orders: {
 			total: Number(orderStats?.totalOrders ?? 0),

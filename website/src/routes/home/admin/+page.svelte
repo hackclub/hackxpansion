@@ -180,6 +180,11 @@
 						{stats.submissions.avgNps !== null ? `${stats.submissions.avgNps} / 10` : 'N/A'}
 					</span>
 				</p>
+				<p>
+					Submitted: <span class="font-semibold text-slate-800"
+						>{formatMinutes(stats.reviews.totalSubmittedMinutes)}</span
+					>
+				</p>
 			</div>
 		</article>
 	</section>
