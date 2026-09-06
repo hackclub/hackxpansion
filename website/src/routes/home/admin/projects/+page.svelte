@@ -10,6 +10,7 @@
 
 	type SortOption = 'latest' | 'oldest' | 'most_hours' | 'least_hours';
 	let sortBy = $state<string | null>('latest');
+	let statusFilter = $state<string | null>(null);
 
 	const sortOptions = [
 		{ value: 'latest', label: 'Latest' },
@@ -18,8 +19,32 @@
 		{ value: 'least_hours', label: 'Least Hours' }
 	];
 
+	const statusFilterOptions = [
+		{ value: null, label: 'All' },
+		{ value: 'not_submitted', label: 'Not Submitted' },
+		{ value: 'in_review', label: 'In Review Queue' },
+		{ value: 'approved', label: 'Approved' },
+		{ value: 'returned', label: 'Returned' },
+		{ value: 'rejected', label: 'Rejected' }
+	];
+
+	const statusFilterGroups: Record<string, string[]> = {
+		not_submitted: ['not_submitted'],
+		in_review: ['waiting_design', 'waiting_build'],
+		approved: ['approved_design', 'approved_build'],
+		returned: ['needs_changes_design', 'needs_changes_build'],
+		rejected: ['rejected_design', 'rejected_build']
+	};
+
+	let displayedProjects = $derived.by(() => {
+		if (!statusFilter) return data.projects;
+		const statuses = statusFilterGroups[statusFilter];
+		if (!statuses) return data.projects;
+		return data.projects.filter((project) => statuses.includes(project.status));
+	});
+
 	let sortedProjects = $derived.by(() => {
-		const list = [...data.projects];
+		const list = [...displayedProjects];
 		switch (sortBy as SortOption) {
 			case 'oldest':
 				return list.reverse();
@@ -47,19 +72,26 @@
 		</div>
 
 		{#if data.projects.length > 0}
-			<div class="w-48 shrink-0 self-start sm:self-auto">
-				<DropdownSelect
-					name="sortBy"
-					label="Sort by"
-					bind:value={sortBy}
-					options={sortOptions}
-				/>
+			<div class="flex flex-wrap gap-3 self-start sm:self-auto">
+				<div class="w-48 shrink-0">
+					<DropdownSelect
+						name="statusFilter"
+						label="Status"
+						bind:value={statusFilter}
+						options={statusFilterOptions}
+					/>
+				</div>
+				<div class="w-48 shrink-0">
+					<DropdownSelect name="sortBy" label="Sort by" bind:value={sortBy} options={sortOptions} />
+				</div>
 			</div>
 		{/if}
 	</header>
 
 	{#if data.projects.length === 0}
 		<p class="content-box p-5">No projects have been created.</p>
+	{:else if displayedProjects.length === 0}
+		<p class="content-box p-5">No projects match this filter.</p>
 	{:else}
 		<section class="grid gap-4 lg:grid-cols-2" aria-label="All projects">
 			{#each sortedProjects as project (project.id)}
@@ -112,7 +144,9 @@
 						{#if project.hackatimeMinutes > 0}
 							<span>{formatMinutes(project.hackatimeMinutes)} Hackatime</span>
 						{/if}
-						<span class="font-bold text-slate-800">{formatMinutes(project.totalTrackedMinutes)} total</span>
+						<span class="font-bold text-slate-800"
+							>{formatMinutes(project.totalTrackedMinutes)} total</span
+						>
 						<span>{project.reviewCount} review{project.reviewCount === 1 ? '' : 's'}</span>
 						<span
 							class="flex items-center gap-1"
