@@ -3,6 +3,14 @@
 
 	const announcements = [
 		{
+			label: 'Moved the deadline',
+			title: 'The deadline has been moved to Sept 30!!',
+			description:
+				'Since a lot of you have been asking for it, we have moved the deadline to Sept. 30!!',
+			image: asset('/party-parrot.gif'),
+			imageAlt: 'Party parrot'
+		},
+		{
 			label: 'Hardware update',
 			title: 'The console prototype arrived, and it works!',
 			description:
@@ -45,7 +53,7 @@
 			>
 				<div class="flex flex-col gap-6 p-6 sm:p-8">
 					<p class="text-sm font-bold uppercase tracking-widest text-slate-600">
-						{announcement.label} // Online
+						{announcement.label}
 					</p>
 					<div>
 						<h3 class="max-w-xl text-4xl leading-none font-bold sm:text-5xl">
