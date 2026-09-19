@@ -1,0 +1,17 @@
+[package]
+name = "firmware"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+xpanse-api = "0.2.3"
+
+embassy-rp = "0.10.0"
+embassy-executor = { version = "0.10.0", features = [
+    "platform-cortex-m",
+    "executor-thread",
+    "defmt",
+] }
+
+embassy-time = "0.5"
+embedded-hal-async = "1.0"
