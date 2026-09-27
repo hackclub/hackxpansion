@@ -72,7 +72,7 @@ nfcxpansion = { workspace = true }
 SD_card_driver = { workspace = true }
 hackxpansion_speaker = { workspace = true }
 audio_jack_firmware = { workspace = true }
-
+JoystickHackx = { workspace = true }
 # Apps (each behind an `app-*` feature flag)
 doom-app = { workspace = true, optional = true }
 button-logger = { workspace = true, optional = true }
@@ -82,7 +82,7 @@ snake-game = { workspace = true, optional = true }
 nes-emulator = { workspace = true, optional = true }
 
 [features]
-default = ["app-neon-beat", "app-snake-game"]
+default = []
 app-button-logger = ["dep:button-logger"]
 app-cube-game = ["dep:cube-game"]
 app-neon-beat = ["dep:neon-beat"]

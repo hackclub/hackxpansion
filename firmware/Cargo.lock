@@ -3,6 +3,16 @@
 version = 4
 
 [[package]]
+name = "JoystickHackx"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "811076e53412250fcbb8228fdfc65e1687da6c36e9e42dc75e5a1f80eb80ca71"
+dependencies = [
+ "embassy-rp",
+ "xpanse-api 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
 name = "SD_card_driver"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -7084,6 +7094,7 @@ checksum = "ec7a2a501ed189703dba8b08142f057e887dfc4b2cc4db2d343ac6376ba3e0b9"
 name = "xpanse"
 version = "0.1.0"
 dependencies = [
+ "JoystickHackx",
  "SD_card_driver",
  "assign-resources",
  "audio_jack_firmware",

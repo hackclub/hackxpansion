@@ -103,7 +103,7 @@ nfcxpansion = "0.1.1"
 audio_jack_firmware = "0.1.1"
 SD_card_driver = "0.1.1"
 hackxpansion_speaker = "0.1.1"
-
+JoystickHackx = "0.1.0"
 # Apps
 doom-app = { version = "0.1.0" }
 button-logger = { path = "./apps/button-logger/" }
