@@ -126,6 +126,30 @@ Some(id) if id == pn532_driver::Pn532Driver::ID => {
                 }
             }
         }
+        Some(id) if id == irxpansion_driver::IrDriver::ID => {
+            match irxpansion_driver::IrDriver::create(bank, slot, registry, bus).await {
+                Ok(()) => defmt::info!("IR driver initialized in {:?}", slot),
+                Err(error) => {
+                    defmt::error!("IR driver init failed in {:?}: {:?}", slot, error)
+                }
+            }
+        }
+        Some(id) if id == joystickxpansion_driver::JoystickDriver::ID => {
+            match joystickxpansion_driver::JoystickDriver::create(bank, slot, registry, bus).await {
+                Ok(()) => defmt::info!("Joystick driver initialized in {:?}", slot),
+                Err(error) => {
+                    defmt::error!("Joystick driver init failed in {:?}: {:?}", slot, error)
+                }
+            }
+        }
+        Some(id) if id == microsdxpansion_driver::MicroSdCardDriver::ID => {
+            match microsdxpansion_driver::MicroSdCardDriver::create(bank, slot, registry, bus).await {
+                Ok(()) => defmt::info!("Micro SD driver initialized in {:?}", slot),
+                Err(error) => {
+                    defmt::error!("Micro SD driver init failed in {:?}: {:?}", slot, error)
+                }
+            }
+        }
         Some(id) => defmt::warn!("unknown driver id {:?} in {:?}", id, slot),
         None => defmt::info!("no driver to load in {:?}", slot),
     }

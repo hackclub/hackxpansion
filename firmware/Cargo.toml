@@ -102,6 +102,9 @@ keebxpansion = "0.1.0"
 nfcxpansion = "0.1.1"
 qwertyxpansion-driver = "0.1.0"
 sensexpansion-driver = "0.1.0"
+microsdxpansion-driver = "0.1.1"
+irxpansion-driver = "0.1.1"
+joystickxpansion-driver = "0.1.0"
 
 # Apps
 doom-app = { version = "0.1.0" }
@@ -110,3 +113,6 @@ cube-game = { path = "./apps/cube-game/" }
 neon-beat = { path = "./apps/neon-beat/" }
 snake-game = { path = "./apps/snake-game/" }
 nes-emulator = { path = "./apps/nes-emulator/" }
+
+[patch.crates-io]
+microsdxpansion-driver = { path = "/Users/vejas2/Hackxpansion/microsdxpansion/firmware" }
