@@ -296,6 +296,13 @@
 						<span class="text-xs font-bold bg-slate-400 px-2 py-0.5">{stats.projects.total}</span>
 					</a>
 					<a
+						href={resolve('/home/admin/airtable')}
+						class="flex items-center justify-between bg-slate-300/80 px-3 py-2 transition hover:bg-slate-300"
+					>
+						<span>Airtable Backfill</span>
+						<span class="text-xs font-bold">&rarr;</span>
+					</a>
+					<a
 						href={resolve('/home/admin/orders')}
 						class="flex items-center justify-between bg-slate-300/80 px-3 py-2 transition hover:bg-slate-300"
 					>

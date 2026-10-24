@@ -30,7 +30,7 @@ const fields = {
 	lapseLinks: 'fldjALcVM1u7150Dq',
 	technicalFeatures: 'fld0HvqTvcI429CFa',
 	deflationReason: 'fldxnLY7qf46rqQYS',
-	additionalJustification: 'fldp3XWKJjES72fWM'
+	alternateTrackingMethod: 'fldpsBmCzFJJS0w8C'
 } as const;
 
 export type YswsProjectApproval = {
@@ -107,11 +107,53 @@ export function buildYswsProjectSubmissionFields(approval: YswsProjectApproval) 
 		approval.justification?.technical_features
 	);
 	setIfPresent(airtableFields, fields.deflationReason, approval.justification?.deflation_reason);
-	if (!Object.values(approval.justification ?? {}).some((value) => value?.trim())) {
-		setIfPresent(airtableFields, fields.additionalJustification, approval.auditNote?.trim());
-	}
+	setIfPresent(airtableFields, fields.alternateTrackingMethod, approval.auditNote?.trim());
 
 	return airtableFields;
+}
+
+export type YswsAlternateTrackingUpdate = {
+	deliveryId: string;
+	recordId: string;
+	auditNote: string;
+};
+
+export async function updateYswsProjectSubmissionAlternateTracking(
+	updates: YswsAlternateTrackingUpdate[],
+	personalAccessToken: string | undefined
+) {
+	if (!personalAccessToken) throw new Error('AIRTABLE_PAC is not configured');
+	if (updates.length === 0) return 0;
+
+	let updated = 0;
+	for (let index = 0; index < updates.length; index += 10) {
+		const batch = updates.slice(index, index + 10);
+		const response = await fetchWithTimeout(
+			`https://api.airtable.com/v0/${YSWS_BASE_ID}/${YSWS_PROJECT_SUBMISSION_TABLE_ID}`,
+			{
+				method: 'PATCH',
+				headers: {
+					Authorization: `Bearer ${personalAccessToken}`,
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					records: batch.map(({ recordId, auditNote }) => ({
+						id: recordId,
+						fields: { [fields.alternateTrackingMethod]: auditNote }
+					}))
+				})
+			}
+		);
+		const responseBody = await response.text();
+		if (!response.ok) {
+			throw new Error(
+				`Airtable alternate tracking update failed (${response.status}): ${responseBody}`
+			);
+		}
+		updated += batch.length;
+	}
+
+	return updated;
 }
 
 export async function createYswsProjectSubmission(

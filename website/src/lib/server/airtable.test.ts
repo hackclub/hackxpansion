@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
 	buildYswsProjectSubmissionFields,
 	createYswsProjectSubmission,
+	updateYswsProjectSubmissionAlternateTracking,
 	type YswsProjectApproval
 } from './airtable';
 
@@ -60,7 +61,8 @@ describe('YSWS Project Submission Airtable export', () => {
 			fldVpkqS5o87dqbFq: '594',
 			fldjALcVM1u7150Dq: 'https://lapse.example.com/one, https://lapse.example.com/two',
 			fld0HvqTvcI429CFa: 'Custom protocol',
-			fldxnLY7qf46rqQYS: 'Existing libraries reduced implementation time.'
+			fldxnLY7qf46rqQYS: 'Existing libraries reduced implementation time.',
+			fldpsBmCzFJJS0w8C: 'Fallback reviewer explanation'
 		});
 		expect(result).not.toHaveProperty('fldScjPJRcrBYgRAp');
 		expect(result).not.toHaveProperty('fldp3XWKJjES72fWM');
@@ -77,17 +79,65 @@ describe('YSWS Project Submission Airtable export', () => {
 		expect(result).not.toHaveProperty('fldsq64DaIPVrhe4e');
 	});
 
-	it('uses additional justification for an audit-note-only review', () => {
+	it('uses alternate tracking method for an audit-note-only review', () => {
 		const result = buildYswsProjectSubmissionFields({
 			...approval,
 			justification: null,
 			auditNote: ' Reviewer explanation '
 		});
 
-		expect(result).toHaveProperty('fldp3XWKJjES72fWM', 'Reviewer explanation');
+		expect(result).toHaveProperty('fldpsBmCzFJJS0w8C', 'Reviewer explanation');
+		expect(result).not.toHaveProperty('fldp3XWKJjES72fWM');
 		expect(result).not.toHaveProperty('fldScjPJRcrBYgRAp');
 		expect(result).not.toHaveProperty('fldNqi8wSWq5eeDlT');
 		expect(result).not.toHaveProperty('fldqEsuO4Kley6aDy');
+	});
+
+	it('omits alternate tracking method when Ari did not provide an audit note', () => {
+		const result = buildYswsProjectSubmissionFields({ ...approval, auditNote: '   ' });
+
+		expect(result).not.toHaveProperty('fldpsBmCzFJJS0w8C');
+	});
+
+	it('patches alternate tracking method in batches of ten', async () => {
+		const fetchMock = vi
+			.fn()
+			.mockImplementation(() =>
+				Promise.resolve(new Response(JSON.stringify({ records: [] }), { status: 200 }))
+			);
+		vi.stubGlobal('fetch', fetchMock);
+
+		const updates = Array.from({ length: 12 }, (_, index) => ({
+			deliveryId: `delivery-${index}`,
+			recordId: `rec${String(index).padStart(14, '0')}`,
+			auditNote: `Audit note ${index}`
+		}));
+
+		await expect(updateYswsProjectSubmissionAlternateTracking(updates, 'pat-secret')).resolves.toBe(
+			12
+		);
+		expect(fetchMock).toHaveBeenCalledTimes(2);
+
+		const [firstUrl, firstInit] = fetchMock.mock.calls[0] as [string, RequestInit];
+		expect(firstUrl).toBe('https://api.airtable.com/v0/appdl599Ct1mJBIrV/tblRSGunS3aJP94zf');
+		expect(firstInit.method).toBe('PATCH');
+		expect(new Headers(firstInit.headers).get('Authorization')).toBe('Bearer pat-secret');
+		const firstBody = JSON.parse(String(firstInit.body));
+		expect(firstBody.records).toHaveLength(10);
+		expect(firstBody.records[0]).toEqual({
+			id: 'rec00000000000000',
+			fields: { fldpsBmCzFJJS0w8C: 'Audit note 0' }
+		});
+
+		const [, secondInit] = fetchMock.mock.calls[1] as [string, RequestInit];
+		const secondBody = JSON.parse(String(secondInit.body));
+		expect(secondBody.records).toHaveLength(2);
+	});
+
+	it('requires an Airtable token to patch alternate tracking', async () => {
+		await expect(updateYswsProjectSubmissionAlternateTracking([], undefined)).rejects.toThrow(
+			'AIRTABLE_PAC is not configured'
+		);
 	});
 
 	it('posts one record to the existing YSWS Project Submission table', async () => {

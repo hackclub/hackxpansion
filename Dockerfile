@@ -34,6 +34,7 @@ COPY --from=build --chown=node:node /app/build ./build
 COPY --from=build --chown=node:node /app/node_modules ./node_modules
 COPY --from=build --chown=node:node /app/drizzle ./drizzle
 COPY --from=build --chown=node:node /app/scripts/migrate.mjs ./scripts/migrate.mjs
+COPY --from=build --chown=node:node /app/scripts/backfill-airtable-alternate-tracking.mjs ./scripts/backfill-airtable-alternate-tracking.mjs
 
 USER node
 EXPOSE 3000

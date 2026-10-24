@@ -76,6 +76,23 @@ The initial migration expects a fresh database. A database previously initialize
 has no Drizzle migration history; recreate that database or baseline it before enabling automatic
 migrations if its existing data must be preserved.
 
+## Airtable Backfills
+
+Admins can populate `Justification - Alternate Tracking Method` on already-approved YSWS Project
+Submission rows from the stored Ari audit notes at `/home/admin/airtable`. The page has a preview
+button and an apply button.
+
+The same backfill is available as a script for local or automated use:
+
+```sh
+npm run airtable:backfill-alternate-tracking -- --dry-run
+npm run airtable:backfill-alternate-tracking
+```
+
+The first command only prints what would change. Applying the backfill requires `AIRTABLE_PAC` and
+the production `DATABASE_URL` or `APP_DATABASE_URL`. In the runtime container, run
+`node scripts/backfill-airtable-alternate-tracking.mjs` directly.
+
 ## Quality Checks
 
 ```sh

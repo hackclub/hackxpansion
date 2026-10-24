@@ -17,6 +17,7 @@
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
 		"test": "vitest run",
+		"airtable:backfill-alternate-tracking": "node --env-file-if-exists=.env scripts/backfill-airtable-alternate-tracking.mjs",
 		"db:start": "docker compose up db",
 		"db:push": "drizzle-kit push",
 		"db:generate": "drizzle-kit generate",
