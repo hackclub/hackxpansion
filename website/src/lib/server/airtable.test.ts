@@ -79,6 +79,29 @@ describe('YSWS Project Submission Airtable export', () => {
 		expect(result).not.toHaveProperty('fldsq64DaIPVrhe4e');
 	});
 
+	it('uses the unified DB record over the audit note', () => {
+		const result = buildYswsProjectSubmissionFields({
+			...approval,
+			justification: {
+				...approval.justification,
+				unified_db_record: ' Unified DB record '
+			},
+			auditNote: 'Fallback reviewer explanation'
+		});
+
+		expect(result).toHaveProperty('fldpsBmCzFJJS0w8C', 'Unified DB record');
+	});
+
+	it('falls back to the audit note when the unified DB record is blank', () => {
+		const result = buildYswsProjectSubmissionFields({
+			...approval,
+			justification: { ...approval.justification, unified_db_record: '   ' },
+			auditNote: ' Reviewer explanation '
+		});
+
+		expect(result).toHaveProperty('fldpsBmCzFJJS0w8C', 'Reviewer explanation');
+	});
+
 	it('uses alternate tracking method for an audit-note-only review', () => {
 		const result = buildYswsProjectSubmissionFields({
 			...approval,
@@ -93,7 +116,7 @@ describe('YSWS Project Submission Airtable export', () => {
 		expect(result).not.toHaveProperty('fldqEsuO4Kley6aDy');
 	});
 
-	it('omits alternate tracking method when Ari did not provide an audit note', () => {
+	it('omits alternate tracking method when Ari did not provide a unified DB record or audit note', () => {
 		const result = buildYswsProjectSubmissionFields({ ...approval, auditNote: '   ' });
 
 		expect(result).not.toHaveProperty('fldpsBmCzFJJS0w8C');
@@ -110,7 +133,7 @@ describe('YSWS Project Submission Airtable export', () => {
 		const updates = Array.from({ length: 12 }, (_, index) => ({
 			deliveryId: `delivery-${index}`,
 			recordId: `rec${String(index).padStart(14, '0')}`,
-			auditNote: `Audit note ${index}`
+			alternateTrackingMethod: `Alternate tracking method ${index}`
 		}));
 
 		await expect(updateYswsProjectSubmissionAlternateTracking(updates, 'pat-secret')).resolves.toBe(
@@ -126,7 +149,7 @@ describe('YSWS Project Submission Airtable export', () => {
 		expect(firstBody.records).toHaveLength(10);
 		expect(firstBody.records[0]).toEqual({
 			id: 'rec00000000000000',
-			fields: { fldpsBmCzFJJS0w8C: 'Audit note 0' }
+			fields: { fldpsBmCzFJJS0w8C: 'Alternate tracking method 0' }
 		});
 
 		const [, secondInit] = fetchMock.mock.calls[1] as [string, RequestInit];

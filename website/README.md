@@ -79,8 +79,8 @@ migrations if its existing data must be preserved.
 ## Airtable Backfills
 
 Admins can populate `Justification - Alternate Tracking Method` on already-approved YSWS Project
-Submission rows from the stored Ari audit notes at `/home/admin/airtable`. The page has a preview
-button and an apply button.
+Submission rows from the stored Ari unified DB records, falling back to audit notes when a unified DB
+record is unavailable, at `/home/admin/airtable`. The page has a preview button and an apply button.
 
 The same backfill is available as a script for local or automated use:
 

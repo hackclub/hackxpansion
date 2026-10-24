@@ -51,7 +51,7 @@ export const actions: Actions = {
 			return {
 				success: true,
 				message: result.dryRun
-					? `Found ${result.candidates} approved project${result.candidates === 1 ? '' : 's'} with an audit note. No records were changed.`
+					? `Found ${result.candidates} approved project${result.candidates === 1 ? '' : 's'} with a unified DB record or audit note. No records were changed.`
 					: `Updated ${result.updated} of ${result.candidates} approved project${result.candidates === 1 ? '' : 's'}.`
 			};
 		} catch (caught) {

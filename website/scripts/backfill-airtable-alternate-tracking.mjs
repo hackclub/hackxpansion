@@ -27,9 +27,11 @@ try {
 			delivery_id,
 			airtable_record_id,
 			COALESCE(
+				NULLIF(BTRIM(justification ->> 'unified_db_record'), ''),
+				NULLIF(BTRIM(raw_payload -> 'review' -> 'justification' ->> 'unified_db_record'), ''),
 				NULLIF(BTRIM(audit_note), ''),
 				NULLIF(BTRIM(raw_payload -> 'review' ->> 'audit_note'), '')
-			) AS audit_note
+			) AS alternate_tracking_method
 		FROM review
 		WHERE event = 'approved'
 			AND airtable_record_id LIKE 'rec%'
@@ -38,24 +40,26 @@ try {
 	const updates = new Map();
 
 	for (const review of reviews) {
-		const auditNote = review.audit_note?.trim();
-		if (!auditNote) continue;
+		const alternateTrackingMethod = review.alternate_tracking_method?.trim();
+		if (!alternateTrackingMethod) continue;
 
 		updates.set(review.airtable_record_id, {
 			deliveryId: review.delivery_id,
 			recordId: review.airtable_record_id,
-			auditNote
+			alternateTrackingMethod
 		});
 	}
 
 	const records = [...updates.values()];
 	console.log(
-		`Found ${records.length} approved project${records.length === 1 ? '' : 's'} with an audit note to backfill.`
+		`Found ${records.length} approved project${records.length === 1 ? '' : 's'} with an alternate tracking method to backfill.`
 	);
 
 	if (dryRun) {
 		for (const record of records) {
-			console.log(`Would update ${record.recordId} (${record.deliveryId}): ${record.auditNote}`);
+			console.log(
+				`Would update ${record.recordId} (${record.deliveryId}): ${record.alternateTrackingMethod}`
+			);
 		}
 		console.log('Dry run complete; no Airtable records were changed.');
 	} else {
@@ -77,7 +81,7 @@ async function updateAlternateTracking(records) {
 	const body = JSON.stringify({
 		records: records.map((record) => ({
 			id: record.recordId,
-			fields: { [ALTERNATE_TRACKING_METHOD_FIELD_ID]: record.auditNote }
+			fields: { [ALTERNATE_TRACKING_METHOD_FIELD_ID]: record.alternateTrackingMethod }
 		}))
 	});
 

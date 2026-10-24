@@ -52,6 +52,7 @@ export type ReviewJustification = {
 	lapse_links?: string;
 	technical_features?: string;
 	deflation_reason?: string;
+	unified_db_record?: string;
 };
 
 export type OutboundCollaborator = {

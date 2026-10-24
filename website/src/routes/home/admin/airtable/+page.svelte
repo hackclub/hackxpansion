@@ -13,9 +13,9 @@
 		<p class="text-sm font-bold tracking-widest text-slate-500 uppercase">Admin</p>
 		<h1 class="text-4xl font-bold">Airtable backfill</h1>
 		<p class="text-slate-600">
-			Copy stored Ari audit notes into
+			Copy stored Ari unified DB records into
 			<span class="font-semibold">Justification - Alternate Tracking Method</span> on existing approved
-			YSWS Project Submission rows.
+			YSWS Project Submission rows, falling back to audit notes when a unified DB record is unavailable.
 		</p>
 	</header>
 
@@ -35,7 +35,8 @@
 		<h2 id="backfill-heading" class="text-2xl font-bold">Ready to backfill</h2>
 		<p>
 			<span class="font-bold">{data.candidateCount}</span>
-			approved project{data.candidateCount === 1 ? '' : 's'} with an audit note and Airtable record ID.
+			approved project{data.candidateCount === 1 ? '' : 's'} with a unified DB record or audit note and
+			Airtable record ID.
 		</p>
 		{#if !data.airtableConfigured}
 			<p class="border border-amber-700 bg-amber-100 p-3 text-sm text-amber-900">

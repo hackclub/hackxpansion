@@ -19,7 +19,9 @@ export async function getAlternateTrackingBackfillRecords(): Promise<
 		.select({
 			deliveryId: review.deliveryId,
 			recordId: review.airtableRecordId,
-			auditNote: sql<string | null>`COALESCE(
+			alternateTrackingMethod: sql<string | null>`COALESCE(
+				NULLIF(BTRIM(${review.justification} ->> 'unified_db_record'), ''),
+				NULLIF(BTRIM(${review.rawPayload} -> 'review' -> 'justification' ->> 'unified_db_record'), ''),
 				NULLIF(BTRIM(${review.auditNote}), ''),
 				NULLIF(BTRIM(${review.rawPayload} -> 'review' ->> 'audit_note'), '')
 			)`
@@ -30,13 +32,13 @@ export async function getAlternateTrackingBackfillRecords(): Promise<
 
 	const updates = new Map<string, YswsAlternateTrackingUpdate>();
 	for (const row of rows) {
-		const auditNote = row.auditNote?.trim();
-		if (!row.recordId || !auditNote) continue;
+		const alternateTrackingMethod = row.alternateTrackingMethod?.trim();
+		if (!row.recordId || !alternateTrackingMethod) continue;
 
 		updates.set(row.recordId, {
 			deliveryId: row.deliveryId,
 			recordId: row.recordId,
-			auditNote
+			alternateTrackingMethod
 		});
 	}
 

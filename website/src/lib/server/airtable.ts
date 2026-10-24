@@ -107,7 +107,11 @@ export function buildYswsProjectSubmissionFields(approval: YswsProjectApproval) 
 		approval.justification?.technical_features
 	);
 	setIfPresent(airtableFields, fields.deflationReason, approval.justification?.deflation_reason);
-	setIfPresent(airtableFields, fields.alternateTrackingMethod, approval.auditNote?.trim());
+	setIfPresent(
+		airtableFields,
+		fields.alternateTrackingMethod,
+		approval.justification?.unified_db_record?.trim() || approval.auditNote?.trim()
+	);
 
 	return airtableFields;
 }
@@ -115,7 +119,7 @@ export function buildYswsProjectSubmissionFields(approval: YswsProjectApproval) 
 export type YswsAlternateTrackingUpdate = {
 	deliveryId: string;
 	recordId: string;
-	auditNote: string;
+	alternateTrackingMethod: string;
 };
 
 export async function updateYswsProjectSubmissionAlternateTracking(
@@ -137,9 +141,9 @@ export async function updateYswsProjectSubmissionAlternateTracking(
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify({
-					records: batch.map(({ recordId, auditNote }) => ({
+					records: batch.map(({ recordId, alternateTrackingMethod }) => ({
 						id: recordId,
-						fields: { [fields.alternateTrackingMethod]: auditNote }
+						fields: { [fields.alternateTrackingMethod]: alternateTrackingMethod }
 					}))
 				})
 			}
