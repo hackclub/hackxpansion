@@ -65,6 +65,7 @@
 		{ title: 'Orders', href: '/home/admin/orders' },
 		{ title: 'Projects', href: '/home/admin/projects' },
 		{ title: 'Submissions', href: '/home/admin/submissions' },
+		{ title: 'Airtable Backfill', href: '/home/admin/airtable' },
 		{ title: 'Shop Items', href: '/home/admin/shop' },
 		{ title: 'Users', href: '/home/admin/users' }
 	] as const;
