@@ -71,6 +71,9 @@ keebxpansion = { workspace = true }
 nfcxpansion = { workspace = true }
 qwertyxpansion-driver = { workspace = true }
 sensexpansion-driver = { workspace = true }
+irxpansion-driver = { workspace = true }
+microsdxpansion-driver = { workspace = true }
+joystickxpansion-driver = { workspace = true }
 
 # Apps (each behind an `app-*` feature flag)
 doom-app = { workspace = true, optional = true }
