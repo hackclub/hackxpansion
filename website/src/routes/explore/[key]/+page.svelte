@@ -27,7 +27,7 @@
 			&larr; Back to Explore
 		</a>
 
-		<article class="content-box overflow-hidden">
+		<article class="overflow-hidden content-box">
 			{#if data.project.thumbnailUrl}
 				<img
 					src={data.project.thumbnailUrl}
@@ -77,11 +77,11 @@
 				<dl class="grid gap-4 sm:grid-cols-2">
 					{#if data.project.md0 !== null && data.project.md1 !== null}
 						<div class="border border-slate-400 bg-white/50 p-3">
-							<dt class="text-xs uppercase tracking-wide text-slate-600">MD0</dt>
+							<dt class="text-xs tracking-wide text-slate-600 uppercase">MD0</dt>
 							<dd class="text-xl font-bold">{formatResistor(data.project.md0)}</dd>
 						</div>
 						<div class="border border-slate-400 bg-white/50 p-3">
-							<dt class="text-xs uppercase tracking-wide text-slate-600">MD1</dt>
+							<dt class="text-xs tracking-wide text-slate-600 uppercase">MD1</dt>
 							<dd class="text-xl font-bold">{formatResistor(data.project.md1)}</dd>
 						</div>
 					{/if}

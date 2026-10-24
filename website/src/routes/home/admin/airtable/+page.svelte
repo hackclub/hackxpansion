@@ -10,7 +10,7 @@
 
 <main class="mx-auto flex max-w-6xl flex-col gap-8 p-6 text-slate-800">
 	<header>
-		<p class="text-sm font-bold uppercase tracking-widest text-slate-500">Admin</p>
+		<p class="text-sm font-bold tracking-widest text-slate-500 uppercase">Admin</p>
 		<h1 class="text-4xl font-bold">Airtable backfill</h1>
 		<p class="text-slate-600">
 			Copy stored Ari audit notes into
@@ -31,7 +31,7 @@
 		</p>
 	{/if}
 
-	<section class="content-box flex flex-col gap-4 p-5" aria-labelledby="backfill-heading">
+	<section class="flex flex-col gap-4 content-box p-5" aria-labelledby="backfill-heading">
 		<h2 id="backfill-heading" class="text-2xl font-bold">Ready to backfill</h2>
 		<p>
 			<span class="font-bold">{data.candidateCount}</span>

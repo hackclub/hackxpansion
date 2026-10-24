@@ -86,9 +86,9 @@ export const actions: Actions = {
 			resolve(`/home/projects/${params.id}/submit`),
 			url.origin
 		).toString();
-		const response = await auth.api.signInWithOAuth2({
-			body: { providerId: 'hackclub', callbackURL }
+		const response = await auth.api.signInSocial({
+			body: { provider: 'hackclub', callbackURL }
 		});
-		if (response.redirect) redirect(302, response.url);
+		if (response.redirect && response.url) redirect(302, response.url);
 	}
 };

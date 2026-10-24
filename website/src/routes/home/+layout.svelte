@@ -92,7 +92,7 @@
 
 <div class="relative h-screen w-screen overflow-hidden">
 	<GridBg />
-	<div class="flex flex-row h-full gap-3">
+	<div class="flex h-full flex-row gap-3">
 		{#if hidden}
 			<button
 				class="fixed z-50 m-3 h-fit content-box border-dashed px-2 hover:underline sm:sticky sm:top-3 sm:left-0 sm:writing-vertical-lr"
@@ -105,9 +105,9 @@
 		{:else}
 			<aside
 				id="home-sidebar"
-				class="fixed left-3 z-50 my-3 box-border flex h-[calc(100%-1.5rem)] w-80 max-w-[calc(100vw-1.5rem)] shrink-0 flex-col justify-between gap-2 overflow-hidden p-3 content-box sm:sticky sm:top-3 sm:left-0 sm:ml-3"
+				class="fixed left-3 z-50 my-3 box-border flex h-[calc(100%-1.5rem)] w-80 max-w-[calc(100vw-1.5rem)] shrink-0 flex-col justify-between gap-2 overflow-hidden content-box p-3 sm:sticky sm:top-3 sm:left-0 sm:ml-3"
 			>
-				<div class="flex min-h-0 min-w-0 w-full flex-1 flex-col gap-2">
+				<div class="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-2">
 					<button
 						class="w-fit shrink-0 hover:underline"
 						onclick={() => (hidden = true)}
@@ -119,23 +119,23 @@
 					<hr class="w-full shrink-0" />
 					<nav
 						aria-label="Account navigation"
-						class="flex min-h-0 min-w-0 w-full flex-col gap-1 overflow-x-hidden overflow-y-auto pr-2"
+						class="flex min-h-0 w-full min-w-0 flex-col gap-1 overflow-x-hidden overflow-y-auto pr-2"
 					>
 						{#each items as item (item.href)}
 							<a
 								href={resolve(item.href)}
-								class="text-3xl hover:underline mr-30"
+								class="mr-30 text-3xl hover:underline"
 								class:underline={isCurrentPage(item.href)}
 								aria-current={isCurrentPage(item.href) ? 'page' : undefined}
 							>
 								{item.title}
 							</a>
 							{#if item.href === '/home/docs' && isCurrentPage(item.href)}
-								<div class="ml-2 min-w-0 flex flex-col border-l border-slate-400 pl-3">
+								<div class="ml-2 flex min-w-0 flex-col border-l border-slate-400 pl-3">
 									{#each docsItems as docsItem (docsItem.href)}
 										<a
 											href={resolve(docsItem.href)}
-											class="min-w-0 wrap-break-word text-lg hover:underline"
+											class="min-w-0 text-lg wrap-break-word hover:underline"
 											class:ml-4={docsItem.indent}
 											class:underline={isExactPage(resolve(docsItem.href))}
 											aria-current={isExactPage(resolve(docsItem.href)) ? 'page' : undefined}
@@ -204,7 +204,7 @@
 				{#if data.user}
 					<section aria-label="Account" class="flex shrink-0 flex-row gap-2">
 						<img src={data.user.image} alt="" class="size-20" />
-						<div class="flex flex-col py-3 justify-between">
+						<div class="flex flex-col justify-between py-3">
 							<p class="text-xl">{data.user.name}</p>
 							<p
 								class="flex items-center gap-1 font-semibold"
@@ -214,7 +214,7 @@
 								<span aria-hidden="true">{data.user.currency}</span>
 							</p>
 							<form method="post" action={`${resolve('/home')}?/signOut`}>
-								<button class="w-fit hover:underline cursor-pointer">Sign out</button>
+								<button class="w-fit cursor-pointer hover:underline">Sign out</button>
 							</form>
 						</div>
 					</section>
@@ -227,7 +227,7 @@
 					>
 						<input type="hidden" name="returnTo" value={`${page.url.pathname}${page.url.search}`} />
 						<button
-							class="content-box w-full cursor-pointer px-4 py-3 font-bold transition-colors hover:bg-slate-700 hover:text-white"
+							class="w-full cursor-pointer content-box px-4 py-3 font-bold transition-colors hover:bg-slate-700 hover:text-white"
 						>
 							Sign In/Up
 						</button>

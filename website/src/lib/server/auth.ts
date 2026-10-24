@@ -80,6 +80,8 @@ export const auth = betterAuth({
 					discoveryUrl: 'https://auth.hackclub.com/.well-known/openid-configuration',
 					clientId: env.HACKCLUB_CLIENT_ID,
 					clientSecret: env.HACKCLUB_CLIENT_SECRET,
+					// Hack Club Auth does not advertise PKCE support; better-auth 1.7 enables it by default.
+					pkce: false,
 					overrideUserInfo: true,
 					scopes: [
 						'openid',
@@ -95,7 +97,10 @@ export const auth = betterAuth({
 						tokens.accessToken
 							? fetchHackClubProfile(tokens.accessToken, env.SLACK_BOT_TOKEN)
 							: Promise.resolve(null),
-					mapProfileToUser: (profile) => mapHackClubProfile(profile)
+					mapProfileToUser: (profile) => {
+						const mapped = mapHackClubProfile(profile);
+						return { ...mapped, image: mapped.image ?? undefined };
+					}
 				}
 			]
 		}),

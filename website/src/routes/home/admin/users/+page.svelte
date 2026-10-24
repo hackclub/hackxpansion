@@ -13,7 +13,7 @@
 
 <main class="mx-auto flex max-w-6xl flex-col gap-8 p-6 text-slate-800">
 	<header>
-		<p class="text-sm font-bold uppercase tracking-widest text-slate-500">Admin</p>
+		<p class="text-sm font-bold tracking-widest text-slate-500 uppercase">Admin</p>
 		<h1 class="text-4xl font-bold">Users</h1>
 		<p class="text-slate-600">Grant admin access to existing Hackxpansion users.</p>
 	</header>
@@ -41,7 +41,7 @@
 			<div class="grid gap-4 lg:grid-cols-2">
 				{#each members as user (user.id)}
 					<article
-						class="content-box flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between"
+						class="flex flex-col gap-4 content-box p-5 sm:flex-row sm:items-center sm:justify-between"
 					>
 						<div class="min-w-0">
 							<h3 class="truncate text-xl font-bold">{user.name}</h3>
@@ -65,7 +65,7 @@
 		<div class="grid gap-4 lg:grid-cols-2">
 			{#each admins as user (user.id)}
 				<article
-					class="content-box flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between"
+					class="flex flex-col gap-4 content-box p-5 sm:flex-row sm:items-center sm:justify-between"
 				>
 					<div class="min-w-0">
 						<h3 class="truncate text-xl font-bold">{user.name}</h3>

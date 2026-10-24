@@ -59,7 +59,7 @@
 						{/if}
 						{#if order.fulfillmentMessage}
 							<div class="mt-4 border-l-2 border-green-700 bg-green-50 p-3">
-								<p class="text-xs font-bold uppercase text-green-900">Message from the fulfiller</p>
+								<p class="text-xs font-bold text-green-900 uppercase">Message from the fulfiller</p>
 								<p class="mt-1">{order.fulfillmentMessage}</p>
 							</div>
 						{/if}

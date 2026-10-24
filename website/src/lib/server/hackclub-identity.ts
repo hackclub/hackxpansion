@@ -1,7 +1,5 @@
-import { and, eq } from 'drizzle-orm';
 import { auth } from '$lib/server/auth';
-import { db } from '$lib/server/db';
-import { account } from '$lib/server/db/auth.schema';
+import { getHackClubAccount } from '$lib/server/hackclub-account';
 import { fetchWithTimeout } from '$lib/server/http';
 
 const HACKCLUB_IDENTITY_URL = 'https://auth.hackclub.com/api/v1/me';
@@ -46,11 +44,7 @@ export class HackClubIdentityError extends Error {
 }
 
 export async function getHackClubIdentity(userId: string) {
-	const [linkedAccount] = await db
-		.select({ accountId: account.accountId })
-		.from(account)
-		.where(and(eq(account.userId, userId), eq(account.providerId, 'hackclub')))
-		.limit(1);
+	const linkedAccount = await getHackClubAccount(userId);
 	if (!linkedAccount) {
 		throw new HackClubIdentityError(
 			'reauthorization_required',
@@ -61,7 +55,7 @@ export async function getHackClubIdentity(userId: string) {
 	let accessToken: string;
 	try {
 		({ accessToken } = await auth.api.getAccessToken({
-			body: { providerId: 'hackclub', userId }
+			body: { accountId: linkedAccount.id, userId }
 		}));
 	} catch (error) {
 		throw new HackClubIdentityError(

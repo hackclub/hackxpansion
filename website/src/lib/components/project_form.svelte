@@ -120,7 +120,7 @@
 	}
 </script>
 
-<form method="post" {action} class="grid gap-4 md:grid-cols-2 w-full min-h-full">
+<form method="post" {action} class="grid min-h-full w-full gap-4 md:grid-cols-2">
 	<label class="flex flex-col gap-0.5">
 		<span>Title *</span>
 		<input
@@ -197,7 +197,7 @@
 			{/if}
 
 			<div
-				class="grid w-full h-60 overflow-y-auto gap-1 border border-slate-700 bg-white/70 p-2 md:grid-cols-2"
+				class="grid h-60 w-full gap-1 overflow-y-auto border border-slate-700 bg-white/70 p-2 md:grid-cols-2"
 			>
 				{#each hackatimeProjects as project (project.name)}
 					<label
@@ -265,7 +265,7 @@
 
 	<div class="flex items-center gap-4 md:col-span-2">
 		<button
-			class="bg-slate-800 px-4 py-2 text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-400 cursor-pointer"
+			class="cursor-pointer bg-slate-800 px-4 py-2 text-white hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-400"
 			{disabled}
 		>
 			{submitLabel}

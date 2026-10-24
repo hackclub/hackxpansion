@@ -50,7 +50,7 @@
 
 <main class="mx-auto flex max-w-6xl flex-col gap-8 p-6 text-slate-800">
 	<header>
-		<p class="text-sm font-bold uppercase tracking-widest text-slate-500">Admin</p>
+		<p class="text-sm font-bold tracking-widest text-slate-500 uppercase">Admin</p>
 		<h1 class="text-4xl font-bold">Shop items</h1>
 		<p class="text-slate-600">Add and edit items available in the shop.</p>
 		<p class="mt-2 text-sm text-slate-500">

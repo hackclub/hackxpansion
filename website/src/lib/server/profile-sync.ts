@@ -2,6 +2,7 @@ import { and, eq, isNull, lt, or } from 'drizzle-orm';
 import { auth } from '$lib/server/auth';
 import { db } from '$lib/server/db';
 import { user } from '$lib/server/db/auth.schema';
+import { getHackClubAccount } from '$lib/server/hackclub-account';
 import { fetchHackClubProfile, mapHackClubProfile } from '$lib/server/hackclub-profile';
 import { env } from '$env/dynamic/private';
 
@@ -33,9 +34,12 @@ export async function syncHackClubProfileIfStale(userId: string, headers: Header
 }
 
 export async function refreshHackClubProfile(userId: string, headers: Headers) {
+	const linkedAccount = await getHackClubAccount(userId);
+	if (!linkedAccount) throw new Error('Hack Club account is not linked');
+
 	const { accessToken } = await auth.api.getAccessToken({
 		headers,
-		body: { providerId: 'hackclub' }
+		body: { accountId: linkedAccount.id, userId }
 	});
 	const profile = await fetchHackClubProfile(accessToken, env.SLACK_BOT_TOKEN);
 	if (!profile) throw new Error('Hack Club userinfo request failed');

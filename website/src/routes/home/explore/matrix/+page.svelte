@@ -72,7 +72,7 @@
 		>
 	</section>
 
-	<div class="content-box min-w-0 p-1">
+	<div class="min-w-0 content-box p-1">
 		<div
 			class="grid min-w-0 grid-cols-[1.5rem_minmax(0,1fr)_1.5rem] grid-rows-[1.5rem_minmax(0,1fr)_1.5rem]"
 		>
@@ -82,7 +82,7 @@
 				MD1
 			</p>
 			<div class="col-start-1 row-start-2 flex items-center justify-center" aria-hidden="true">
-				<span class="writing-vertical-rl rotate-180 text-base font-bold tracking-wide">MD0</span>
+				<span class="rotate-180 text-base font-bold tracking-wide writing-vertical-rl">MD0</span>
 			</div>
 			<div class="col-start-2 row-start-2 max-h-[calc(100vh-18rem)] min-w-0 overflow-auto">
 				<table class="border-separate border-spacing-1 text-xs" onmouseleave={clearHighlight}>
@@ -92,7 +92,7 @@
 							<th class="invisible size-8 min-w-8 p-0" aria-hidden="true"></th>
 							{#each E24_RESISTOR_VALUES as md1 (md1)}
 								<th
-									class="sticky top-0 z-20 size-8 min-w-8 max-w-8 border border-slate-400 p-0 align-middle font-medium {hoveredMd1 ===
+									class="sticky top-0 z-20 size-8 max-w-8 min-w-8 border border-slate-400 p-0 align-middle font-medium {hoveredMd1 ===
 									md1
 										? 'bg-slate-300 text-slate-900'
 										: 'bg-white'}"
@@ -106,7 +106,7 @@
 						{#each E24_RESISTOR_VALUES as md0 (md0)}
 							<tr>
 								<th
-									class="sticky left-0 z-10 size-8 min-w-8 max-w-8 border border-slate-400 p-0 text-center font-medium {hoveredMd0 ===
+									class="sticky left-0 z-10 size-8 max-w-8 min-w-8 border border-slate-400 p-0 text-center font-medium {hoveredMd0 ===
 									md0
 										? 'bg-slate-300 text-slate-900'
 										: 'bg-white'}"

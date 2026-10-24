@@ -20,7 +20,7 @@
 	</a>
 
 	<header>
-		<p class="text-sm font-bold uppercase tracking-widest text-slate-500">Confirm order</p>
+		<p class="text-sm font-bold tracking-widest text-slate-500 uppercase">Confirm order</p>
 		<h1 class="text-4xl font-bold">{data.item.name}</h1>
 	</header>
 
@@ -28,7 +28,7 @@
 		<p class="border border-red-700 bg-red-100 p-3 text-sm">{form.message}</p>
 	{/if}
 
-	<section class="content-box flex flex-col gap-6 p-5" aria-label="Order details">
+	<section class="flex flex-col gap-6 content-box p-5" aria-label="Order details">
 		<div class="flex items-start justify-between gap-4 border-b border-slate-400 pb-5">
 			<div>
 				<h2 class="text-xl font-bold">Order summary</h2>

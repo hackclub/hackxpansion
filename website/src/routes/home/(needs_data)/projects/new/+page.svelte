@@ -19,14 +19,14 @@
 	<title>New project · Hackxpansion</title>
 </svelte:head>
 
-<main class="mx-auto flex w-full flex-col gap-8 p-0 text-slate-800 min-h-full h-fit">
+<main class="mx-auto flex h-fit min-h-full w-full flex-col gap-8 p-0 text-slate-800">
 	{#if form?.message}
 		<p class="border border-slate-700 bg-white/50 p-3 text-sm">
 			{form.message}
 		</p>
 	{/if}
 
-	<section class="p-5 w-full min-h-full h-fit">
+	<section class="h-fit min-h-full w-full p-5">
 		<h2 class="mb-4 text-2xl font-bold">Create project</h2>
 
 		<ProjectForm

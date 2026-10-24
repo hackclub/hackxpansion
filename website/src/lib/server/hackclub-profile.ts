@@ -68,7 +68,6 @@ export async function fetchHackClubProfile(
 
 export function mapHackClubProfile(profile: Record<string, unknown>, checkedAt = new Date()) {
 	return {
-		id: optionalString(profile.sub),
 		name: optionalString(profile.slack_display_name) ?? optionalString(profile.slack_id),
 		email: optionalString(profile.email),
 		emailVerified: profile.email_verified === true,

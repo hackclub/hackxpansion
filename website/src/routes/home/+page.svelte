@@ -49,10 +49,10 @@
 		<h2 id="announcements-heading" class="text-2xl font-bold">Announcements</h2>
 		{#each announcements as announcement (announcement.title)}
 			<article
-				class="content-box grid overflow-hidden md:min-h-96 md:grid-cols-[minmax(0,1fr)_20rem]"
+				class="grid overflow-hidden content-box md:min-h-96 md:grid-cols-[minmax(0,1fr)_20rem]"
 			>
 				<div class="flex flex-col gap-6 p-6 sm:p-8">
-					<p class="text-sm font-bold uppercase tracking-widest text-slate-600">
+					<p class="text-sm font-bold tracking-widest text-slate-600 uppercase">
 						{announcement.label}
 					</p>
 					<div>

@@ -196,7 +196,7 @@
 
 	<section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
 		<article class="content-box p-4">
-			<p class="text-xs uppercase tracking-wide text-slate-600">Currency paid</p>
+			<p class="text-xs tracking-wide text-slate-600 uppercase">Currency paid</p>
 			<p
 				class="mt-1 flex items-center gap-1 text-2xl font-bold"
 				aria-label={`${data.project.currencyPaidOut} currency paid out`}
@@ -206,23 +206,23 @@
 			</p>
 		</article>
 		<article class="content-box p-4">
-			<p class="text-xs uppercase tracking-wide text-slate-600">Journal entries</p>
+			<p class="text-xs tracking-wide text-slate-600 uppercase">Journal entries</p>
 			<p class="mt-1 text-2xl font-bold">{data.stats.journalCount}</p>
 		</article>
 		<article class="content-box p-4">
-			<p class="text-xs uppercase tracking-wide text-slate-600">Journaled time</p>
+			<p class="text-xs tracking-wide text-slate-600 uppercase">Journaled time</p>
 			<p class="mt-1 text-2xl font-bold">
 				{formatMinutes(data.stats.totalJournalMinutes)}
 			</p>
 		</article>
 		<article class="content-box p-4">
-			<p class="text-xs uppercase tracking-wide text-slate-600">Hackatime</p>
+			<p class="text-xs tracking-wide text-slate-600 uppercase">Hackatime</p>
 			<p class="mt-1 text-2xl font-bold">
 				{data.hackatime.error ? 'Unavailable' : formatMinutes(data.hackatime.minutes)}
 			</p>
 		</article>
 		<article class="content-box p-4">
-			<p class="text-xs uppercase tracking-wide text-slate-600">Total tracked</p>
+			<p class="text-xs tracking-wide text-slate-600 uppercase">Total tracked</p>
 			<p class="mt-1 text-2xl font-bold">
 				{data.hackatime.error
 					? formatMinutes(data.stats.totalJournalMinutes)
@@ -266,7 +266,7 @@
 				<div class="relative flex items-start gap-4">
 					{#if timeline.length > 0}
 						<div
-							class="absolute left-5 top-10 w-0.5 bg-slate-400"
+							class="absolute top-10 left-5 w-0.5 bg-slate-400"
 							style="height: calc(100% + 1rem)"
 						></div>
 					{/if}
@@ -310,7 +310,7 @@
 					<div class="relative flex items-start gap-4">
 						{#if i < timeline.length - 1}
 							<div
-								class="absolute left-5 top-10 w-0.5 bg-slate-400"
+								class="absolute top-10 left-5 w-0.5 bg-slate-400"
 								style="height: calc(100% + 1rem)"
 							></div>
 						{/if}

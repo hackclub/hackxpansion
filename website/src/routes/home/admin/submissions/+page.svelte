@@ -29,7 +29,7 @@
 
 <main class="mx-auto flex max-w-7xl flex-col gap-8 p-6 text-slate-800">
 	<header>
-		<p class="text-sm font-bold uppercase tracking-widest text-slate-500">Admin</p>
+		<p class="text-sm font-bold tracking-widest text-slate-500 uppercase">Admin</p>
 		<h1 class="text-4xl font-bold">Project submissions</h1>
 		<p class="text-slate-600">Review every project submission snapshot sent to ARI.</p>
 	</header>
@@ -51,7 +51,7 @@
 	{:else}
 		<div class="overflow-x-auto border border-slate-500 bg-white/40">
 			<table class="w-full min-w-5xl border-collapse text-left text-sm">
-				<thead class="bg-slate-200 text-xs uppercase tracking-wide text-slate-600">
+				<thead class="bg-slate-200 text-xs tracking-wide text-slate-600 uppercase">
 					<tr>
 						<th class="px-4 py-3">Submitted by</th>
 						<th class="px-4 py-3">Project</th>
@@ -94,10 +94,10 @@
 								>
 									{submission.projectTitle}
 								</a>
-								<p class="mt-1 text-xs uppercase text-slate-500">{submission.projectStatus}</p>
+								<p class="mt-1 text-xs text-slate-500 uppercase">{submission.projectStatus}</p>
 							</td>
 							<td class="px-4 py-3 capitalize">{submission.phase}</td>
-							<td class="whitespace-nowrap px-4 py-3">
+							<td class="px-4 py-3 whitespace-nowrap">
 								{dateFormatter.format(new Date(submission.createdAt))}
 							</td>
 							<td class="px-4 py-3">{submission.nps}/10</td>

@@ -28,7 +28,7 @@
 		step="1"
 		required
 		bind:value={duration}
-		class="w-full border border-slate-700 bg-white/70 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-500"
+		class="w-full border border-slate-700 bg-white/70 px-3 py-2 text-sm focus:ring-2 focus:ring-slate-500 focus:outline-none"
 	/>
 </div>
 
@@ -71,7 +71,7 @@
 		required
 		hidden={tab !== 'write'}
 		bind:value={text}
-		class="w-full border border-slate-700 bg-white/70 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-500"
+		class="w-full border border-slate-700 bg-white/70 px-3 py-2 text-sm focus:ring-2 focus:ring-slate-500 focus:outline-none"
 	></textarea>
 	<div
 		hidden={tab !== 'preview'}

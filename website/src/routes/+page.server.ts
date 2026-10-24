@@ -25,14 +25,14 @@ export const actions: Actions = {
 				? requestedCallbackURL.toString()
 				: defaultCallbackURL.toString();
 
-		const res = await auth.api.signInWithOAuth2({
+		const res = await auth.api.signInSocial({
 			body: {
-				providerId: 'hackclub',
+				provider: 'hackclub',
 				callbackURL
 			}
 		});
 
-		if (res.redirect) {
+		if (res.redirect && res.url) {
 			redirect(302, res.url);
 		}
 	}

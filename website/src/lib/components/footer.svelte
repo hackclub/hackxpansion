@@ -23,7 +23,7 @@
 		{/if}
 		<nav
 			aria-label="Footer navigation"
-			class="flex flex-wrap items-center justify-self-center gap-x-5 gap-y-1 sm:col-start-3 sm:justify-self-end"
+			class="flex flex-wrap items-center gap-x-5 gap-y-1 justify-self-center sm:col-start-3 sm:justify-self-end"
 		>
 			<a href={resolve('/home/docs')} class="hover:underline">Docs</a>
 			<a href={repoURL} target="_blank" rel="noopener noreferrer" class="hover:underline">

@@ -28,7 +28,6 @@ describe('Hack Club profile mapping', () => {
 				checkedAt
 			)
 		).toEqual({
-			id: 'ident!example',
 			name: 'Example Display',
 			email: 'USER@example.com',
 			emailVerified: true,

@@ -100,7 +100,7 @@
 		<p class="mt-2">Sign out of your Hack Club account on this device.</p>
 		<form method="post" action={`${resolve('/home')}?/signOut`} class="mt-4">
 			<button
-				class="border border-slate-800 px-4 py-2 hover:bg-slate-800 hover:text-white cursor-pointer"
+				class="cursor-pointer border border-slate-800 px-4 py-2 hover:bg-slate-800 hover:text-white"
 			>
 				Sign out
 			</button>

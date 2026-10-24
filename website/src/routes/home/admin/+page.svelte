@@ -31,7 +31,7 @@
 
 <main class="mx-auto flex max-w-6xl flex-col gap-8 p-6 text-slate-800">
 	<header>
-		<p class="text-sm font-bold uppercase tracking-widest text-slate-500">Admin</p>
+		<p class="text-sm font-bold tracking-widest text-slate-500 uppercase">Admin</p>
 		<h1 class="text-4xl font-bold">Event Overview</h1>
 		<p class="text-slate-600">
 			General stats, participant activity, project pipeline, and economic activity.
@@ -47,7 +47,7 @@
 			{#if stats.projects.pendingReview > 0}
 				<a
 					href={resolve('/home/admin/submissions')}
-					class="content-box flex flex-1 items-center justify-between border-amber-600 bg-amber-100/80 p-4 transition hover:bg-amber-200/80"
+					class="flex flex-1 items-center justify-between content-box border-amber-600 bg-amber-100/80 p-4 transition hover:bg-amber-200/80"
 				>
 					<div class="flex items-center gap-3">
 						<span class="flex size-8 items-center justify-center bg-amber-500 font-bold text-white">
@@ -68,7 +68,7 @@
 			{#if stats.orders.pending > 0}
 				<a
 					href={resolve('/home/admin/orders')}
-					class="content-box flex flex-1 items-center justify-between border-amber-600 bg-amber-100/80 p-4 transition hover:bg-amber-200/80"
+					class="flex flex-1 items-center justify-between content-box border-amber-600 bg-amber-100/80 p-4 transition hover:bg-amber-200/80"
 				>
 					<div class="flex items-center gap-3">
 						<span class="flex size-8 items-center justify-center bg-amber-500 font-bold text-white">
@@ -90,9 +90,9 @@
 	<!-- Top Metric Cards Grid -->
 	<section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" aria-label="Top level stats">
 		<!-- Users Card -->
-		<article class="content-box flex flex-col justify-between p-5">
+		<article class="flex flex-col justify-between content-box p-5">
 			<div>
-				<p class="text-xs font-bold uppercase tracking-wider text-slate-500">Participants</p>
+				<p class="text-xs font-bold tracking-wider text-slate-500 uppercase">Participants</p>
 				<p class="mt-2 text-4xl font-extrabold">{stats.users.total}</p>
 			</div>
 			<div
@@ -118,9 +118,9 @@
 		</article>
 
 		<!-- Projects Card -->
-		<article class="content-box flex flex-col justify-between p-5">
+		<article class="flex flex-col justify-between content-box p-5">
 			<div>
-				<p class="text-xs font-bold uppercase tracking-wider text-slate-500">Projects Created</p>
+				<p class="text-xs font-bold tracking-wider text-slate-500 uppercase">Projects Created</p>
 				<p class="mt-2 text-4xl font-extrabold">{stats.projects.total}</p>
 			</div>
 			<div class="mt-4 border-t border-slate-400/60 pt-3 text-xs text-slate-600">
@@ -135,9 +135,9 @@
 		</article>
 
 		<!-- Currency Card -->
-		<article class="content-box flex flex-col justify-between p-5">
+		<article class="flex flex-col justify-between content-box p-5">
 			<div>
-				<p class="text-xs font-bold uppercase tracking-wider text-slate-500">Currency Awarded</p>
+				<p class="text-xs font-bold tracking-wider text-slate-500 uppercase">Currency Awarded</p>
 				<p class="mt-2 flex items-center gap-1.5 text-4xl font-extrabold">
 					<CoinIcon />
 					{stats.projects.totalCurrencyPaidOut}
@@ -155,9 +155,9 @@
 		</article>
 
 		<!-- Hours & NPS Card -->
-		<article class="content-box flex flex-col justify-between p-5">
+		<article class="flex flex-col justify-between content-box p-5">
 			<div>
-				<p class="text-xs font-bold uppercase tracking-wider text-slate-500">Logged Work</p>
+				<p class="text-xs font-bold tracking-wider text-slate-500 uppercase">Logged Work</p>
 				<p class="mt-2 text-4xl font-extrabold">
 					{formatMinutes(stats.journals.totalMinutes + stats.hackatime.totalMinutes)}
 				</p>
@@ -192,7 +192,7 @@
 	<!-- Main Details Grid -->
 	<section class="grid gap-6 lg:grid-cols-3" aria-label="Detailed breakdowns">
 		<!-- Project Status Pipeline (2 cols) -->
-		<article class="content-box flex flex-col gap-4 p-5 lg:col-span-2">
+		<article class="flex flex-col gap-4 content-box p-5 lg:col-span-2">
 			<div class="flex items-center justify-between">
 				<h2 class="text-xl font-bold">Project Pipeline Status</h2>
 				<a
@@ -236,40 +236,40 @@
 		<!-- Right Column: Types, Tiers, & Quick Admin Links -->
 		<div class="flex flex-col gap-6">
 			<!-- Project Types & Tiers -->
-			<article class="content-box flex flex-col gap-4 p-5">
+			<article class="flex flex-col gap-4 content-box p-5">
 				<h2 class="text-xl font-bold">Project Types & Tiers</h2>
 
 				<div>
-					<p class="text-xs font-bold uppercase tracking-wider text-slate-500">By Type</p>
+					<p class="text-xs font-bold tracking-wider text-slate-500 uppercase">By Type</p>
 					<div class="mt-2 grid grid-cols-3 gap-2">
 						<div class="bg-slate-200/80 p-2.5 text-center">
-							<p class="text-xs uppercase text-slate-500 font-bold">Card</p>
+							<p class="text-xs font-bold text-slate-500 uppercase">Card</p>
 							<p class="mt-0.5 text-xl font-bold">{stats.projects.byType['card'] ?? 0}</p>
 						</div>
 						<div class="bg-slate-200/80 p-2.5 text-center">
-							<p class="text-xs uppercase text-slate-500 font-bold">App</p>
+							<p class="text-xs font-bold text-slate-500 uppercase">App</p>
 							<p class="mt-0.5 text-xl font-bold">{stats.projects.byType['app'] ?? 0}</p>
 						</div>
 						<div class="bg-slate-200/80 p-2.5 text-center">
-							<p class="text-xs uppercase text-slate-500 font-bold">Mod</p>
+							<p class="text-xs font-bold text-slate-500 uppercase">Mod</p>
 							<p class="mt-0.5 text-xl font-bold">{stats.projects.byType['mod'] ?? 0}</p>
 						</div>
 					</div>
 				</div>
 
 				<div class="border-t border-slate-400/60 pt-3">
-					<p class="text-xs font-bold uppercase tracking-wider text-slate-500">By Tier</p>
+					<p class="text-xs font-bold tracking-wider text-slate-500 uppercase">By Tier</p>
 					<div class="mt-2 grid grid-cols-3 gap-2">
 						<div class="bg-slate-200/80 p-2.5 text-center">
-							<p class="text-xs uppercase text-slate-500 font-bold">Basic</p>
+							<p class="text-xs font-bold text-slate-500 uppercase">Basic</p>
 							<p class="mt-0.5 text-xl font-bold">{stats.projects.byTier['basic'] ?? 0}</p>
 						</div>
 						<div class="bg-slate-200/80 p-2.5 text-center">
-							<p class="text-xs uppercase text-slate-500 font-bold">Advanced</p>
+							<p class="text-xs font-bold text-slate-500 uppercase">Advanced</p>
 							<p class="mt-0.5 text-xl font-bold">{stats.projects.byTier['advanced'] ?? 0}</p>
 						</div>
 						<div class="bg-slate-200/80 p-2.5 text-center">
-							<p class="text-xs uppercase text-slate-500 font-bold">Pro</p>
+							<p class="text-xs font-bold text-slate-500 uppercase">Pro</p>
 							<p class="mt-0.5 text-xl font-bold">{stats.projects.byTier['pro'] ?? 0}</p>
 						</div>
 					</div>
@@ -277,7 +277,7 @@
 			</article>
 
 			<!-- Quick Admin Navigation -->
-			<article class="content-box flex flex-col gap-3 p-5">
+			<article class="flex flex-col gap-3 content-box p-5">
 				<h2 class="text-xl font-bold">Admin Navigation</h2>
 				<nav class="flex flex-col gap-2 font-medium">
 					<a
@@ -285,7 +285,7 @@
 						class="flex items-center justify-between bg-slate-300/80 px-3 py-2 transition hover:bg-slate-300"
 					>
 						<span>Submissions Review</span>
-						<span class="text-xs font-bold bg-slate-400 px-2 py-0.5">{stats.submissions.total}</span
+						<span class="bg-slate-400 px-2 py-0.5 text-xs font-bold">{stats.submissions.total}</span
 						>
 					</a>
 					<a
@@ -293,7 +293,7 @@
 						class="flex items-center justify-between bg-slate-300/80 px-3 py-2 transition hover:bg-slate-300"
 					>
 						<span>All Projects</span>
-						<span class="text-xs font-bold bg-slate-400 px-2 py-0.5">{stats.projects.total}</span>
+						<span class="bg-slate-400 px-2 py-0.5 text-xs font-bold">{stats.projects.total}</span>
 					</a>
 					<a
 						href={resolve('/home/admin/airtable')}
@@ -307,7 +307,7 @@
 						class="flex items-center justify-between bg-slate-300/80 px-3 py-2 transition hover:bg-slate-300"
 					>
 						<span>Shop Orders</span>
-						<span class="text-xs font-bold bg-slate-400 px-2 py-0.5">
+						<span class="bg-slate-400 px-2 py-0.5 text-xs font-bold">
 							{stats.orders.pending} queue / {stats.orders.total} total
 						</span>
 					</a>
@@ -323,7 +323,7 @@
 						class="flex items-center justify-between bg-slate-300/80 px-3 py-2 transition hover:bg-slate-300"
 					>
 						<span>Manage Users & Admins</span>
-						<span class="text-xs font-bold bg-slate-400 px-2 py-0.5">{stats.users.total}</span>
+						<span class="bg-slate-400 px-2 py-0.5 text-xs font-bold">{stats.users.total}</span>
 					</a>
 				</nav>
 			</article>

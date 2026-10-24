@@ -3,11 +3,7 @@ import { alias } from 'drizzle-orm/pg-core';
 import { requireAdmin } from '$lib/server/admin';
 import { db } from '$lib/server/db';
 import { project, shopItem, shopOrder, user } from '$lib/server/db/schema';
-import {
-	getShopEligibility,
-	HACKXPANSION_CONSOLE,
-	type ShopProgress
-} from '$lib/shop/domain';
+import { getShopEligibility, HACKXPANSION_CONSOLE, type ShopProgress } from '$lib/shop/domain';
 import type { CatalogItemInput } from '$lib/shop/catalog';
 import type { ProjectType } from '$lib/projects/domain';
 

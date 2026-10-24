@@ -12,7 +12,7 @@
 
 <main class="mx-auto flex max-w-6xl flex-col gap-8 p-6 text-slate-800">
 	<header>
-		<p class="text-sm font-bold uppercase tracking-widest text-slate-500">Admin</p>
+		<p class="text-sm font-bold tracking-widest text-slate-500 uppercase">Admin</p>
 		<h1 class="text-4xl font-bold">Shop orders</h1>
 		<p class="text-slate-600">Review notes and mark queued orders as fulfilled.</p>
 	</header>
@@ -55,7 +55,7 @@
 
 					<div class="mt-4 grid gap-4 lg:grid-cols-2">
 						<div>
-							<p class="text-xs font-bold uppercase text-slate-500">Notes from user</p>
+							<p class="text-xs font-bold text-slate-500 uppercase">Notes from user</p>
 							<p class="mt-1 whitespace-pre-wrap">{order.notes ?? 'No notes provided.'}</p>
 						</div>
 						{#if order.status === 'in_queue'}
@@ -76,7 +76,7 @@
 							</form>
 						{:else}
 							<div>
-								<p class="text-xs font-bold uppercase text-slate-500">Fulfillment message</p>
+								<p class="text-xs font-bold text-slate-500 uppercase">Fulfillment message</p>
 								<p class="mt-1 text-sm text-slate-600">
 									Fulfilled by {order.fulfillerName ??
 										order.fulfilledByUserId ??

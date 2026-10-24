@@ -55,7 +55,7 @@
 		{:else}
 			{#each data.projects as project (project.id)}
 				<article
-					class="content-box group relative cursor-pointer p-5 transition duration-150 hover:-translate-y-0.5 hover:bg-slate-400/70 hover:shadow-lg"
+					class="group relative cursor-pointer content-box p-5 transition duration-150 hover:-translate-y-0.5 hover:bg-slate-400/70 hover:shadow-lg"
 				>
 					<div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
 						<div class="flex gap-4">
@@ -71,7 +71,7 @@
 								<h3 class="text-xl font-bold">
 									<a
 										href={resolve(`/home/projects/${project.id}`)}
-										class="after:absolute after:inset-0 focus:outline-none focus-visible:after:ring-2 focus-visible:after:ring-slate-800 focus-visible:after:ring-offset-2 group-hover:underline"
+										class="group-hover:underline after:absolute after:inset-0 focus:outline-none focus-visible:after:ring-2 focus-visible:after:ring-slate-800 focus-visible:after:ring-offset-2"
 										>{project.title}</a
 									>
 								</h3>

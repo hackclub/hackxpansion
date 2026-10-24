@@ -44,7 +44,7 @@
 		{:else}
 			<div class="grid gap-5 lg:grid-cols-2">
 				{#each data.items as item (item.id)}
-					<article class="content-box flex flex-col overflow-hidden">
+					<article class="flex flex-col overflow-hidden content-box">
 						<div
 							class="flex min-h-44 items-center justify-center border-b border-slate-500 bg-slate-800 p-6 text-white"
 						>
@@ -59,7 +59,7 @@
 							{:else}
 								<div class="text-center">
 									<p class="text-5xl font-bold tracking-tight">HX</p>
-									<p class="mt-1 text-sm uppercase tracking-[0.35em]">Console</p>
+									<p class="mt-1 text-sm tracking-[0.35em] uppercase">Console</p>
 								</div>
 							{/if}
 						</div>

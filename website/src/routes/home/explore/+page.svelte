@@ -34,7 +34,7 @@
 	<form
 		method="get"
 		action={resolve('/home/explore')}
-		class="content-box grid gap-3 p-4 sm:grid-cols-[1fr_auto_auto] sm:items-end"
+		class="grid gap-3 content-box p-4 sm:grid-cols-[1fr_auto_auto] sm:items-end"
 	>
 		<label class="flex flex-col gap-1 text-sm font-semibold" for="project-search">
 			Search by project name
@@ -77,7 +77,7 @@
 		{:else}
 			<div class="grid gap-4 md:grid-cols-2">
 				{#each data.projects as project (project.id)}
-					<article class="content-box flex flex-col gap-4 p-5">
+					<article class="flex flex-col gap-4 content-box p-5">
 						<div class="flex gap-4">
 							{#if project.thumbnailUrl}
 								<img

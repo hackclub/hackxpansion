@@ -30,7 +30,7 @@
 	let selectedAddressId = $state<string | null>(value('addressId') || null);
 </script>
 
-<form method="post" {action} class="content-box flex w-full flex-col gap-6 p-5 sm:p-7">
+<form method="post" {action} class="flex w-full flex-col gap-6 content-box p-5 sm:p-7">
 	{#if errorMessage}
 		<p class="border border-red-700 bg-red-100 p-3 text-sm text-red-900">{errorMessage}</p>
 	{/if}
@@ -93,7 +93,7 @@
 			>How likely are you to recommend Hackxpansion to a friend? <span class="text-red-700">*</span
 			></legend
 		>
-		<span class="font-normal text-slate-500 flex flex-row justify-between">
+		<span class="flex flex-row justify-between font-normal text-slate-500">
 			<div>Never: 1-6</div>
 			<div>Maybe: 7-8</div>
 			<div>Likely: 9-10</div>

@@ -66,7 +66,7 @@
 <main class="mx-auto flex max-w-6xl flex-col gap-8 p-6 text-slate-800">
 	<header class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
 		<div>
-			<p class="text-sm font-bold uppercase tracking-widest text-slate-500">Admin</p>
+			<p class="text-sm font-bold tracking-widest text-slate-500 uppercase">Admin</p>
 			<h1 class="text-4xl font-bold">Projects</h1>
 			<p class="text-slate-600">View every project, its owner, journals, and review history.</p>
 		</div>
@@ -96,7 +96,7 @@
 		<section class="grid gap-4 lg:grid-cols-2" aria-label="All projects">
 			{#each sortedProjects as project (project.id)}
 				<article
-					class="content-box group relative flex cursor-pointer flex-col gap-4 p-5 transition duration-150 hover:-translate-y-0.5 hover:bg-slate-400/70 hover:shadow-lg"
+					class="group relative flex cursor-pointer flex-col gap-4 content-box p-5 transition duration-150 hover:-translate-y-0.5 hover:bg-slate-400/70 hover:shadow-lg"
 				>
 					<div class="flex min-w-0 gap-4">
 						{#if project.thumbnailUrl}
@@ -110,7 +110,7 @@
 							<h2 class="truncate text-xl font-bold">
 								<a
 									href={resolve(`/home/admin/projects/${project.id}`)}
-									class="after:absolute after:inset-0 focus:outline-none focus-visible:after:ring-2 focus-visible:after:ring-slate-800 focus-visible:after:ring-offset-2 group-hover:underline"
+									class="group-hover:underline after:absolute after:inset-0 focus:outline-none focus-visible:after:ring-2 focus-visible:after:ring-slate-800 focus-visible:after:ring-offset-2"
 								>
 									{project.title}
 								</a>

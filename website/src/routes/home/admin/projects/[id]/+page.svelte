@@ -59,7 +59,7 @@
 		</a>
 		<div class="mt-2 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
 			<div class="min-w-0">
-				<p class="text-sm font-bold uppercase tracking-widest text-slate-500">Admin project view</p>
+				<p class="text-sm font-bold tracking-widest text-slate-500 uppercase">Admin project view</p>
 				<div class="flex flex-wrap items-center gap-3">
 					<h1 class="text-4xl font-bold">{data.project.title}</h1>
 					<ProjectStatusBadge status={data.project.status} />
@@ -80,19 +80,19 @@
 
 	<section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" aria-label="Project summary">
 		<article class="content-box p-4">
-			<p class="text-xs uppercase tracking-wide text-slate-600">Journal entries</p>
+			<p class="text-xs tracking-wide text-slate-600 uppercase">Journal entries</p>
 			<p class="mt-1 text-2xl font-bold">{data.stats.journalCount}</p>
 		</article>
 		<article class="content-box p-4">
-			<p class="text-xs uppercase tracking-wide text-slate-600">Journaled time</p>
+			<p class="text-xs tracking-wide text-slate-600 uppercase">Journaled time</p>
 			<p class="mt-1 text-2xl font-bold">{formatMinutes(data.stats.totalJournalMinutes)}</p>
 		</article>
 		<article class="content-box p-4">
-			<p class="text-xs uppercase tracking-wide text-slate-600">Hackatime</p>
+			<p class="text-xs tracking-wide text-slate-600 uppercase">Hackatime</p>
 			<p class="mt-1 text-2xl font-bold">{formatMinutes(data.stats.hackatimeMinutes)}</p>
 		</article>
 		<article class="content-box p-4">
-			<p class="text-xs uppercase tracking-wide text-slate-600">Currency paid</p>
+			<p class="text-xs tracking-wide text-slate-600 uppercase">Currency paid</p>
 			<p class="mt-1 flex items-center gap-1 text-2xl font-bold">
 				<CoinIcon class="size-6" />
 				{data.project.currencyPaidOut}
@@ -258,11 +258,11 @@
 
 					<section class="mt-5 grid gap-4 md:grid-cols-2" aria-label="Review notes">
 						<div class="border border-slate-300 bg-white/40 p-4">
-							<h4 class="text-xs font-bold uppercase text-slate-500">Note to maker</h4>
+							<h4 class="text-xs font-bold text-slate-500 uppercase">Note to maker</h4>
 							<p class="mt-2 whitespace-pre-wrap">{review.noteToMaker ?? 'No note provided.'}</p>
 						</div>
 						<div class="border border-slate-300 bg-white/40 p-4">
-							<h4 class="text-xs font-bold uppercase text-slate-500">Audit note</h4>
+							<h4 class="text-xs font-bold text-slate-500 uppercase">Audit note</h4>
 							<p class="mt-2 whitespace-pre-wrap">
 								{review.auditNote ?? 'No audit note provided.'}
 							</p>
@@ -273,13 +273,13 @@
 						<h4 id={`time-${review.id}`} class="text-lg font-bold">Approved time</h4>
 						<div class="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
 							<div class="border border-slate-300 bg-white/40 p-3">
-								<p class="text-xs uppercase text-slate-500">Total</p>
+								<p class="text-xs text-slate-500 uppercase">Total</p>
 								<p class="text-lg font-bold">{formatMinutes(review.approvedMinutes ?? 0)}</p>
 							</div>
 							{#if review.minutesBreakdown}
 								{#each objectEntries(review.minutesBreakdown) as [source, minutes] (source)}
 									<div class="border border-slate-300 bg-white/40 p-3">
-										<p class="text-xs uppercase text-slate-500">{humanizeKey(source)}</p>
+										<p class="text-xs text-slate-500 uppercase">{humanizeKey(source)}</p>
 										<p class="text-lg font-bold">{formatMinutes(Number(minutes))}</p>
 									</div>
 								{/each}
@@ -297,8 +297,8 @@
 							<dl class="mt-3 grid gap-3 md:grid-cols-2">
 								{#each objectEntries(review.justification) as [key, value] (key)}
 									<div class="border border-slate-300 bg-white/40 p-3">
-										<dt class="text-xs font-bold uppercase text-slate-500">{humanizeKey(key)}</dt>
-										<dd class="mt-1 whitespace-pre-wrap wrap-break-word">{formatValue(value)}</dd>
+										<dt class="text-xs font-bold text-slate-500 uppercase">{humanizeKey(key)}</dt>
+										<dd class="mt-1 wrap-break-word whitespace-pre-wrap">{formatValue(value)}</dd>
 									</div>
 								{/each}
 							</dl>
@@ -317,7 +317,7 @@
 											<h5 class="font-bold">{field.label}</h5>
 											<p class="text-xs text-slate-500">{field.key} · {field.type}</p>
 										</div>
-										<p class="mt-2 whitespace-pre-wrap wrap-break-word font-mono text-sm">
+										<p class="mt-2 font-mono text-sm wrap-break-word whitespace-pre-wrap">
 											{formatValue(field.value)}
 										</p>
 									</div>

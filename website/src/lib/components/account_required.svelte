@@ -10,16 +10,16 @@
 
 <main class="flex min-h-full items-center justify-center p-6 text-slate-800">
 	<section
-		class="content-box w-full max-w-xl p-8 text-center sm:p-12"
+		class="w-full max-w-xl content-box p-8 text-center sm:p-12"
 		aria-labelledby="account-required"
 	>
-		<p class="mb-2 text-sm font-bold uppercase tracking-widest text-slate-500">Account required</p>
+		<p class="mb-2 text-sm font-bold tracking-widest text-slate-500 uppercase">Account required</p>
 		<h1 id="account-required" class="text-3xl font-bold sm:text-4xl">Sign In/Up to continue</h1>
 		<p class="mx-auto mt-4 max-w-md text-lg text-slate-600">{message}</p>
 		<form method="post" action={`${resolve('/')}?/signIn`} class="mt-7">
 			<input type="hidden" name="returnTo" value={returnTo} />
 			<button
-				class="border border-slate-800 bg-slate-800 px-5 py-3 font-bold text-white hover:bg-transparent hover:text-slate-800 cursor-pointer"
+				class="cursor-pointer border border-slate-800 bg-slate-800 px-5 py-3 font-bold text-white hover:bg-transparent hover:text-slate-800"
 			>
 				Sign In/Up
 			</button>
