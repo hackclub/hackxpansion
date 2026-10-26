@@ -1,7 +1,7 @@
 import { isHttpError, type Handle, type HandleServerError } from '@sveltejs/kit';
 import { randomUUID } from 'node:crypto';
 import { building } from '$app/environment';
-import { auth } from '$lib/server/auth';
+import { auth, hackClubLegacyCallbackPath } from '$lib/server/auth';
 import { svelteKitHandler } from 'better-auth/svelte-kit';
 import { env } from '$env/dynamic/private';
 import { base } from '$app/paths';
@@ -50,6 +50,12 @@ async function handleRequest(
 
 	if (request.url.startsWith('http://') && env.ORIGIN?.startsWith('https://')) {
 		request = new Request(request.url.replace('http://', 'https://'), request);
+	}
+
+	if (event.url.pathname === hackClubLegacyCallbackPath) {
+		const callbackUrl = new URL(request.url);
+		callbackUrl.pathname = `${base}/api/auth/callback/hackclub`;
+		return auth.handler(new Request(callbackUrl, request));
 	}
 
 	if (event.url.pathname.startsWith(`${base}/api/auth/`)) {

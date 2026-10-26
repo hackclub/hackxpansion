@@ -8,6 +8,13 @@ import { genericOAuth } from 'better-auth/plugins';
 import { base } from '$app/paths';
 import { fetchHackClubProfile, mapHackClubProfile } from '$lib/server/hackclub-profile';
 
+// The Hack Club Auth app is registered with the callback path used by
+// better-auth's genericOAuth plugin before 1.7. Keep using that URI and
+// forward it to the current callback route until the app registration is
+// updated in the Hack Club Auth developer dashboard.
+export const hackClubLegacyCallbackPath = `${base}/api/auth/oauth2/callback/hackclub`;
+const hackClubLegacyRedirectURI = new URL(hackClubLegacyCallbackPath, env.ORIGIN).toString();
+
 export const auth = betterAuth({
 	baseURL: env.ORIGIN,
 	basePath: `${base}/api/auth`,
@@ -80,6 +87,7 @@ export const auth = betterAuth({
 					discoveryUrl: 'https://auth.hackclub.com/.well-known/openid-configuration',
 					clientId: env.HACKCLUB_CLIENT_ID,
 					clientSecret: env.HACKCLUB_CLIENT_SECRET,
+					redirectURI: hackClubLegacyRedirectURI,
 					// Hack Club Auth does not advertise PKCE support; better-auth 1.7 enables it by default.
 					pkce: false,
 					overrideUserInfo: true,
