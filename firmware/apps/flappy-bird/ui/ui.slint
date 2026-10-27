@@ -1,0 +1,353 @@
+import "../fonts/ShareTechMono-Regular.ttf";
+import { VerticalBox } from "std-widgets.slint";
+
+export struct GamePipe {
+    top_y_pos: int,
+    bot_y_pos: int,
+    x_pos: int,    
+}
+// For your app to use your UI, it has to export a component that inherits Window
+export component FlappyBirdUI inherits Window {
+    // These are the dimensions of the physical screen
+    width: 320px;
+    height: 240px;
+
+    // This is a reactive property that we will set from our app's logic code
+    in-out property <int> count: 0;
+    in property <[GamePipe]> tubes;
+    // For testing purposes
+    //tubes: [{top-y-pos: 50, bot-y-pos: 100, x_pos: 100}, {top-y-pos: 150, bot-y-pos: 200, x_pos: 250}];
+    in property <int> bird-x: 40;
+    in property <int> bird-y: 90;
+    in property <bool> bird-falling: false;
+    in property <bool> bird-flapping: false;
+    in property <bool> level-select: true;
+    in property <int> selection: 0;
+    in property <bool> selected: false;
+    in property <bool> explainer: false;
+    in property <bool> has-died: false;
+    in property <bool> low-grapics: true;
+
+    default-font-family: "Share Tech Mono";
+
+    // The background
+    VerticalLayout {
+        alignment: start;
+      Rectangle {
+        width: parent.width;
+        height: 190px;
+        background: low-grapics ? #0dacb2: @linear-gradient(0deg, #0dacb2 0%, skyblue 75%);
+      }
+      Rectangle {
+        width: parent.width;
+        height: 20px;
+        for _[i] in 8: Rectangle {
+            width: parent.width / 8;
+            height: 40px;
+            x: i * (320px / 8);
+            y: 0px;
+            border-top-left-radius: 17px;
+            border-top-right-radius: 17px;
+            background: #cedde0d2;
+        } 
+        background: #0dacb2;
+      }
+      Rectangle {
+        width: parent.width;
+        height: 30px;
+        background: #0d8500;
+      }
+    }
+
+    // Dots on grass
+    for _[row] in 16: Rectangle {
+        x: row * 20px;
+        y: 210px + mod((row * 314234567px + 1px), 19px);
+        width: 5px;
+        height: 5px;
+        background: #66c45b;
+    }
+
+    // Sun
+    Rectangle {
+        width: 100px;
+        height: 100px;
+        border-radius: 100px;
+        x: -50px;
+        y: -50px;
+        background: #d0bc00;
+    }
+
+    for _[i] in 10: Rectangle {
+        width: 30px;
+        height: 4px;
+        x: -10px + cos(i * 10deg) * 70px;
+        y: 2px + sin(i * 10deg) * 70px;
+        transform-rotation: i * 10deg;
+        background: #d0bc00;
+    }
+
+    // Tubes
+    for tube in root.tubes: Rectangle{
+        if tube.bot-y-pos < 188: Rectangle {
+            width: 36px;
+            height: 193px - tube.bot-y-pos * 1px;
+            x: tube.x-pos * 1px;
+            y: tube.bot-y-pos * 1px + 19px + 30px;
+            background: low-grapics ? #55ff00: @linear-gradient(90deg, #ffffff 0%, #55ff00 25%, #55ff00 75%, #000000 100%);
+            border-width: 3px;
+            border-color: black;
+        }
+
+        if tube.top-y-pos > 22: Rectangle {
+            width: 36px;
+            height: tube.top-y-pos * 1px -17px;
+            x: tube.x-pos * 1px;
+            y: tube.top-y-pos * 1px - 19px - (tube.top-y-pos * 1px - 17px);
+            background: low-grapics ? #55ff00: @linear-gradient(90deg, #ffffff 0%, #55ff00 25%, #55ff00 75%, #000000 100%);
+            border-width: 3px;
+            border-color: black;
+        }
+
+        if tube.bot-y-pos < 210: Rectangle {
+            width: 46px;
+            height: 22px;
+            x: tube.x-pos * 1px - 5px;
+            y: tube.bot-y-pos * 1px + 30px;
+            background: low-grapics ? #55ff00: @linear-gradient(90deg, #ffffff 0%, #55ff00 25%, #55ff00 75%, #000000 100%);
+            border-width: 3px;
+            border-color: black;
+            //border-radius: 5px;
+        }
+
+        if tube.top-y-pos > 0: Rectangle {
+            width: 46px;
+            height: 22px;
+            x: tube.x-pos * 1px - 5px;
+            y: tube.top-y-pos * 1px - 22px;
+            background: low-grapics ? #55ff00: @linear-gradient(90deg, #ffffff 0%, #55ff00 25%, #55ff00 75%, #000000 100%);
+            border-width: 3px;
+            border-color: black;
+           //border-radius: 5px;
+        }
+    }
+
+    // Count
+    if !root.level-select && !root.explainer && !root.has-died: Text {
+        width: root.width - 16px;
+        x: 8px;
+        y: 8px;
+        text: "Score " + root.count;
+        font-size: 25px;
+        font-weight: 700;
+        color: red;
+        horizontal-alignment: end;
+    }
+
+    // Level select menu
+    if root.level-select: Rectangle {
+        width: 240px;
+        height: 200px;
+        y: 30px;
+        background: #707070fe;
+        border-radius: 15px;
+        border-width: 5px;
+        border-color: #575757;
+
+        Rectangle {
+            width: 200px;
+            height: 30px;
+            y: -30px;
+            background: #848484;
+            border-radius: 5px;
+            Text {
+                width: parent.width - 4px;
+                height: parent.height;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+                text: "A: V   Long A: >";
+                font-size: 20px;
+                font-weight: 700;
+                color: black;
+            }
+        }
+
+        for _[level] in 4: Rectangle {
+            width: 200px;
+            height: 40px;
+            y: level * 45px+ 12px;
+            background: root.selection == level ? #555555 : #666666;
+            border-radius: 10px;
+            border-width: 5px;
+            border-color: root.selected && root.selection == level ? red: root.selection == level ?  #111111: #3a3a3a;
+            Text {
+                width: parent.width;
+                height: parent.height;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+                text: level == 3 ?  "Grapics " + (low-grapics ? "Low": "High"): "Level " + (level == 0 ? "easy": level == 1 ? "hard" : "ultra");
+                font-size: 25px;
+                font-weight: 700;
+                color: black;
+            }
+        }
+    }
+
+    // Da bird
+    Rectangle {
+        width: 30px;
+        height: 30px;
+        background: yellow;
+        border-width: 3px;
+        border-color: black;
+        border-radius: 13px;
+        x: root.level-select ? 20px: root.bird_x * 1px;
+        y: root.level-select ? (root.selection == 0 ? 42px: root.selection == 1 ? 87px: root.selection == 2 ? 132px: 177px): root.bird-y * 1px;
+        
+        // Eyeball
+        Rectangle {
+            width: 15px;
+            height: 15px;
+            background: white;
+            x: 15px;
+            y: 4px;
+            border-width: 3px;
+            border-color: black;
+            border-radius: 7px;
+
+            // Pupil
+            Rectangle {
+                width: 4px;
+                height: 4px;
+                background: black;
+                x: 7px;
+                border-radius: 3px;
+            }
+        }
+
+        // Wing
+        Rectangle {
+            width: 20px;
+            height: root.bird-flapping ? 12px: 17px;
+            background: yellow;
+            x: -4px;
+            y: 10px;
+            border-width: 3px;
+            border-color: black;
+            border-radius: 8px;
+            border-top-left-radius: 2px;
+        }
+        
+        // Mouth
+        Rectangle {
+            width: 20px;
+            height: 7px;
+            background: red;
+            x: 15px;
+            y: 16px;
+            border-width: 2px;
+            border-color: black;
+            border-radius: 7px;
+        }
+        Rectangle {
+            width: 17px;
+            height: 7px;
+            background: red;
+            x: 15px;
+            y: 21px;
+            border-width: 2px;
+            border-color: black;
+            border-radius: 7px;
+        }
+        transform-rotation: root.bird-falling == true ? 45deg : 0deg;
+    }
+
+    if root.explainer: Rectangle {
+        width: 240px;
+        height: 200px;
+        y: 30px;
+        background: #c7c71c;
+        border-radius: 15px;
+        border-width: 5px;
+        border-color: #ffff00;
+
+        Text {
+            width: parent.width - 24px;
+            height: parent.height;
+            horizontal-alignment: center;
+            vertical-alignment: center;
+            text: "The game only uses 1 button to flap the bird up. This is the A button. Press A to start!";
+            wrap: word-wrap;
+            font-size: 25px;
+            font-weight: 700;
+            color: red;
+        }
+    }
+
+    // Death screen
+    if root.has-died: Rectangle{
+        width: 240px;
+        height: 140px;
+        background: #ff3232d9;
+        border-radius: 15px;
+        border-width: 5px;
+        border-color: #fc0202;
+        
+        Text {
+            width: parent.width;
+            height: parent.height;
+            horizontal-alignment: center;
+            vertical-alignment: center;
+            text: "YOU DIED";
+            font-size: 50px;
+            font-weight: 700;
+            color: white;
+        }
+
+        Rectangle {
+            width: parent.width;
+            height: 40px;
+            y: 100px;
+            background: #fde4e4d9;
+            border-radius: 15px;
+            
+            HorizontalLayout {
+                for _[i] in 2: Rectangle {
+                    width: 120px;
+                    height: 40px;
+                    background: root.selection == i ? #ff5454: #790000aa;
+                    border-bottom-left-radius: i == 0 ? 15px: 0px;
+                    border-top-left-radius: i == 0 ? 15px: 0px;
+                    border-bottom-right-radius: i == 1 ? 15px: 0px;
+                    border-top-right-radius: i == 1 ? 15px: 0px;
+                    border-width: 5px;
+                    border-color: root.selection == i ? selected ? #ffffff: #ff0000: #94001b5c;
+
+                    Text {
+                        width: parent.width;
+                        height: parent.height;
+                        horizontal-alignment: center;
+                        vertical-alignment: center;
+                        text: i == 0 ? "Try again": "Exit";
+                        font-size: 20px;
+                        font-weight: 700;
+                        color: root.selection == i ? white: #ffffff55;
+                    }
+                }
+            }
+        }
+
+        Text {
+            width: parent.width;
+            height: parent.height;
+            y: 5px;
+            horizontal-alignment: center;
+            vertical-alignment: top;
+            text: "Score " + root.count;
+            font-size: 30px;
+            font-weight: 700;
+            color: white;
+        }
+    }
+}
+

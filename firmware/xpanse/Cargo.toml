@@ -82,15 +82,17 @@ cube-game = { workspace = true, optional = true }
 neon-beat = { workspace = true, optional = true }
 snake-game = { workspace = true, optional = true }
 nes-emulator = { workspace = true, optional = true }
+flappy-bird = { workspace = true, optional = true }
 
 [features]
-default = ["app-neon-beat", "app-snake-game"]
+default = ["app-neon-beat", "app-snake-game", "app-flappy-bird", "app-cube-game", "app-button-logger"]
 app-button-logger = ["dep:button-logger"]
 app-cube-game = ["dep:cube-game"]
 app-neon-beat = ["dep:neon-beat"]
 app-snake-game = ["dep:snake-game"]
 app-nes-emulator = ["dep:nes-emulator"]
 app-doom = ["dep:doom-app"]
+app-flappy-bird = ["dep:flappy-bird"]
 
 [build-dependencies]
 slint-build = { workspace = true }

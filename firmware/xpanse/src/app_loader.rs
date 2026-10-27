@@ -42,6 +42,12 @@ const APP_CATALOG: &[AppDescriptor] = &[
         can_run: nes_emulator::NesEmulatorApp::can_run,
         run: run_app_impl::<nes_emulator::NesEmulatorApp>,
     },
+    #[cfg(feature = "app-flappy-bird")]
+    AppDescriptor {
+        name: flappy_bird::FlappyBirdApp::NAME,
+        can_run: flappy_bird::FlappyBirdApp::can_run,
+        run: run_app_impl::<flappy_bird::FlappyBirdApp>,
+    }
 ];
 
 type AppFuture<'a> = Pin<Box<dyn Future<Output = ()> + 'a>>;
