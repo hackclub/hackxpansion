@@ -2448,10 +2448,10 @@
 		(at 26.67 25.4 0)
 		(unit 1)
 		(body_style 1)
-		(exclude_from_sim yes)
+		(exclude_from_sim no)
 		(in_bom no)
 		(on_board yes)
-		(in_pos_files yes)
+		(in_pos_files no)
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "826d1b33-69b3-4d0c-9b63-030c5f2745d0")
@@ -2477,7 +2477,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Symbol:OSHW-Logo_5.7x6mm_SilkScreen"
+		(property "Footprint" "Symbol:OSHW-Logo2_14.6x12mm_SilkScreen"
 			(at 26.67 25.4 0)
 			(hide yes)
 			(show_name no)

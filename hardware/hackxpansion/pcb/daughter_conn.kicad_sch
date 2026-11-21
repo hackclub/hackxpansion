@@ -1082,6 +1082,7 @@
 	(symbol
 		(lib_id "easyeda2kicad:533981471")
 		(at 157.48 68.58 0)
+		(mirror x)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -1089,10 +1090,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "c99bade5-6603-4eb7-9eae-eedc7284f138")
-		(property "Reference" "CN3"
-			(at 163.83 67.3099 0)
+		(property "Reference" "CN1"
+			(at 163.83 69.8501 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1103,7 +1103,7 @@
 			)
 		)
 		(property "Value" "533981471"
-			(at 163.83 69.8499 0)
+			(at 163.83 67.3101 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1114,7 +1114,7 @@
 			)
 		)
 		(property "Footprint" "easyeda2kicad:CONN-SMD_14P-P1.25_MOLEX_533981471"
-			(at 157.48 97.79 0)
+			(at 157.48 39.37 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1125,7 +1125,7 @@
 			)
 		)
 		(property "Datasheet" "https://www.lcsc.com/datasheet/C2886291.pdf"
-			(at 157.48 100.33 0)
+			(at 157.48 36.83 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1147,7 +1147,7 @@
 			)
 		)
 		(property "Manufacturer" "MOLEX"
-			(at 157.48 102.87 0)
+			(at 157.48 34.29 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1158,7 +1158,7 @@
 			)
 		)
 		(property "MPN" "533981471"
-			(at 157.48 105.41 0)
+			(at 157.48 31.75 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1169,7 +1169,7 @@
 			)
 		)
 		(property "LCSC" "C2886291"
-			(at 157.48 107.95 0)
+			(at 157.48 29.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1260,7 +1260,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "d28ce0ad-8e23-40a8-b467-ce9a8d6697e4")
-		(property "Reference" "#PWR035"
+		(property "Reference" "#PWR032"
 			(at 104.14 93.98 0)
 			(hide yes)
 			(show_name no)
@@ -1349,7 +1349,7 @@
 		(in_pos_files yes)
 		(dnp no)
 		(uuid "d3271656-2adc-4b0e-91c2-e3219f24364e")
-		(property "Reference" "#PWR0106"
+		(property "Reference" "#PWR0104"
 			(at 166.37 53.34 0)
 			(hide yes)
 			(show_name no)
@@ -1439,7 +1439,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "eb33855b-ea30-490d-b521-636e23d95e3f")
-		(property "Reference" "#PWR097"
+		(property "Reference" "#PWR044"
 			(at 161.29 97.79 0)
 			(hide yes)
 			(show_name no)

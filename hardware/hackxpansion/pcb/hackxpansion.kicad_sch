@@ -1956,7 +1956,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Sheetfile" "daughter_conn.kicad_sch"
+		(property "Sheetfile" "main_conn.kicad_sch"
 			(at 69.85 60.2746 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2434,7 +2434,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Sheetfile" "daughter_conn.kicad_sch"
+		(property "Sheetfile" "main_conn.kicad_sch"
 			(at 69.85 88.2146 0)
 			(show_name no)
 			(do_not_autoplace no)
