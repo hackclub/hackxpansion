@@ -6,6 +6,8 @@
 	(paper "A5")
 	(title_block
 		(title "Interconnect Connector")
+		(date "2026-11-23")
+		(rev "V1.1.0")
 	)
 	(lib_symbols
 		(symbol "easyeda2kicad:533981471"
@@ -1233,14 +1235,6 @@
 					(reference "CN3")
 					(unit 1)
 				)
-				(path "/aaf5804d-3f78-442b-969e-39faa388db94/79f7f22b-c2ab-42e1-a34f-927e722d2621"
-					(reference "CN1")
-					(unit 1)
-				)
-				(path "/aaf5804d-3f78-442b-969e-39faa388db94/a303a5eb-7273-4dfa-a166-817b9294c5a4"
-					(reference "CN4")
-					(unit 1)
-				)
 				(path "/aaf5804d-3f78-442b-969e-39faa388db94/b4afcaf7-a1cb-4e89-a612-234ae7735c35"
 					(reference "CN2")
 					(unit 1)
@@ -1321,14 +1315,6 @@
 			(project "hackxpansion"
 				(path "/aaf5804d-3f78-442b-969e-39faa388db94/5128c8bf-7fd5-4142-8f5c-357a729d9a97"
 					(reference "#PWR035")
-					(unit 1)
-				)
-				(path "/aaf5804d-3f78-442b-969e-39faa388db94/79f7f22b-c2ab-42e1-a34f-927e722d2621"
-					(reference "#PWR032")
-					(unit 1)
-				)
-				(path "/aaf5804d-3f78-442b-969e-39faa388db94/a303a5eb-7273-4dfa-a166-817b9294c5a4"
-					(reference "#PWR042")
 					(unit 1)
 				)
 				(path "/aaf5804d-3f78-442b-969e-39faa388db94/b4afcaf7-a1cb-4e89-a612-234ae7735c35"
@@ -1412,14 +1398,6 @@
 					(reference "#PWR0106")
 					(unit 1)
 				)
-				(path "/aaf5804d-3f78-442b-969e-39faa388db94/79f7f22b-c2ab-42e1-a34f-927e722d2621"
-					(reference "#PWR0104")
-					(unit 1)
-				)
-				(path "/aaf5804d-3f78-442b-969e-39faa388db94/a303a5eb-7273-4dfa-a166-817b9294c5a4"
-					(reference "#PWR0107")
-					(unit 1)
-				)
 				(path "/aaf5804d-3f78-442b-969e-39faa388db94/b4afcaf7-a1cb-4e89-a612-234ae7735c35"
 					(reference "#PWR0105")
 					(unit 1)
@@ -1500,14 +1478,6 @@
 			(project "hackxpansion"
 				(path "/aaf5804d-3f78-442b-969e-39faa388db94/5128c8bf-7fd5-4142-8f5c-357a729d9a97"
 					(reference "#PWR097")
-					(unit 1)
-				)
-				(path "/aaf5804d-3f78-442b-969e-39faa388db94/79f7f22b-c2ab-42e1-a34f-927e722d2621"
-					(reference "#PWR044")
-					(unit 1)
-				)
-				(path "/aaf5804d-3f78-442b-969e-39faa388db94/a303a5eb-7273-4dfa-a166-817b9294c5a4"
-					(reference "#PWR0103")
 					(unit 1)
 				)
 				(path "/aaf5804d-3f78-442b-969e-39faa388db94/b4afcaf7-a1cb-4e89-a612-234ae7735c35"

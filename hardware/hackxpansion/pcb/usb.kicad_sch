@@ -6,6 +6,8 @@
 	(paper "A5")
 	(title_block
 		(title "USB")
+		(date "2026-11-23")
+		(rev "V1.1.0")
 	)
 	(lib_symbols
 		(symbol "Connector:USB_C_Receptacle_USB2.0_14P"

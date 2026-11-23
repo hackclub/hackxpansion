@@ -6,6 +6,8 @@
 	(paper "A5")
 	(title_block
 		(title "Power")
+		(date "2026-11-23")
+		(rev "V1.1.0")
 	)
 	(lib_symbols
 		(symbol "Battery_Management:BQ24075RGT"

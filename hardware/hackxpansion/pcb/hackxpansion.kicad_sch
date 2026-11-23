@@ -4,6 +4,10 @@
 	(generator_version "10.0")
 	(uuid "aaf5804d-3f78-442b-969e-39faa388db94")
 	(paper "A5")
+	(title_block
+		(date "2026-11-23")
+		(rev "V1.1.0")
+	)
 	(lib_symbols
 		(symbol "+3V3_1"
 			(power local)
