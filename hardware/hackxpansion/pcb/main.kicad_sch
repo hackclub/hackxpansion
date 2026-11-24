@@ -272,146 +272,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "Device:R"
-			(pin_numbers
-				(hide yes)
-			)
-			(pin_names
-				(offset 0)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "R"
-				(at 2.032 0 90)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "R"
-				(at 0 0 90)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at -1.778 0 90)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "Resistor"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "R res resistor"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_fp_filters" "R_*"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "R_0_1"
-				(rectangle
-					(start -1.016 -2.54)
-					(end 1.016 2.54)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "R_1_1"
-				(pin passive line
-					(at 0 3.81 270)
-					(length 1.27)
-					(name ""
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 0 -3.81 90)
-					(length 1.27)
-					(name ""
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "Graphic:Logo_Open_Hardware_Small"
 			(exclude_from_sim no)
 			(in_bom no)
@@ -817,16 +677,6 @@
 	)
 	(wire
 		(pts
-			(xy 179.07 83.82) (xy 182.88 83.82)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "238a16cc-d6a6-425e-af77-2035e500b75e")
-	)
-	(wire
-		(pts
 			(xy 168.275 69.85) (xy 170.18 69.85)
 		)
 		(stroke
@@ -847,7 +697,7 @@
 	)
 	(wire
 		(pts
-			(xy 168.91 102.87) (xy 171.45 102.87)
+			(xy 180.34 102.87) (xy 182.245 102.87)
 		)
 		(stroke
 			(width 0)
@@ -904,16 +754,6 @@
 			(type default)
 		)
 		(uuid "450f9d0b-b49c-4bd4-bda4-02025b0ebffd")
-	)
-	(wire
-		(pts
-			(xy 179.07 102.87) (xy 182.245 102.87)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "48261f34-20b1-4060-9dae-ef35e56d818d")
 	)
 	(bus
 		(pts
@@ -987,7 +827,7 @@
 	)
 	(wire
 		(pts
-			(xy 168.91 83.82) (xy 171.45 83.82)
+			(xy 180.34 83.82) (xy 182.88 83.82)
 		)
 		(stroke
 			(width 0)
@@ -1641,99 +1481,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R")
-		(at 175.26 83.82 90)
-		(mirror x)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "22d71fb2-8384-439f-9f23-b774e5f852b5")
-		(property "Reference" "R36"
-			(at 172.466 82.804 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "5R1"
-			(at 178.054 82.804 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 175.26 82.042 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 175.26 83.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor"
-			(at 175.26 83.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C2909363"
-			(at 175.26 83.82 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "c938805c-72da-47bd-858b-5eda6a58cbfb")
-		)
-		(pin "1"
-			(uuid "b839798d-c23e-4319-9f45-71d2a32432f0")
-		)
-		(instances
-			(project "hackxpansion"
-				(path "/aaf5804d-3f78-442b-969e-39faa388db94/61af021d-ad04-487f-9d02-e2b100ecd1ae"
-					(reference "R36")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Mechanical:MountingHole")
 		(at 129.54 115.57 0)
 		(unit 1)
@@ -1831,7 +1578,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "TestPoint"
+		(property "Value" "BATT+"
 			(at 95.7579 114.3 0)
 			(hide yes)
 			(show_name no)
@@ -1891,7 +1638,7 @@
 	(symbol
 		(lib_name "+3V3_1")
 		(lib_id "power:+3V3")
-		(at 168.91 102.87 90)
+		(at 180.34 102.87 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -1901,7 +1648,7 @@
 		(dnp no)
 		(uuid "2bdae112-aa4e-4398-b8c2-8145bd21b6db")
 		(property "Reference" "#PWR075"
-			(at 172.72 102.87 0)
+			(at 184.15 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1912,7 +1659,7 @@
 			)
 		)
 		(property "Value" "+3V3"
-			(at 162.56 102.87 90)
+			(at 173.99 102.87 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -1922,7 +1669,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 168.91 102.87 0)
+			(at 180.34 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1933,7 +1680,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 168.91 102.87 0)
+			(at 180.34 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -1944,7 +1691,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at 168.91 102.87 0)
+			(at 180.34 102.87 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2114,99 +1861,6 @@
 			(project "hackxpansion"
 				(path "/aaf5804d-3f78-442b-969e-39faa388db94/61af021d-ad04-487f-9d02-e2b100ecd1ae"
 					(reference "H7")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 175.26 102.87 90)
-		(mirror x)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "432ea7e1-e7ae-467f-a4b2-4a2eb40ca1e8")
-		(property "Reference" "R37"
-			(at 172.466 101.854 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "5R1"
-			(at 178.054 101.854 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0402_1005Metric"
-			(at 175.26 101.092 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 175.26 102.87 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor"
-			(at 175.26 102.87 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C2909363"
-			(at 175.26 102.87 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "b1927a4e-d1a7-4af4-803f-6f0509330bac")
-		)
-		(pin "1"
-			(uuid "580f91fd-6010-409a-91da-424f59747d86")
-		)
-		(instances
-			(project "hackxpansion"
-				(path "/aaf5804d-3f78-442b-969e-39faa388db94/61af021d-ad04-487f-9d02-e2b100ecd1ae"
-					(reference "R37")
 					(unit 1)
 				)
 			)
@@ -2833,7 +2487,7 @@
 	(symbol
 		(lib_name "+3V3_1")
 		(lib_id "power:+3V3")
-		(at 168.91 83.82 90)
+		(at 180.34 83.82 90)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -2843,7 +2497,7 @@
 		(dnp no)
 		(uuid "c2d46709-7f6d-4d57-b6d0-822151ea8d43")
 		(property "Reference" "#PWR074"
-			(at 172.72 83.82 0)
+			(at 184.15 83.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2854,7 +2508,7 @@
 			)
 		)
 		(property "Value" "+3V3"
-			(at 163.322 83.82 90)
+			(at 174.752 83.82 90)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -2864,7 +2518,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 168.91 83.82 0)
+			(at 180.34 83.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2875,7 +2529,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 168.91 83.82 0)
+			(at 180.34 83.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2886,7 +2540,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at 168.91 83.82 0)
+			(at 180.34 83.82 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -2930,7 +2584,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "TestPoint"
+		(property "Value" "BATT-"
 			(at 95.7579 118.11 0)
 			(hide yes)
 			(show_name no)
